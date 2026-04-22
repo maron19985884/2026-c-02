@@ -1,0 +1,20 @@
+# 環境変数（絶対にコミットしない）
+.env
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Next.js
+frontend/.next/
+frontend/out/
+
+# TypeScript ビルド成果物
+backend/dist/
+
+# MySQL データ（ローカル）
+mysql/data/
+
+# OS
+.DS_Store
+Thumbs.db
