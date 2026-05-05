@@ -1,0 +1,1 @@
+- [書店アプリプロジェクトの設計上の重要事項](project_bookstore_overview.md) — user_requirements.md（複数形）の暗黙の前提・解釈、価格の信頼境界、注文番号形式、CartContext の永続化方針など
