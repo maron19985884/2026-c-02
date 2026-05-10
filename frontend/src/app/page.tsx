@@ -4,10 +4,47 @@ import Link from "next/link";
 import { useCart } from "@/contexts/CartContext";
 import type { Book } from "@/types";
 
+const AMZ = {
+  navy: "#131921",
+  header: "#232F3E",
+  orange: "#FF9900",
+  price: "#B12704",
+  link: "#007185",
+  text: "#0F1111",
+  textSub: "#565959",
+  green: "#007600",
+  prime: "#00A8E1",
+  border: "#D5D9D9",
+  borderLight: "#E7E7E7",
+  bg: "#EAEDED",
+  card: "#FFFFFF",
+};
+
+const DUMMY_RATINGS: Record<number, { stars: number; count: number }> = {};
+function getRating(id: number) {
+  if (!DUMMY_RATINGS[id]) {
+    const stars = 3.5 + (id % 5) * 0.3;
+    const count = 100 + (id * 137) % 900;
+    DUMMY_RATINGS[id] = { stars: Math.min(5, +stars.toFixed(1)), count };
+  }
+  return DUMMY_RATINGS[id];
+}
+function Stars({ rating }: { rating: number }) {
+  const full = Math.floor(rating);
+  const half = rating - full >= 0.5;
+  return (
+    <span style={{ color: AMZ.orange, fontSize: 13 }}>
+      {"★".repeat(full)}
+      {half ? "½" : ""}
+      {"☆".repeat(5 - full - (half ? 1 : 0))}
+    </span>
+  );
+}
+
 export default function ProductListPage() {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
-  const { items } = useCart();
+  const { items, addItem } = useCart();
   const cartCount = items.reduce((sum, i) => sum + i.quantity, 0);
 
   useEffect(() => {
@@ -18,163 +55,111 @@ export default function ProductListPage() {
   }, []);
 
   return (
-    <div style={{ minHeight: "100vh", background: "#0c0b09" }}>
-      <header style={{
-        borderBottom: "1px solid rgba(201,169,110,0.15)",
-        padding: "1.25rem 2.5rem",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        position: "sticky",
-        top: 0,
-        zIndex: 100,
-        background: "#0c0b09",
-      }}>
-        <div>
-          <span style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontSize: "1.5rem",
-            fontWeight: 300,
-            color: "#ede8dc",
-            letterSpacing: "0.15em",
-          }}>LIBRAIRIE</span>
-          <span style={{
-            marginLeft: "0.5rem",
-            color: "#c9a96e",
-            fontFamily: "'Cormorant Garamond', serif",
-            fontSize: "1.5rem",
-            fontWeight: 300,
-            letterSpacing: "0.15em",
-          }}>書</span>
+    <div style={{ minHeight: "100vh", background: AMZ.bg, fontFamily: "Arial, sans-serif" }}>
+      {/* ===== HEADER ===== */}
+      <header style={{ background: AMZ.navy, color: "white" }}>
+        {/* Row 1 */}
+        <div style={{ display: "flex", alignItems: "center", padding: "8px 16px", gap: 8 }}>
+          {/* Logo */}
+          <Link href="/" style={{ textDecoration: "none", color: "white", border: "1px solid transparent", padding: "4px 8px", borderRadius: 2 }}
+            onMouseEnter={e => (e.currentTarget.style.border = "1px solid white")}
+            onMouseLeave={e => (e.currentTarget.style.border = "1px solid transparent")}>
+            <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: -1 }}>amazon</div>
+            <div style={{ fontSize: 10, color: AMZ.orange, textAlign: "right", marginTop: -4 }}>.co.jp</div>
+          </Link>
+          {/* Search */}
+          <div style={{ flex: 1, display: "flex", maxWidth: 800 }}>
+            <select style={{ background: "#F3F3F3", border: "none", padding: "0 8px", fontSize: 12, borderRadius: "4px 0 0 4px", height: 38, cursor: "pointer" }}>
+              <option>すべて</option><option>本</option><option>技術書</option>
+            </select>
+            <input type="text" placeholder="キーワードを入力"
+              style={{ flex: 1, border: "none", padding: "0 12px", fontSize: 14, height: 38, outline: "none" }} />
+            <button style={{ background: AMZ.orange, border: "none", padding: "0 14px", borderRadius: "0 4px 4px 0", height: 38, cursor: "pointer", fontSize: 18 }}>
+              🔍
+            </button>
+          </div>
+          {/* Cart */}
+          <Link href="/cart" style={{ textDecoration: "none", color: "white", display: "flex", alignItems: "flex-end", gap: 4, padding: 4,
+            border: "1px solid transparent", borderRadius: 2 }}
+            onMouseEnter={e => (e.currentTarget.style.border = "1px solid white")}
+            onMouseLeave={e => (e.currentTarget.style.border = "1px solid transparent")}>
+            <div style={{ position: "relative", fontSize: 28, lineHeight: 1 }}>
+              🛒
+              {cartCount > 0 && (
+                <span style={{ position: "absolute", top: -4, right: -4, background: AMZ.orange, color: AMZ.navy,
+                  fontSize: 11, fontWeight: 700, borderRadius: "50%", padding: "1px 5px", minWidth: 16, textAlign: "center" }}>
+                  {cartCount}
+                </span>
+              )}
+            </div>
+            <span style={{ fontWeight: 700, fontSize: 13 }}>カート</span>
+          </Link>
         </div>
-        <Link href="/cart" style={{
-          textDecoration: "none",
-          display: "flex",
-          alignItems: "center",
-          gap: "0.5rem",
-          color: "#c5bfb3",
-          fontSize: "0.8rem",
-          letterSpacing: "0.18em",
-          textTransform: "uppercase" as const,
-          fontFamily: "'Cormorant Garamond', serif",
-        }}>
-          カート
-          {cartCount > 0 && (
-            <span style={{
-              background: "#c9a96e",
-              color: "#0c0b09",
-              borderRadius: "50%",
-              width: "20px",
-              height: "20px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "0.7rem",
-              fontWeight: 700,
-              fontFamily: "'Noto Serif JP', serif",
-            }}>
-              {cartCount}
+        {/* Row 2: Category nav */}
+        <div style={{ background: AMZ.header, padding: "4px 16px", display: "flex", gap: 4, fontSize: 13 }}>
+          {["☰ すべて", "本・コミック", "技術書", "ビジネス書", "新着", "ランキング"].map((label) => (
+            <span key={label} style={{ padding: "6px 10px", cursor: "pointer", border: "1px solid transparent", borderRadius: 2, whiteSpace: "nowrap" }}
+              onMouseEnter={e => (e.currentTarget.style.border = "1px solid white")}
+              onMouseLeave={e => (e.currentTarget.style.border = "1px solid transparent")}>
+              {label}
             </span>
-          )}
-        </Link>
+          ))}
+        </div>
       </header>
 
-      <main style={{ maxWidth: "1280px", margin: "0 auto", padding: "4rem 2.5rem" }}>
-        <div style={{ marginBottom: "3.5rem", animation: "fadeUp 0.7s ease both" }}>
-          <p style={{
-            color: "#c9a96e",
-            fontSize: "0.7rem",
-            letterSpacing: "0.3em",
-            textTransform: "uppercase" as const,
-            marginBottom: "0.75rem",
-            fontFamily: "'Cormorant Garamond', serif",
-          }}>厳選された書籍のコレクション</p>
-          <h1 style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontSize: "3.25rem",
-            fontWeight: 300,
-            color: "#ede8dc",
-            margin: 0,
-            letterSpacing: "0.05em",
-            lineHeight: 1.1,
-          }}>書籍一覧</h1>
-          <div style={{ width: "40px", height: "1px", background: "#c9a96e", marginTop: "1.25rem" }} />
-        </div>
+      {/* ===== MAIN ===== */}
+      <main style={{ maxWidth: 1500, margin: "0 auto", padding: 16 }}>
+        <h2 style={{ fontSize: 18, fontWeight: 700, margin: "0 0 16px", color: AMZ.text }}>技術書一覧</h2>
 
         {loading ? (
-          <p style={{ color: "#887d6f", fontFamily: "'Cormorant Garamond', serif", fontSize: "1.15rem", letterSpacing: "0.05em" }}>
-            読み込み中…
-          </p>
+          <p style={{ color: AMZ.textSub }}>読み込み中…</p>
         ) : (
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-            gap: "2rem",
-          }}>
-            {books.map((book, i) => (
-              <Link key={book.id} href={`/products/${book.id}`} style={{ textDecoration: "none" }}>
-                <div
-                  style={{
-                    background: "#161410",
-                    border: "1px solid rgba(201,169,110,0.1)",
-                    borderRadius: "3px",
-                    overflow: "hidden",
-                    cursor: "pointer",
-                    transition: "border-color 0.3s, transform 0.35s, box-shadow 0.35s",
-                    animation: "fadeUp 0.6s ease both",
-                    animationDelay: `${i * 0.07}s`,
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = "rgba(201,169,110,0.5)";
-                    e.currentTarget.style.transform = "translateY(-6px)";
-                    e.currentTarget.style.boxShadow = "0 20px 50px rgba(0,0,0,0.55)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = "rgba(201,169,110,0.1)";
-                    e.currentTarget.style.transform = "none";
-                    e.currentTarget.style.boxShadow = "none";
-                  }}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={book.image_url}
-                    alt={book.title}
-                    style={{ width: "100%", height: "300px", objectFit: "cover", display: "block" }}
-                  />
-                  <div style={{ padding: "1.25rem 1.1rem 1.4rem" }}>
-                    <h3 style={{
-                      margin: "0 0 0.4rem",
-                      fontSize: "0.88rem",
-                      color: "#ede8dc",
-                      lineHeight: 1.55,
-                      fontFamily: "'Noto Serif JP', serif",
-                      fontWeight: 400,
-                    }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16 }}>
+            {books.map((book) => {
+              const { stars, count } = getRating(book.id);
+              return (
+                <div key={book.id} style={{ background: AMZ.card, border: `1px solid ${AMZ.borderLight}`, borderRadius: 4, padding: 16, cursor: "pointer" }}
+                  onMouseEnter={e => (e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,.2)")}
+                  onMouseLeave={e => (e.currentTarget.style.boxShadow = "none")}>
+                  <Link href={`/products/${book.id}`} style={{ textDecoration: "none", color: "inherit" }}>
+                    {/* Image */}
+                    <div style={{ textAlign: "center", marginBottom: 8, height: 160, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={book.image_url} alt={book.title}
+                        style={{ maxHeight: 160, maxWidth: "100%", objectFit: "contain" }} />
+                    </div>
+                    {/* Title */}
+                    <div style={{ fontSize: 14, color: AMZ.link, marginBottom: 4, display: "-webkit-box",
+                      WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as const, overflow: "hidden" }}>
                       {book.title}
-                    </h3>
-                    <p style={{
-                      margin: "0 0 0.85rem",
-                      fontSize: "0.78rem",
-                      color: "#887d6f",
-                      fontFamily: "'Cormorant Garamond', serif",
-                      letterSpacing: "0.06em",
-                    }}>
-                      {book.author}
-                    </p>
-                    <p style={{
-                      margin: 0,
-                      fontFamily: "'Cormorant Garamond', serif",
-                      fontWeight: 500,
-                      color: "#c9a96e",
-                      fontSize: "1.08rem",
-                      letterSpacing: "0.04em",
-                    }}>
-                      ¥{book.price.toLocaleString()}
-                    </p>
-                  </div>
+                    </div>
+                    <div style={{ fontSize: 12, color: AMZ.textSub, marginBottom: 4 }}>{book.author}</div>
+                    {/* Stars */}
+                    <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 4 }}>
+                      <Stars rating={stars} />
+                      <span style={{ fontSize: 12, color: AMZ.link }}>{stars}</span>
+                      <span style={{ fontSize: 12, color: AMZ.textSub }}>({count.toLocaleString()})</span>
+                    </div>
+                    {/* Price */}
+                    <div style={{ marginBottom: 4 }}>
+                      <span style={{ fontSize: 13, color: AMZ.text }}>￥</span>
+                      <span style={{ fontSize: 21, fontWeight: 700, color: AMZ.price }}>{book.price.toLocaleString()}</span>
+                    </div>
+                    {/* Prime */}
+                    <div style={{ color: AMZ.prime, fontSize: 12, fontWeight: 700, marginBottom: 8 }}>✓ Prime 対応</div>
+                  </Link>
+                  {/* Cart button */}
+                  <button
+                    onClick={() => addItem({ id: book.id, title: book.title, author: book.author, price: book.price })}
+                    style={{ width: "100%", padding: "8px 0", background: AMZ.orange, border: "1px solid #C59000",
+                      borderRadius: 20, fontSize: 13, cursor: "pointer", fontFamily: "Arial, sans-serif" }}
+                    onMouseEnter={e => (e.currentTarget.style.background = "#FA8900")}
+                    onMouseLeave={e => (e.currentTarget.style.background = AMZ.orange)}>
+                    カートに追加
+                  </button>
                 </div>
-              </Link>
-            ))}
+              );
+            })}
           </div>
         )}
       </main>

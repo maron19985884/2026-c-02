@@ -3,141 +3,88 @@ import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
+const AMZ = {
+  navy: "#131921",
+  orange: "#FF9900",
+  yellow: "#FFD814",
+  link: "#007185",
+  text: "#0F1111",
+  textSub: "#565959",
+  green: "#007600",
+  prime: "#00A8E1",
+  borderLight: "#E7E7E7",
+  bg: "#EAEDED",
+  card: "#FFFFFF",
+};
+
 function OrderCompleteContent() {
   const searchParams = useSearchParams();
   const orderNumber = searchParams.get("orderNumber");
 
   return (
-    <div style={{
-      maxWidth: "520px",
-      margin: "0 auto",
-      padding: "7rem 2rem",
-      textAlign: "center",
-      animation: "fadeUp 0.8s ease both",
-    }}>
-      {/* Ornamental divider */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", marginBottom: "2.75rem" }}>
-        <div style={{ height: "1px", width: "48px", background: "rgba(201,169,110,0.3)" }} />
-        <div style={{ width: "7px", height: "7px", border: "1px solid rgba(201,169,110,0.6)", transform: "rotate(45deg)" }} />
-        <div style={{ height: "1px", width: "48px", background: "rgba(201,169,110,0.3)" }} />
-      </div>
-
-      <p style={{
-        color: "#c9a96e",
-        fontSize: "0.68rem",
-        letterSpacing: "0.35em",
-        textTransform: "uppercase" as const,
-        marginBottom: "1.25rem",
-        fontFamily: "'Cormorant Garamond', serif",
-      }}>
-        Order Confirmed
-      </p>
-      <h2 style={{
-        fontFamily: "'Cormorant Garamond', serif",
-        fontSize: "2.6rem",
-        fontWeight: 300,
-        color: "#ede8dc",
-        margin: "0 0 1.25rem",
-        letterSpacing: "0.04em",
-        lineHeight: 1.25,
-      }}>
-        ご注文ありがとうございます
-      </h2>
-      <p style={{
-        color: "#887d6f",
-        marginBottom: "3rem",
-        lineHeight: 2.1,
-        fontFamily: "'Noto Serif JP', serif",
-        fontSize: "0.86rem",
-      }}>
-        ご注文が正常に受け付けられました。
-      </p>
-
-      {orderNumber && (
-        <div style={{
-          background: "#161410",
-          border: "1px solid rgba(201,169,110,0.2)",
-          borderRadius: "2px",
-          padding: "2.25rem",
-          marginBottom: "3.25rem",
-          animation: "fadeUp 0.8s ease 0.25s both",
-        }}>
-          <p style={{
-            margin: "0 0 0.85rem",
-            color: "#887d6f",
-            fontSize: "0.68rem",
-            letterSpacing: "0.25em",
-            textTransform: "uppercase" as const,
-            fontFamily: "'Cormorant Garamond', serif",
-          }}>
-            注文番号
-          </p>
-          <p style={{
-            margin: 0,
-            fontFamily: "'Cormorant Garamond', serif",
-            fontSize: "1.5rem",
-            fontWeight: 300,
-            color: "#c9a96e",
-            letterSpacing: "0.15em",
-          }}>
-            {orderNumber}
-          </p>
+    <main style={{ maxWidth: 700, margin: "0 auto", padding: 24 }}>
+      {/* Confirmation box */}
+      <div style={{ background: AMZ.card, border: `1px solid ${AMZ.borderLight}`, borderRadius: 4, padding: 24 }}>
+        {/* Green header bar */}
+        <div style={{ background: "#F0FAF0", border: `1px solid #4CAF50`, borderRadius: 4,
+          padding: "12px 16px", marginBottom: 24, display: "flex", alignItems: "center", gap: 12 }}>
+          <span style={{ fontSize: 28, color: AMZ.green }}>✓</span>
+          <div>
+            <div style={{ fontSize: 18, fontWeight: 700, color: AMZ.green }}>ご注文ありがとうございます</div>
+            <div style={{ fontSize: 14, color: AMZ.textSub, marginTop: 2 }}>
+              ご注文が正常に受け付けられました。確認メールをお送りします。
+            </div>
+          </div>
         </div>
-      )}
 
-      <Link
-        href="/"
-        style={{
-          display: "inline-block",
-          background: "transparent",
-          color: "#c9a96e",
-          textDecoration: "none",
-          border: "1px solid rgba(201,169,110,0.45)",
-          padding: "0.9rem 2.75rem",
-          borderRadius: "2px",
-          fontSize: "0.78rem",
-          fontWeight: 600,
-          letterSpacing: "0.22em",
-          textTransform: "uppercase" as const,
-          fontFamily: "'Cormorant Garamond', serif",
-          transition: "all 0.3s",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.background = "#c9a96e";
-          e.currentTarget.style.color = "#0c0b09";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.background = "transparent";
-          e.currentTarget.style.color = "#c9a96e";
-        }}
-      >
-        書籍一覧へ戻る
-      </Link>
-    </div>
+        {/* Order number */}
+        {orderNumber && (
+          <div style={{ marginBottom: 24 }}>
+            <div style={{ fontSize: 14, color: AMZ.textSub, marginBottom: 4 }}>注文番号</div>
+            <div style={{ fontSize: 20, fontWeight: 700, color: AMZ.link }}>{orderNumber}</div>
+          </div>
+        )}
+
+        {/* Delivery info */}
+        <div style={{ background: "#F3F3F3", borderRadius: 4, padding: 16, marginBottom: 24 }}>
+          <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 8 }}>お届け予定</div>
+          <div style={{ fontSize: 14, color: AMZ.text }}>
+            <span style={{ color: AMZ.prime, fontWeight: 700 }}>Prime</span> 対応 — <strong>明日</strong>お届け予定
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div style={{ display: "flex", gap: 12, flexWrap: "wrap" as const }}>
+          <Link href="/" style={{ display: "inline-block", padding: "8px 24px",
+            background: AMZ.yellow, border: "1px solid #C7A600",
+            borderRadius: 20, fontSize: 14, cursor: "pointer",
+            textDecoration: "none", color: AMZ.text, fontFamily: "Arial, sans-serif" }}>
+            書籍一覧に戻る
+          </Link>
+          <Link href="/" style={{ display: "inline-block", padding: "8px 24px",
+            background: "white", border: `1px solid ${AMZ.orange}`,
+            borderRadius: 20, fontSize: 14, cursor: "pointer",
+            textDecoration: "none", color: AMZ.text, fontFamily: "Arial, sans-serif" }}>
+            注文履歴を確認する
+          </Link>
+        </div>
+      </div>
+    </main>
   );
 }
 
 export default function OrderCompletePage() {
   return (
-    <div style={{ minHeight: "100vh", background: "#0c0b09" }}>
-      <header style={{
-        borderBottom: "1px solid rgba(201,169,110,0.15)",
-        padding: "1.25rem 2.5rem",
-        background: "#0c0b09",
-        position: "sticky",
-        top: 0,
-        zIndex: 100,
-      }}>
-        <Link href="/" style={{ textDecoration: "none" }}>
-          <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.5rem", fontWeight: 300, color: "#ede8dc", letterSpacing: "0.15em" }}>LIBRAIRIE</span>
-          <span style={{ marginLeft: "0.5rem", color: "#c9a96e", fontFamily: "'Cormorant Garamond', serif", fontSize: "1.5rem", fontWeight: 300, letterSpacing: "0.15em" }}>書</span>
+    <div style={{ minHeight: "100vh", background: AMZ.bg, fontFamily: "Arial, sans-serif" }}>
+      {/* Header */}
+      <header style={{ background: AMZ.navy, padding: "8px 16px", display: "flex", alignItems: "center" }}>
+        <Link href="/" style={{ textDecoration: "none", color: "white" }}>
+          <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: -1 }}>amazon</div>
+          <div style={{ fontSize: 10, color: AMZ.orange, textAlign: "right", marginTop: -4 }}>.co.jp</div>
         </Link>
       </header>
-      <Suspense fallback={
-        <p style={{ padding: "2rem", textAlign: "center", color: "#887d6f", fontFamily: "'Cormorant Garamond', serif", letterSpacing: "0.05em" }}>
-          読み込み中…
-        </p>
-      }>
+
+      <Suspense fallback={<p style={{ padding: 24, color: AMZ.textSub }}>読み込み中…</p>}>
         <OrderCompleteContent />
       </Suspense>
     </div>
