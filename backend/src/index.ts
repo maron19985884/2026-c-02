@@ -4,11 +4,13 @@ import mysql from "mysql2/promise";
 import type { RowDataPacket, ResultSetHeader } from "mysql2";
 
 const app = express();
+/* istanbul ignore next */
 const PORT = process.env.PORT || 4000;
 
 app.use(cors());
 app.use(express.json());
 
+/* istanbul ignore next */
 const pool = mysql.createPool({
   host: process.env.DB_HOST || "localhost",
   port: Number(process.env.DB_PORT) || 3306,
@@ -106,6 +108,11 @@ app.post("/orders", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Backend running on port ${PORT}`);
-});
+/* istanbul ignore next */
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Backend running on port ${PORT}`);
+  });
+}
+
+export default app;

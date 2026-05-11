@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useCart } from "@/contexts/CartContext";
 
-type FormErrors = { name?: string; address?: string; email?: string };
+type FormErrors = { name?: string; address?: string; email?: string; submit?: string };
 
 const AMZ = {
   navy: "#131921",
@@ -35,6 +35,7 @@ export default function OrderPage() {
   const validate = (): FormErrors => {
     const errs: FormErrors = {};
     if (!name.trim()) errs.name = "氏名を入力してください";
+    else if (name.trim().length > 100) errs.name = "氏名は100文字以内で入力してください";
     if (!address.trim()) errs.address = "住所を入力してください";
     if (!email.trim()) errs.email = "メールアドレスを入力してください";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errs.email = "メールアドレスの形式が正しくありません";
@@ -55,10 +56,12 @@ export default function OrderPage() {
           items: items.map((i) => ({ book_id: i.id, title: i.title, price: i.price, quantity: i.quantity })),
         }),
       });
+      if (!res.ok) throw new Error();
       const data = await res.json();
       clearCart();
       router.push(`/order/complete?orderNumber=${data.order_number}`);
     } catch {
+      setErrors({ submit: "注文の送信に失敗しました。通信環境をご確認のうえ再度お試しください。" });
       setSubmitting(false);
     }
   };
@@ -113,6 +116,13 @@ export default function OrderPage() {
             お届け先情報を入力
           </h2>
           <form onSubmit={handleSubmit} noValidate>
+            {/* Submit error */}
+            {errors.submit && (
+              <p style={{ color: AMZ.red, fontSize: 14, marginBottom: 16, padding: "8px 12px",
+                background: "#FFF5F5", border: `1px solid ${AMZ.red}`, borderRadius: 4 }}>
+                {errors.submit}
+              </p>
+            )}
             {/* Name */}
             <div style={{ marginBottom: 16 }}>
               <label style={{ display: "block", fontSize: 13, fontWeight: 700, marginBottom: 4 }}>

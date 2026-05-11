@@ -32,7 +32,10 @@ export default function ProductDetailPage() {
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${id}`)
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error();
+        return r.json();
+      })
       .then((data) => { setBook(data); setLoading(false); })
       .catch(() => setLoading(false));
   }, [id]);
@@ -41,7 +44,8 @@ export default function ProductDetailPage() {
     if (!book) return;
     addItem({ id: book.id, title: book.title, author: book.author, price: book.price });
     setAdded(true);
-    setTimeout(() => setAdded(false), 2500);
+    const timer = setTimeout(() => setAdded(false), 2500);
+    return () => clearTimeout(timer);
   };
 
   return (

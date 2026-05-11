@@ -44,14 +44,18 @@ function Stars({ rating }: { rating: number }) {
 export default function ProductListPage() {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const { items, addItem } = useCart();
   const cartCount = items.reduce((sum, i) => sum + i.quantity, 0);
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`)
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error();
+        return r.json();
+      })
       .then((data) => { setBooks(data); setLoading(false); })
-      .catch(() => setLoading(false));
+      .catch(() => { setError(true); setLoading(false); });
   }, []);
 
   return (
@@ -113,6 +117,10 @@ export default function ProductListPage() {
 
         {loading ? (
           <p style={{ color: AMZ.textSub }}>読み込み中…</p>
+        ) : error ? (
+          <p style={{ color: "#CC0000" }}>書籍一覧の取得に失敗しました。時間をおいて再度お試しください。</p>
+        ) : books.length === 0 ? (
+          <p style={{ color: AMZ.textSub }}>販売中の書籍はありません。</p>
         ) : (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16 }}>
             {books.map((book) => {

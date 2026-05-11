@@ -20,6 +20,18 @@ const AMZ = {
 function OrderCompleteContent() {
   const searchParams = useSearchParams();
   const orderNumber = searchParams.get("orderNumber");
+  const isValid = orderNumber !== null && orderNumber.startsWith("ORD-");
+
+  if (!isValid) {
+    return (
+      <main style={{ maxWidth: 700, margin: "0 auto", padding: 24 }}>
+        <div style={{ background: AMZ.card, border: `1px solid ${AMZ.borderLight}`, borderRadius: 4, padding: 24, textAlign: "center" }}>
+          <p style={{ fontSize: 16, color: AMZ.textSub, marginBottom: 16 }}>注文情報が見つかりません。</p>
+          <Link href="/" style={{ color: AMZ.link, fontSize: 14 }}>商品一覧に戻る</Link>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main style={{ maxWidth: 700, margin: "0 auto", padding: 24 }}>
@@ -38,12 +50,10 @@ function OrderCompleteContent() {
         </div>
 
         {/* Order number */}
-        {orderNumber && (
-          <div style={{ marginBottom: 24 }}>
-            <div style={{ fontSize: 14, color: AMZ.textSub, marginBottom: 4 }}>注文番号</div>
-            <div style={{ fontSize: 20, fontWeight: 700, color: AMZ.link }}>{orderNumber}</div>
-          </div>
-        )}
+        <div style={{ marginBottom: 24 }}>
+          <div style={{ fontSize: 14, color: AMZ.textSub, marginBottom: 4 }}>注文番号</div>
+          <div style={{ fontSize: 20, fontWeight: 700, color: AMZ.link }}>{orderNumber}</div>
+        </div>
 
         {/* Delivery info */}
         <div style={{ background: "#F3F3F3", borderRadius: 4, padding: 16, marginBottom: 24 }}>

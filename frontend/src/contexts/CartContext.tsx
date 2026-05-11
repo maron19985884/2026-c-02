@@ -30,7 +30,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(items));
+    try {
+      localStorage.setItem("cart", JSON.stringify(items));
+    } catch {}
   }, [items]);
 
   const addItem = (book: Omit<CartItem, "quantity">) => {
