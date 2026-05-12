@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "NODE_PATH=/tmp/frontend-test-deps/node_modules /tmp/frontend-test-deps/node_modules/.bin/jest",
+    "test:coverage": "NODE_PATH=/tmp/frontend-test-deps/node_modules /tmp/frontend-test-deps/node_modules/.bin/jest --coverage"
   },
   "dependencies": {
     "next": "14.2.3",
