@@ -1,0 +1,19 @@
+{
+  "name": "integration-tests",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "jest --passWithNoTests --runInBand",
+    "test:books": "jest api/books",
+    "test:orders": "jest api/orders"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29",
+    "jest": "^29",
+    "ts-jest": "^29",
+    "typescript": "^5"
+  }
+}
