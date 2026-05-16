@@ -1,0 +1,1 @@
+- [テスト設定・既知問題・実行手順](project_test_config.md) — テスト依存は /tmp に都度インストール、React重複問題はjest.config.jsのmoduleNameMapperで解決済み

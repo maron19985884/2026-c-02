@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">95.83% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>22/22</span>
+                <span class='fraction'>23/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">71.42% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>10/10</span>
+                <span class='fraction'>10/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/3</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">95.23% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>19/19</span>
+                <span class='fraction'>20/21</span>
             </div>
         
             
@@ -112,10 +112,32 @@
 <a name='L47'></a><a href='#L47'>47</a>
 <a name='L48'></a><a href='#L48'>48</a>
 <a name='L49'></a><a href='#L49'>49</a>
-<a name='L50'></a><a href='#L50'>50</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">20x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">20x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -163,15 +185,26 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import type { Product, Order, CreateOrderRequest } from '@/types';
 &nbsp;
-// バックエンドのベースURL（環境変数から取得、デフォルトはlocalhost:4000）
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+/**
+ * バックエンドのベースURLを返す。
+ * サーバーサイド（Server Component等）では Docker ネットワーク内のサービス名を使用し、
+ * クライアントサイド（ブラウザ）ではホストOSから見えるポートマッピングを使用する。
+ */
+function getBaseUrl(): string {
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (typeof window === 'undefined') {
+    // サーバーサイド実行: Docker ネットワーク内でバックエンドコンテナに直接接続
+<span class="cstat-no" title="statement not covered" >    return process.env.INTERNAL_API_URL || 'http://backend:4000';</span>
+  }
+  // クライアントサイド実行: ブラウザからホスト経由で接続
+  return process.env.NEXT_PUBLIC_API_URL || <span class="branch-1 cbranch-no" title="branch not covered" >'http://localhost:4000';</span>
+}
 &nbsp;
 /**
  * 商品一覧を取得する
  * cache: 'no-store' を指定して常に最新データを取得する
  */
 export async function fetchProducts(): Promise&lt;Product[]&gt; {
-  const res = await fetch(`${BASE_URL}/api/products`, {
+  const res = await fetch(`${getBaseUrl()}/api/products`, {
     cache: 'no-store',
   });
   if (!res.ok) throw new Error(`Failed to fetch products: ${res.status}`);
@@ -184,7 +217,7 @@ export async function fetchProducts(): Promise&lt;Product[]&gt; {
  * 404の場合は 'Product not found' エラーをスローする
  */
 export async function fetchProduct(id: number): Promise&lt;Product&gt; {
-  const res = await fetch(`${BASE_URL}/api/products/${id}`, {
+  const res = await fetch(`${getBaseUrl()}/api/products/${id}`, {
     cache: 'no-store',
   });
   if (res.status === 404) throw new Error('Product not found');
@@ -198,7 +231,7 @@ export async function fetchProduct(id: number): Promise&lt;Product&gt; {
  * エラー時はバックエンドのエラーレスポンス（ApiError）をそのままスローする
  */
 export async function createOrder(body: CreateOrderRequest): Promise&lt;Order&gt; {
-  const res = await fetch(`${BASE_URL}/api/orders`, {
+  const res = await fetch(`${getBaseUrl()}/api/orders`, {
     method:  'POST',
     headers: { 'Content-Type': 'application/json' },
     body:    JSON.stringify(body),
@@ -217,7 +250,7 @@ export async function createOrder(body: CreateOrderRequest): Promise&lt;Order&gt
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-05-12T13:59:20.171Z
+                at 2026-05-16T11:12:47.570Z
             </div>
         <script src="../prettify.js"></script>
         <script>
