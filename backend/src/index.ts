@@ -1,5 +1,7 @@
 import express from "express";
 import cors from "cors";
+import booksRouter from "./routes/books";
+import ordersRouter from "./routes/orders";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -7,11 +9,13 @@ const PORT = process.env.PORT || 4000;
 app.use(cors());
 app.use(express.json());
 
-// 動作確認用エンドポイント
 app.get("/health", (_req, res) => {
-  res.json({ status: "ok", message: "Backend 起動確認 🚀" });
+  res.json({ status: "ok" });
 });
 
+app.use("/books", booksRouter);
+app.use("/orders", ordersRouter);
+
 app.listen(PORT, () => {
-  console.log(`✅ Backend server is running on port ${PORT}`);
+  console.log(`Backend running on port ${PORT}`);
 });
