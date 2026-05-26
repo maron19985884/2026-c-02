@@ -1,0 +1,39 @@
+# ------------------------------------------------------------------
+# node_modules
+# ホストOSのバイナリはコンテナ(Linux/Alpine)と異なるため除外。
+# コンテナ内で npm ci により再インストールされる。
+node_modules/
+
+# TypeScript コンパイル済み成果物
+# コンテナ内で npm run build により再生成されるため除外。
+dist/
+
+# 環境変数・シークレット
+# docker-compose の environment セクションで実行時に注入されるため除外。
+# .env.example はドキュメントとして含めてよいので除外しない。
+.env
+.env.*
+!.env.example
+
+# ログファイル
+*.log
+npm-debug.log*
+
+# Docker 関連ファイル（イメージ内に含める必要なし）
+Dockerfile
+.dockerignore
+
+# Git 履歴（実行に不要、イメージサイズ削減）
+.git/
+.gitignore
+
+# テスト・カバレッジ（本番イメージには不要）
+coverage/
+**/*.test.ts
+**/*.spec.ts
+
+# OS / エディタ生成物
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

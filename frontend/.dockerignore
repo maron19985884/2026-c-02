@@ -1,0 +1,49 @@
+# ------------------------------------------------------------------
+# node_modules
+# ホストOSのバイナリはコンテナ(Linux/Alpine)と異なるため除外。
+# コンテナ内で npm ci により再インストールされる。
+node_modules/
+
+# Next.js ビルド成果物
+# コンテナ内で npm run build により再生成されるため除外。
+.next/
+out/
+
+# 環境変数・シークレット
+# docker-compose の environment セクションで実行時に注入されるため除外。
+# Next.js が参照する .env.local 系も除外。
+.env
+.env.*
+!.env.example
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ログファイル
+*.log
+npm-debug.log*
+
+# Docker 関連ファイル（イメージ内に含める必要なし）
+Dockerfile
+.dockerignore
+
+# Git 履歴（実行に不要、イメージサイズ削減）
+.git/
+.gitignore
+
+# テスト・カバレッジ（本番イメージには不要）
+coverage/
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+
+# TypeScript インクリメンタルビルドキャッシュ（コンテナ内で再生成）
+*.tsbuildinfo
+
+# OS / エディタ生成物
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
