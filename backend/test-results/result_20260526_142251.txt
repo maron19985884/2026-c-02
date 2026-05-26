@@ -1,0 +1,18 @@
+PASS src/routes/books.test.ts
+  GET /books
+    ✓ 書籍一覧を返す (37 ms)
+  GET /books/:id
+    ✓ 指定したIDの書籍を返す (7 ms)
+    ✓ 存在しないIDの場合は404を返す (4 ms)
+
+PASS src/routes/orders.test.ts
+  POST /orders
+    ✓ 注文を作成して注文番号を返す (36 ms)
+    ✓ 必須項目が不足している場合は400を返す (5 ms)
+    ✓ itemsが空の場合は400を返す (5 ms)
+
+Test Suites: 2 passed, 2 total
+Tests:       6 passed, 6 total
+Snapshots:   0 total
+Time:        0.743 s, estimated 2 s
+Ran all test suites.
