@@ -17,7 +17,7 @@ RUN npm install
 # ソースをコピー
 COPY . .
 
-EXPOSE 4000
+EXPOSE 3001
 
 # ts-node-dev でホットリロード対応
 CMD ["npm", "run", "dev"]
@@ -50,6 +50,6 @@ RUN npm ci --only=production
 
 COPY --from=builder /app/dist ./dist
 
-EXPOSE 4000
+EXPOSE 3001
 
 CMD ["node", "dist/index.js"]

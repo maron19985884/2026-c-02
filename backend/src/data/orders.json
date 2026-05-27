@@ -1,0 +1,67 @@
+[
+  {
+    "orderId": "ORD-20260527-000001",
+    "customerName": "�e�X�g ���Y",
+    "address": "�����s�a�J�擹����1-2-3",
+    "email": "test@example.com",
+    "items": [
+      {
+        "bookId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "title": "TypeScriptで学ぶ設計原則",
+        "price": 2800,
+        "quantity": 2,
+        "subtotal": 5600
+      }
+    ],
+    "totalAmount": 5600,
+    "createdAt": "2026-05-27T09:21:34.287Z"
+  },
+  {
+    "orderId": "ORD-20260527-000002",
+    "customerName": "テスト 太郎",
+    "address": "東京都渋谷区道玄坂1-2-3",
+    "email": "test2@example.com",
+    "items": [
+      {
+        "bookId": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+        "title": "Reactフロントエンド実践ガイド",
+        "price": 3200,
+        "quantity": 1,
+        "subtotal": 3200
+      }
+    ],
+    "totalAmount": 3200,
+    "createdAt": "2026-05-27T09:22:52.154Z"
+  },
+  {
+    "orderId": "ORD-20260527-000003",
+    "customerName": "田中 花子",
+    "address": "大阪府大阪市北区梅田1-1-1",
+    "email": "hanako@example.com",
+    "items": [
+      {
+        "bookId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "title": "TypeScriptで学ぶ設計原則",
+        "price": 2800,
+        "quantity": 1,
+        "subtotal": 2800
+      },
+      {
+        "bookId": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+        "title": "Node.jsバックエンド開発入門",
+        "price": 3000,
+        "quantity": 2,
+        "subtotal": 6000
+      },
+      {
+        "bookId": "d4e5f6a7-b8c9-0123-def0-234567890123",
+        "title": "Dockerコンテナ完全ガイド",
+        "price": 3500,
+        "quantity": 1,
+        "subtotal": 3500
+      }
+    ],
+    "totalAmount": 12300,
+    "createdAt": "2026-05-27T09:23:27.139Z"
+  }
+]

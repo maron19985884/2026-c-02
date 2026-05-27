@@ -6,15 +6,16 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-      target: development          # 本番時は production に変更
+      target: development
     container_name: frontend
     ports:
       - "3000:3000"
     volumes:
-      - ./frontend:/app            # ホットリロード用マウント
-      - /app/node_modules          # node_modules はコンテナ側を優先
+      - ./frontend:/app
+      - /app/node_modules
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:4000
+      - NEXT_PUBLIC_API_URL=http://localhost:3001
+      - BACKEND_URL=http://backend:3001
     depends_on:
       - backend
     networks:
@@ -27,50 +28,18 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-      target: development          # 本番時は production に変更
+      target: development
     container_name: backend
     ports:
-      - "4000:4000"
+      - "3001:3001"
     volumes:
-      - ./backend:/app             # ホットリロード用マウント
-      - /app/node_modules          # node_modules はコンテナ側を優先
+      - ./backend:/app
+      - /app/node_modules
+      - ./backend/src/data:/app/src/data
     environment:
       - NODE_ENV=development
-      - PORT=4000
-      - DB_HOST=mysql
-      - DB_PORT=3306
-      - DB_NAME=${DB_NAME:-appdb}
-      - DB_USER=${DB_USER:-appuser}
-      - DB_PASSWORD=${DB_PASSWORD:-password}
-    depends_on:
-      mysql:
-        condition: service_healthy
-    networks:
-      - app-network
-
-  # ============================================================
-  # Database: MySQL 8
-  # ============================================================
-  mysql:
-    image: mysql:8.0
-    container_name: mysql
-    restart: unless-stopped
-    ports:
-      - "3306:3306"
-    environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-rootpassword}
-      - MYSQL_DATABASE=${DB_NAME:-appdb}
-      - MYSQL_USER=${DB_USER:-appuser}
-      - MYSQL_PASSWORD=${DB_PASSWORD:-password}
-    volumes:
-      - mysql_data:/var/lib/mysql          # データ永続化
-      - ./mysql/init:/docker-entrypoint-initdb.d  # 初期化SQLを配置できる
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-rootpassword}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
+      - PORT=3001
+      - FRONTEND_URL=http://localhost:3000
     networks:
       - app-network
 
@@ -80,10 +49,3 @@ services:
 networks:
   app-network:
     driver: bridge
-
-# ============================================================
-# ボリューム
-# ============================================================
-volumes:
-  mysql_data:
-    driver: local

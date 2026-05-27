@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm --version)",
+      "PowerShell(Get-Command node -ErrorAction SilentlyContinue)",
+      "PowerShell(Get-Command npm -ErrorAction SilentlyContinue)",
+      "PowerShell($docker = \"C:\\\\Program Files\\\\Docker\\\\Docker\\\\resources\\\\bin\\\\docker.exe\"; & $docker run --rm -v \"C:\\\\Software\\\\workspace\\\\2026-c-02\\\\backend:/app\" -w /app node:20-alpine npm install 2>&1)",
+      "PowerShell(Get-ChildItem \"C:\\\\Software\\\\workspace\\\\2026-c-02\\\\backend\\\\src\" -Recurse | Where-Object { -not $_.PSIsContainer } | Select-Object FullName | ForEach-Object { $_.FullName.Replace\\(\"C:\\\\Software\\\\workspace\\\\2026-c-02\\\\backend\\\\\", \"\"\\) })",
+      "Bash(Get-ChildItem -Path \"C:\\\\Software\\\\workspace\\\\2026-c-02\\\\backend\\\\\" -Recurse -File | Select-Object FullName | Sort-Object FullName)",
+      "Bash(ls /c/Users/AKANEOONO/ 2>&1 | head -20)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Software\\\\workspace\\\\2026-c-02\\\\frontend\" -MaxDepth 1 -File | Where-Object { $_.Name -match '\\(next|tailwind|postcss|jest\\)' } | Select-Object Name)",
+      "PowerShell($env:PATH)",
+      "Bash(npm install *)",
+      "PowerShell(Get-ChildItem \"C:\\\\\" -Depth 1 -Directory -ErrorAction SilentlyContinue | Select-Object Name; Get-ChildItem \"$env:APPDATA\\\\npm\" -ErrorAction SilentlyContinue | Select-Object -First 5 Name; Get-ChildItem \"$env:LOCALAPPDATA\\\\nvm\" -ErrorAction SilentlyContinue | Select-Object Name)",
+      "PowerShell(docker run --rm -v \"C:\\\\Software\\\\workspace\\\\2026-c-02\\\\frontend:/app\" -w /app node:20-alpine npm install --save-dev jest jest-environment-jsdom @testing-library/react @testing-library/jest-dom @testing-library/user-event @types/jest 2>&1)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Software\\\\workspace\\\\2026-c-02\\\\\" -Force | Select-Object Name, Mode | Format-Table -AutoSize)",
+      "Bash(ls -la \"C:\\\\Software\\\\workspace\\\\2026-c-02\\\\\")",
+      "Bash(docker compose *)",
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(Start-Sleep -Seconds 8)",
+      "Bash(curl -s http://localhost:3001/api/books)",
+      "Bash(curl -s http://localhost:3000)",
+      "Bash(curl -s \"http://localhost:3000/books/a1b2c3d4-e5f6-7890-abcd-ef1234567890\")",
+      "Bash(curl -s \"http://localhost:3000/cart\")",
+      "Bash(curl -s \"http://localhost:3000/checkout\")"
+    ]
+  }
+}
