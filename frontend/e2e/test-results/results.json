@@ -1,0 +1,1830 @@
+{
+  "config": {
+    "configFile": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\playwright.config.ts",
+    "rootDir": "D:/_dat/prj/2026-c-02/feature/h1nakamu/.claude/worktrees/focused-lederberg-d85b9e/frontend/e2e",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 3
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/_dat/prj/2026-c-02/feature/h1nakamu/.claude/worktrees/focused-lederberg-d85b9e/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 3
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "D:/_dat/prj/2026-c-02/feature/h1nakamu/.claude/worktrees/focused-lederberg-d85b9e/frontend/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "open": "never",
+          "outputFolder": "e2e/playwright-report"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "e2e/test-results/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.60.0",
+    "workers": 8,
+    "webServer": {
+      "command": "npm run dev",
+      "url": "http://localhost:3000",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "books.spec.ts",
+      "file": "books.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "書籍一覧ページ",
+          "file": "books.spec.ts",
+          "line": 26,
+          "column": 6,
+          "specs": [
+            {
+              "title": "ページタイトルが表示される",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 9502,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:42:51.020Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\books-書籍一覧ページ-ページタイトルが表示される-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e273644fa03595d2d8c7-c9e95862b6ceb0d1199c",
+              "file": "books.spec.ts",
+              "line": 38,
+              "column": 7
+            },
+            {
+              "title": "書籍が2冊表示される",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3675,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:43:01.092Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\books-書籍一覧ページ-書籍が2冊表示される-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e273644fa03595d2d8c7-be331c4d7584c14bc7a5",
+              "file": "books.spec.ts",
+              "line": 42,
+              "column": 7
+            },
+            {
+              "title": "著者名が表示される",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 938,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:43:04.790Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\books-書籍一覧ページ-著者名が表示される-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e273644fa03595d2d8c7-df63b6a176871043ec94",
+              "file": "books.spec.ts",
+              "line": 47,
+              "column": 7
+            },
+            {
+              "title": "価格が表示される",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 898,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:43:05.754Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\books-書籍一覧ページ-価格が表示される-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e273644fa03595d2d8c7-b7e12f3175b7c3bf9916",
+              "file": "books.spec.ts",
+              "line": 52,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "書籍詳細ページ",
+          "file": "books.spec.ts",
+          "line": 60,
+          "column": 6,
+          "specs": [
+            {
+              "title": "一覧から詳細ページに遷移できる",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1762,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:43:06.673Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\books-書籍詳細ページ-一覧から詳細ページに遷移できる-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e273644fa03595d2d8c7-712c51b795a66cd91ffe",
+              "file": "books.spec.ts",
+              "line": 78,
+              "column": 7
+            },
+            {
+              "title": "書籍タイトルが表示される",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1005,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:43:08.452Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\books-書籍詳細ページ-書籍タイトルが表示される-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e273644fa03595d2d8c7-f8f6cf0e55df6f2a164f",
+              "file": "books.spec.ts",
+              "line": 84,
+              "column": 7
+            },
+            {
+              "title": "著者名・価格・説明が表示される",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 955,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:43:09.478Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\books-書籍詳細ページ-著者名・価格・説明が表示される-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e273644fa03595d2d8c7-a1a4b4f9eb1b785bbc13",
+              "file": "books.spec.ts",
+              "line": 89,
+              "column": 7
+            },
+            {
+              "title": "「カートに追加」ボタンが表示される",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1232,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:43:10.454Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\books-書籍詳細ページ-「カートに追加」ボタンが表示される-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e273644fa03595d2d8c7-26104ccad59e4bc40004",
+              "file": "books.spec.ts",
+              "line": 96,
+              "column": 7
+            },
+            {
+              "title": "カートに追加するとボタンが「追加しました!」に変わる",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1445,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:43:11.703Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\books-書籍詳細ページ-カートに追加するとボタンが「追加しました-」に変わる-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e273644fa03595d2d8c7-58c9ef62407bae514e38",
+              "file": "books.spec.ts",
+              "line": 101,
+              "column": 7
+            },
+            {
+              "title": "「← 一覧に戻る」ボタンで一覧に戻れる",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 6156,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:3000/\"\u001b[39m\nReceived: \u001b[31m\"about:blank\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    14 × unexpected value \"about:blank\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:3000/\"\u001b[39m\nReceived: \u001b[31m\"about:blank\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    14 × unexpected value \"about:blank\"\u001b[22m\n\n    at D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\books.spec.ts:110:24",
+                        "location": {
+                          "file": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\books.spec.ts",
+                          "column": 24,
+                          "line": 110
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 108 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/books/1'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 109 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'← 一覧に戻る'\u001b[39m })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 110 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveURL(\u001b[32m'/'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 111 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 112 |\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 113 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\books.spec.ts",
+                            "column": 24,
+                            "line": 110
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:3000/\"\u001b[39m\nReceived: \u001b[31m\"about:blank\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    14 × unexpected value \"about:blank\"\u001b[22m\n\n\n  108 |     await page.goto('/books/1');\n  109 |     await page.getByRole('button', { name: '← 一覧に戻る' }).click();\n> 110 |     await expect(page).toHaveURL('/');\n      |                        ^\n  111 |   });\n  112 | });\n  113 |\n    at D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\books.spec.ts:110:24"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:43:13.167Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\books-書籍詳細ページ-「←-一覧に戻る」ボタンで一覧に戻れる-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\books-書籍詳細ページ-「←-一覧に戻る」ボタンで一覧に戻れる-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\books.spec.ts",
+                        "column": 24,
+                        "line": 110
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "e273644fa03595d2d8c7-81d40687ef4322011035",
+              "file": "books.spec.ts",
+              "line": 107,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "cart.spec.ts",
+      "file": "cart.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "カートページ",
+          "file": "cart.spec.ts",
+          "line": 40,
+          "column": 6,
+          "specs": [
+            {
+              "title": "カートが空の場合「カートは空です」と表示される",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 9454,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:42:51.002Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\cart-カートページ-カートが空の場合「カートは空です」と表示される-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "1981448f0b79506fb670-b105848b85f259110bea",
+              "file": "cart.spec.ts",
+              "line": 41,
+              "column": 7
+            },
+            {
+              "title": "カートが空のとき「書籍一覧へ」リンクが表示される",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2087,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:43:01.026Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\cart-カートページ-カートが空のとき「書籍一覧へ」リンクが表示される-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "1981448f0b79506fb670-01d4bc3c1b7d7c5046db",
+              "file": "cart.spec.ts",
+              "line": 46,
+              "column": 7
+            },
+            {
+              "title": "カートに追加した商品が表示される",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 7418,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Clean Code')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Clean Code')\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Clean Code')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Clean Code')\u001b[22m\n\n    at D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\cart.spec.ts:54:48",
+                        "location": {
+                          "file": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\cart.spec.ts",
+                          "column": 48,
+                          "line": 54
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 52 |\u001b[39m     \u001b[36mawait\u001b[39m addToCart(page\u001b[33m,\u001b[39m \u001b[35m1\u001b[39m\u001b[33m,\u001b[39m mockBook1)\u001b[33m;\u001b[39m\n \u001b[90m 53 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/cart'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 54 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(\u001b[32m'Clean Code'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 55 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(\u001b[32m'Robert C. Martin'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m 56 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 57 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\cart.spec.ts",
+                            "column": 48,
+                            "line": 54
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Clean Code')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Clean Code')\u001b[22m\n\n\n  52 |     await addToCart(page, 1, mockBook1);\n  53 |     await page.goto('/cart');\n> 54 |     await expect(page.getByText('Clean Code')).toBeVisible();\n     |                                                ^\n  55 |     await expect(page.getByText('Robert C. Martin')).toBeVisible();\n  56 |   });\n  57 |\n    at D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\cart.spec.ts:54:48"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:43:03.139Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\cart-カートページ-カートに追加した商品が表示される-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\cart-カートページ-カートに追加した商品が表示される-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\cart.spec.ts",
+                        "column": 48,
+                        "line": 54
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "1981448f0b79506fb670-e04f7e9b36691aad07de",
+              "file": "cart.spec.ts",
+              "line": 51,
+              "column": 7
+            },
+            {
+              "title": "カートの合計金額が正しく表示される",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 7105,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('¥3,200').nth(1)\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('¥3,200').nth(1)\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('¥3,200').nth(1)\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('¥3,200').nth(1)\u001b[22m\n\n    at D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\cart.spec.ts:62:51",
+                        "location": {
+                          "file": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\cart.spec.ts",
+                          "column": 51,
+                          "line": 62
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 60 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/cart'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 61 |\u001b[39m     \u001b[90m// 数量1 × ¥3,200\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 62 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(\u001b[32m'¥3,200'\u001b[39m)\u001b[33m.\u001b[39mnth(\u001b[35m1\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m \u001b[90m// 合計欄\u001b[39m\n \u001b[90m    |\u001b[39m                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 63 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 64 |\u001b[39m\n \u001b[90m 65 |\u001b[39m   test(\u001b[32m'「＋」ボタンで数量を増やせる'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\cart.spec.ts",
+                            "column": 51,
+                            "line": 62
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('¥3,200').nth(1)\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('¥3,200').nth(1)\u001b[22m\n\n\n  60 |     await page.goto('/cart');\n  61 |     // 数量1 × ¥3,200\n> 62 |     await expect(page.getByText('¥3,200').nth(1)).toBeVisible(); // 合計欄\n     |                                                   ^\n  63 |   });\n  64 |\n  65 |   test('「＋」ボタンで数量を増やせる', async ({ page }) => {\n    at D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\cart.spec.ts:62:51"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:43:11.720Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\cart-カートページ-カートの合計金額が正しく表示される-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\cart-カートページ-カートの合計金額が正しく表示される-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\cart.spec.ts",
+                        "column": 51,
+                        "line": 62
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "1981448f0b79506fb670-2790cc21598afc2ad71d",
+              "file": "cart.spec.ts",
+              "line": 58,
+              "column": 7
+            },
+            {
+              "title": "「＋」ボタンで数量を増やせる",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 1,
+                      "status": "timedOut",
+                      "duration": 30070,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\cart.spec.ts",
+                            "column": 51,
+                            "line": 68
+                          },
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '＋' })\u001b[22m\n\n\n  66 |     await addToCart(page, 1, mockBook1);\n  67 |     await page.goto('/cart');\n> 68 |     await page.getByRole('button', { name: '＋' }).click();\n     |                                                   ^\n  69 |     // 数量が2になる\n  70 |     await expect(page.locator('span').filter({ hasText: '2' })).toBeVisible();\n  71 |     // 合計が ¥6,400 になる\n    at D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\cart.spec.ts:68:51"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:43:20.128Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\cart-カートページ-「＋」ボタンで数量を増やせる-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\cart-カートページ-「＋」ボタンで数量を増やせる-chromium\\error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "1981448f0b79506fb670-da83483c8e45c3c99c99",
+              "file": "cart.spec.ts",
+              "line": 65,
+              "column": 7
+            },
+            {
+              "title": "「−」ボタンで数量を減らせる（1→0で削除される）",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 1,
+                      "status": "timedOut",
+                      "duration": 30084,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\cart.spec.ts",
+                            "column": 51,
+                            "line": 78
+                          },
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '−' })\u001b[22m\n\n\n  76 |     await addToCart(page, 1, mockBook1);\n  77 |     await page.goto('/cart');\n> 78 |     await page.getByRole('button', { name: '−' }).click();\n     |                                                   ^\n  79 |     // 数量0→カートから削除される\n  80 |     await expect(page.getByText('カートは空です')).toBeVisible();\n  81 |   });\n    at D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\cart.spec.ts:78:51"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:43:51.527Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\cart-カートページ-「−」ボタンで数量を減らせる（1→0で削除される）-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\cart-カートページ-「−」ボタンで数量を減らせる（1→0で削除される）-chromium\\error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "1981448f0b79506fb670-2887b01255c7ac4a6e32",
+              "file": "cart.spec.ts",
+              "line": 75,
+              "column": 7
+            },
+            {
+              "title": "「削除」ボタンでカートから削除できる",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 1,
+                      "status": "timedOut",
+                      "duration": 30089,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\cart.spec.ts",
+                            "column": 52,
+                            "line": 86
+                          },
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '削除' })\u001b[22m\n\n\n  84 |     await addToCart(page, 1, mockBook1);\n  85 |     await page.goto('/cart');\n> 86 |     await page.getByRole('button', { name: '削除' }).click();\n     |                                                    ^\n  87 |     await expect(page.getByText('カートは空です')).toBeVisible();\n  88 |   });\n  89 |\n    at D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\cart.spec.ts:86:52"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:44:23.017Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\cart-カートページ-「削除」ボタンでカートから削除できる-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\cart-カートページ-「削除」ボタンでカートから削除できる-chromium\\error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "1981448f0b79506fb670-8233bd70fe9ddc7aa282",
+              "file": "cart.spec.ts",
+              "line": 83,
+              "column": 7
+            },
+            {
+              "title": "「注文へ進む」ボタンで注文ページに遷移できる",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "parallelIndex": 1,
+                      "status": "timedOut",
+                      "duration": 30070,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\cart.spec.ts",
+                            "column": 55,
+                            "line": 93
+                          },
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '注文へ進む' })\u001b[22m\n\n\n  91 |     await addToCart(page, 1, mockBook1);\n  92 |     await page.goto('/cart');\n> 93 |     await page.getByRole('button', { name: '注文へ進む' }).click();\n     |                                                       ^\n  94 |     await expect(page).toHaveURL('/order');\n  95 |   });\n  96 | });\n    at D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\cart.spec.ts:93:55"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:44:54.443Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\cart-カートページ-「注文へ進む」ボタンで注文ページに遷移できる-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\cart-カートページ-「注文へ進む」ボタンで注文ページに遷移できる-chromium\\error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "1981448f0b79506fb670-e9dd5053f853ec9d059c",
+              "file": "cart.spec.ts",
+              "line": 90,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "ヘッダーのカートバッジ",
+          "file": "cart.spec.ts",
+          "line": 100,
+          "column": 6,
+          "specs": [
+            {
+              "title": "商品を追加するとヘッダーのバッジが更新される",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 14,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1291,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:45:25.658Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\cart-ヘッダーのカートバッジ-商品を追加するとヘッダーのバッジが更新される-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "1981448f0b79506fb670-7ecfe65b759a157ce537",
+              "file": "cart.spec.ts",
+              "line": 101,
+              "column": 7
+            },
+            {
+              "title": "2種類の商品を追加するとバッジが2になる",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 14,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 6927,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('header').getByText('2')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('header').getByText('2')\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('header').getByText('2')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('header').getByText('2')\u001b[22m\n\n    at D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\cart.spec.ts:121:57",
+                        "location": {
+                          "file": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\cart.spec.ts",
+                          "column": 57,
+                          "line": 121
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 119 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'追加しました!'\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m 120 |\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 121 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'header'\u001b[39m)\u001b[33m.\u001b[39mgetByText(\u001b[32m'2'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 122 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 123 |\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 124 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\cart.spec.ts",
+                            "column": 57,
+                            "line": 121
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('header').getByText('2')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('header').getByText('2')\u001b[22m\n\n\n  119 |     await expect(page.getByRole('button', { name: '追加しました!' })).toBeVisible();\n  120 |\n> 121 |     await expect(page.locator('header').getByText('2')).toBeVisible();\n      |                                                         ^\n  122 |   });\n  123 | });\n  124 |\n    at D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\cart.spec.ts:121:57"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:45:27.347Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\cart-ヘッダーのカートバッジ-2種類の商品を追加するとバッジが2になる-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\cart-ヘッダーのカートバッジ-2種類の商品を追加するとバッジが2になる-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\cart.spec.ts",
+                        "column": 57,
+                        "line": 121
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "1981448f0b79506fb670-e4bf434f8909b6da407d",
+              "file": "cart.spec.ts",
+              "line": 107,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "order.spec.ts",
+      "file": "order.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "注文フォームページ",
+          "file": "order.spec.ts",
+          "line": 33,
+          "column": 6,
+          "specs": [
+            {
+              "title": "カートが空のとき「カートに商品がありません」と表示される",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 9436,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:42:51.005Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\order-注文フォームページ-カートが空のとき「カートに商品がありません」と表示される-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "85d1357294a106dff78a-c22a0768816385e6cdd8",
+              "file": "order.spec.ts",
+              "line": 34,
+              "column": 7
+            },
+            {
+              "title": "注文ページに注文内容が表示される",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 9556,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Clean Code × 1')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Clean Code × 1')\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Clean Code × 1')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Clean Code × 1')\u001b[22m\n\n    at D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\order.spec.ts:41:52",
+                        "location": {
+                          "file": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\order.spec.ts",
+                          "column": 52,
+                          "line": 41
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 39 |\u001b[39m   test(\u001b[32m'注文ページに注文内容が表示される'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n \u001b[90m 40 |\u001b[39m     \u001b[36mawait\u001b[39m setupOrderPage(page)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 41 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(\u001b[32m'Clean Code × 1'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                    \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 42 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(\u001b[32m'¥3,200'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m 43 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 44 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\order.spec.ts",
+                            "column": 52,
+                            "line": 41
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Clean Code × 1')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Clean Code × 1')\u001b[22m\n\n\n  39 |   test('注文ページに注文内容が表示される', async ({ page }) => {\n  40 |     await setupOrderPage(page);\n> 41 |     await expect(page.getByText('Clean Code × 1')).toBeVisible();\n     |                                                    ^\n  42 |     await expect(page.getByText('¥3,200')).toBeVisible();\n  43 |   });\n  44 |\n    at D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\order.spec.ts:41:52"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:43:00.993Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\order-注文フォームページ-注文ページに注文内容が表示される-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\order-注文フォームページ-注文ページに注文内容が表示される-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\order.spec.ts",
+                        "column": 52,
+                        "line": 41
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "85d1357294a106dff78a-f643d29c3f792ecc9a8a",
+              "file": "order.spec.ts",
+              "line": 39,
+              "column": 7
+            },
+            {
+              "title": "注文フォームの入力欄が表示される",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 7179,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByPlaceholder('山田 太郎')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByPlaceholder('山田 太郎')\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByPlaceholder('山田 太郎')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByPlaceholder('山田 太郎')\u001b[22m\n\n    at D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\order.spec.ts:47:50",
+                        "location": {
+                          "file": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\order.spec.ts",
+                          "column": 50,
+                          "line": 47
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 45 |\u001b[39m   test(\u001b[32m'注文フォームの入力欄が表示される'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n \u001b[90m 46 |\u001b[39m     \u001b[36mawait\u001b[39m setupOrderPage(page)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 47 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByPlaceholder(\u001b[32m'山田 太郎'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                  \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 48 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByPlaceholder(\u001b[32m'東京都千代田区...'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m 49 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByPlaceholder(\u001b[32m'example@mail.com'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m 50 |\u001b[39m   })\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\order.spec.ts",
+                            "column": 50,
+                            "line": 47
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByPlaceholder('山田 太郎')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByPlaceholder('山田 太郎')\u001b[22m\n\n\n  45 |   test('注文フォームの入力欄が表示される', async ({ page }) => {\n  46 |     await setupOrderPage(page);\n> 47 |     await expect(page.getByPlaceholder('山田 太郎')).toBeVisible();\n     |                                                  ^\n  48 |     await expect(page.getByPlaceholder('東京都千代田区...')).toBeVisible();\n  49 |     await expect(page.getByPlaceholder('example@mail.com')).toBeVisible();\n  50 |   });\n    at D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\order.spec.ts:47:50"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:43:11.709Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\order-注文フォームページ-注文フォームの入力欄が表示される-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\order-注文フォームページ-注文フォームの入力欄が表示される-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\order.spec.ts",
+                        "column": 50,
+                        "line": 47
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "85d1357294a106dff78a-4c66f57736e2fb474347",
+              "file": "order.spec.ts",
+              "line": 45,
+              "column": 7
+            },
+            {
+              "title": "未入力で送信するとエラーメッセージが表示される",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 2,
+                      "status": "timedOut",
+                      "duration": 30071,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\order.spec.ts",
+                            "column": 57,
+                            "line": 54
+                          },
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '注文を確定する' })\u001b[22m\n\n\n  52 |   test('未入力で送信するとエラーメッセージが表示される', async ({ page }) => {\n  53 |     await setupOrderPage(page);\n> 54 |     await page.getByRole('button', { name: '注文を確定する' }).click();\n     |                                                         ^\n  55 |     await expect(page.getByText('すべての項目を入力してください')).toBeVisible();\n  56 |   });\n  57 |\n    at D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\order.spec.ts:54:57"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:43:20.101Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\order-注文フォームページ-未入力で送信するとエラーメッセージが表示される-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\order-注文フォームページ-未入力で送信するとエラーメッセージが表示される-chromium\\error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "85d1357294a106dff78a-979a77a3e8604b92e466",
+              "file": "order.spec.ts",
+              "line": 52,
+              "column": 7
+            },
+            {
+              "title": "氏名だけ入力して送信してもエラーになる",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 30141,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\order.spec.ts",
+                            "column": 42,
+                            "line": 60
+                          },
+                          "message": "Error: locator.fill: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByPlaceholder('山田 太郎')\u001b[22m\n\n\n  58 |   test('氏名だけ入力して送信してもエラーになる', async ({ page }) => {\n  59 |     await setupOrderPage(page);\n> 60 |     await page.getByPlaceholder('山田 太郎').fill('山田 太郎');\n     |                                          ^\n  61 |     await page.getByRole('button', { name: '注文を確定する' }).click();\n  62 |     await expect(page.getByText('すべての項目を入力してください')).toBeVisible();\n  63 |   });\n    at D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\order.spec.ts:60:42"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:43:51.486Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\order-注文フォームページ-氏名だけ入力して送信してもエラーになる-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\order-注文フォームページ-氏名だけ入力して送信してもエラーになる-chromium\\error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "85d1357294a106dff78a-36bf0dea5afd0cce58c9",
+              "file": "order.spec.ts",
+              "line": 58,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "注文完了フロー",
+          "file": "order.spec.ts",
+          "line": 68,
+          "column": 6,
+          "specs": [
+            {
+              "title": "フォームに入力して送信すると注文完了ページに遷移する",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 30072,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\order.spec.ts",
+                            "column": 42,
+                            "line": 85
+                          },
+                          "message": "Error: locator.fill: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByPlaceholder('山田 太郎')\u001b[22m\n\n\n  83 |\n  84 |     // フォーム入力\n> 85 |     await page.getByPlaceholder('山田 太郎').fill('山田 太郎');\n     |                                          ^\n  86 |     await page.getByPlaceholder('東京都千代田区...').fill('東京都千代田区1-1-1');\n  87 |     await page.getByPlaceholder('example@mail.com').fill('yamada@example.com');\n  88 |\n    at D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\order.spec.ts:85:42"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:44:22.996Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\order-注文完了フロー-フォームに入力して送信すると注文完了ページに遷移する-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\order-注文完了フロー-フォームに入力して送信すると注文完了ページに遷移する-chromium\\error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "85d1357294a106dff78a-8becc9b9607ef7d56442",
+              "file": "order.spec.ts",
+              "line": 69,
+              "column": 7
+            },
+            {
+              "title": "注文完了ページに注文番号が表示される",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 11,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 30065,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\order.spec.ts",
+                            "column": 42,
+                            "line": 109
+                          },
+                          "message": "Error: locator.fill: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByPlaceholder('山田 太郎')\u001b[22m\n\n\n  107 |\n  108 |     await setupOrderPage(page);\n> 109 |     await page.getByPlaceholder('山田 太郎').fill('山田 太郎');\n      |                                          ^\n  110 |     await page.getByPlaceholder('東京都千代田区...').fill('東京都千代田区1-1-1');\n  111 |     await page.getByPlaceholder('example@mail.com').fill('yamada@example.com');\n  112 |     await page.getByRole('button', { name: '注文を確定する' }).click();\n    at D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\order.spec.ts:109:42"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:44:54.419Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\order-注文完了フロー-注文完了ページに注文番号が表示される-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\order-注文完了フロー-注文完了ページに注文番号が表示される-chromium\\error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "85d1357294a106dff78a-0a70ee9546979d75f7e9",
+              "file": "order.spec.ts",
+              "line": 96,
+              "column": 7
+            },
+            {
+              "title": "注文完了後、カートが空になる",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 13,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 30076,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\order.spec.ts",
+                            "column": 42,
+                            "line": 132
+                          },
+                          "message": "Error: locator.fill: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByPlaceholder('山田 太郎')\u001b[22m\n\n\n  130 |\n  131 |     await setupOrderPage(page);\n> 132 |     await page.getByPlaceholder('山田 太郎').fill('山田 太郎');\n      |                                          ^\n  133 |     await page.getByPlaceholder('東京都千代田区...').fill('東京都千代田区1-1-1');\n  134 |     await page.getByPlaceholder('example@mail.com').fill('yamada@example.com');\n  135 |     await page.getByRole('button', { name: '注文を確定する' }).click();\n    at D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\order.spec.ts:132:42"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:45:25.573Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\order-注文完了フロー-注文完了後、カートが空になる-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\order-注文完了フロー-注文完了後、カートが空になる-chromium\\error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "85d1357294a106dff78a-518ca10a4eb9f3850844",
+              "file": "order.spec.ts",
+              "line": 119,
+              "column": 7
+            },
+            {
+              "title": "注文完了ページから書籍一覧へ戻れる",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 15,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4290,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:45:56.772Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\order-注文完了フロー-注文完了ページから書籍一覧へ戻れる-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "85d1357294a106dff78a-7c222153d689ac1423a5",
+              "file": "order.spec.ts",
+              "line": 143,
+              "column": 7
+            },
+            {
+              "title": "APIエラー時にエラーメッセージが表示される",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 15,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 30066,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\order.spec.ts",
+                            "column": 42,
+                            "line": 155
+                          },
+                          "message": "Error: locator.fill: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByPlaceholder('山田 太郎')\u001b[22m\n\n\n  153 |\n  154 |     await setupOrderPage(page);\n> 155 |     await page.getByPlaceholder('山田 太郎').fill('山田 太郎');\n      |                                          ^\n  156 |     await page.getByPlaceholder('東京都千代田区...').fill('東京都千代田区1-1-1');\n  157 |     await page.getByPlaceholder('example@mail.com').fill('yamada@example.com');\n  158 |     await page.getByRole('button', { name: '注文を確定する' }).click();\n    at D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\e2e\\order.spec.ts:155:42"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:46:01.436Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\order-注文完了フロー-APIエラー時にエラーメッセージが表示される-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\order-注文完了フロー-APIエラー時にエラーメッセージが表示される-chromium\\error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "85d1357294a106dff78a-a083742cc7659837b872",
+              "file": "order.spec.ts",
+              "line": 149,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "注文完了ページ",
+          "file": "order.spec.ts",
+          "line": 166,
+          "column": 6,
+          "specs": [
+            {
+              "title": "URLパラメータから注文番号と合計金額が表示される",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 16,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1032,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:46:32.375Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\order-注文完了ページ-URLパラメータから注文番号と合計金額が表示される-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "85d1357294a106dff78a-09f088b7521a45cdd463",
+              "file": "order.spec.ts",
+              "line": 167,
+              "column": 7
+            },
+            {
+              "title": "✅アイコンとタイトルが表示される",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 16,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 940,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-05-27T08:46:33.668Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\_dat\\prj\\2026-c-02\\feature\\h1nakamu\\.claude\\worktrees\\focused-lederberg-d85b9e\\frontend\\test-results\\order-注文完了ページ-✅アイコンとタイトルが表示される-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "85d1357294a106dff78a-37ea2f577d7bd780996f",
+              "file": "order.spec.ts",
+              "line": 173,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-05-27T08:42:42.781Z",
+    "duration": 231982.67299999998,
+    "expected": 16,
+    "skipped": 0,
+    "unexpected": 16,
+    "flaky": 0
+  }
+}
