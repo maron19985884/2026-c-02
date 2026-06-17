@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CLAUDE.md ベストプラクティス</title>
+  <style>
+    body {
+      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 2rem;
+      color: #1a1a2e;
+      line-height: 1.7;
+      background: #f9f9f9;
+    }
+    h1 {
+      font-size: 1.8rem;
+      border-bottom: 3px solid #0f3460;
+      padding-bottom: 0.5rem;
+      color: #0f3460;
+    }
+    h2 {
+      font-size: 1.3rem;
+      margin-top: 2rem;
+      border-left: 4px solid #0f3460;
+      padding-left: 0.7rem;
+      color: #0f3460;
+    }
+    h3 {
+      font-size: 1.05rem;
+      margin-top: 1.5rem;
+      color: #333;
+    }
+    p {
+      margin: 0.6rem 0;
+    }
+    ul, ol {
+      padding-left: 1.5rem;
+    }
+    li {
+      margin: 0.3rem 0;
+    }
+    code {
+      background: #e8eaf6;
+      padding: 0.1em 0.4em;
+      border-radius: 3px;
+      font-family: "Consolas", "Courier New", monospace;
+      font-size: 0.9em;
+      color: #333;
+    }
+    pre {
+      background: #1a1a2e;
+      color: #e0e0e0;
+      padding: 1rem 1.2rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-family: "Consolas", "Courier New", monospace;
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+      font-size: inherit;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+    th {
+      background: #0f3460;
+      color: #fff;
+      padding: 0.6rem 1rem;
+      text-align: left;
+    }
+    td {
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid #ddd;
+    }
+    tr:nth-child(even) td {
+      background: #f0f2f8;
+    }
+    .callout {
+      background: #e8f4fd;
+      border-left: 4px solid #0f3460;
+      padding: 0.8rem 1rem;
+      border-radius: 0 6px 6px 0;
+      margin: 1rem 0;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #ddd;
+      margin: 2rem 0;
+    }
+  </style>
+</head>
+<body>
+
+<h1>CLAUDE.md ベストプラクティス</h1>
+
+<hr>
+
+<h2>基本原則</h2>
+
+<div class="callout">
+  <strong>CLAUDE.md はすべての会話の開始時に自動で読み込まれる。</strong><br>
+  Claude への「常時有効な指示書」として機能するため、内容の質と量が直接作業精度に影響する。
+</div>
+
+<hr>
+
+<h2>書き方のルール</h2>
+
+<h3>命令形で書く</h3>
+
+<pre><code># 悪い例（説明）
+TypeScriptを使用しています。
+
+# 良い例（指示）
+TypeScript を使用すること。`any` 型は使わないこと。</code></pre>
+
+<p>Claude は説明より指示に従いやすい。</p>
+
+<h3>簡潔に保つ</h3>
+<ul>
+  <li>長すぎると重要な指示が埋もれる</li>
+  <li>目安は <strong>200〜400行以内</strong></li>
+  <li>コードで確認できることは書かない（ライブラリのAPI仕様など）</li>
+</ul>
+
+<h3>重要なことを上に書く</h3>
+<p>スコープ制約・禁止事項など「絶対に守ってほしいこと」を冒頭に配置する。Claude はファイルの上から読む。</p>
+
+<hr>
+
+<h2>含めるべき内容</h2>
+
+<table>
+  <thead>
+    <tr><th>項目</th><th>理由</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>スコープ制約（やらないこと）</td><td>勝手な機能追加を防ぐ</td></tr>
+    <tr><td>テスト実行コマンド</td><td>変更後に必ず実行させるため</td></tr>
+    <tr><td>コーディング規約（非自明なもの）</td><td>コードから読み取れないルールのみ</td></tr>
+    <tr><td>ディレクトリ構成のルール</td><td>ファイル配置ミスを防ぐ</td></tr>
+    <tr><td>環境固有のコマンド</td><td><code>docker compose up</code> など</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h2>含めないべき内容</h2>
+
+<table>
+  <thead>
+    <tr><th>項目</th><th>理由</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>コードを読めばわかること</td><td>冗長になるだけ</td></tr>
+    <tr><td>README と重複する内容</td><td>二重管理になり陳腐化する</td></tr>
+    <tr><td>git log / blame で分かること</td><td>履歴はgitで確認できる</td></tr>
+    <tr><td>将来の計画・TODO</td><td>コードに反映されてから書く</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h2>階層構造の活用</h2>
+
+<p>CLAUDE.md はディレクトリごとに置ける。ルールのスコープを絞れる。</p>
+
+<pre><code>プロジェクトroot/
+├── CLAUDE.md          # プロジェクト全体のルール
+├── frontend/
+│   └── CLAUDE.md      # フロントエンド固有のルール
+└── backend/
+    └── CLAUDE.md      # バックエンド固有のルール</code></pre>
+
+<p>サブディレクトリの CLAUDE.md はルートのものを引き継いだうえで上書き・追記される。</p>
+
+<hr>
+
+<h2>陳腐化を防ぐ</h2>
+
+<ul>
+  <li>実装が変わったら CLAUDE.md も同時に更新する</li>
+  <li>「現在の状態」を書く。「将来こうする予定」は書かない</li>
+  <li>PR レビューの対象に CLAUDE.md を含める</li>
+</ul>
+
+</body>
+</html>

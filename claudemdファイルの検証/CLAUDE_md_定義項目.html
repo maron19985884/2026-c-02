@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CLAUDE.md に定義すべき項目（実装前の観点）</title>
+  <style>
+    body {
+      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 2rem;
+      color: #1a1a2e;
+      line-height: 1.7;
+      background: #f9f9f9;
+    }
+    h1 {
+      font-size: 1.8rem;
+      border-bottom: 3px solid #0f3460;
+      padding-bottom: 0.5rem;
+      color: #0f3460;
+    }
+    h2 {
+      font-size: 1.3rem;
+      margin-top: 2rem;
+      border-left: 4px solid #0f3460;
+      padding-left: 0.7rem;
+      color: #0f3460;
+    }
+    p {
+      margin: 0.6rem 0;
+    }
+    ul {
+      padding-left: 1.5rem;
+    }
+    li {
+      margin: 0.3rem 0;
+    }
+    code {
+      background: #e8eaf6;
+      padding: 0.1em 0.4em;
+      border-radius: 3px;
+      font-family: "Consolas", "Courier New", monospace;
+      font-size: 0.9em;
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+    th {
+      background: #0f3460;
+      color: #fff;
+      padding: 0.6rem 1rem;
+      text-align: left;
+    }
+    td {
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid #ddd;
+    }
+    tr:nth-child(even) td {
+      background: #f0f2f8;
+    }
+    .badge {
+      display: inline-block;
+      background: #e94560;
+      color: #fff;
+      font-size: 0.75rem;
+      padding: 0.1em 0.6em;
+      border-radius: 10px;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+    .badge.recommended {
+      background: #0f3460;
+    }
+    .badge.optional {
+      background: #888;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #ddd;
+      margin: 2rem 0;
+    }
+  </style>
+</head>
+<body>
+
+<h1>CLAUDE.md に定義すべき項目（実装前の観点）</h1>
+
+<hr>
+
+<h2>1. プロジェクト概要と目的</h2>
+<p>Claude が何を作っているのかを常に理解するため。</p>
+<ul>
+  <li>アプリの目的・対象ユーザー</li>
+  <li>主要な画面遷移フロー</li>
+</ul>
+
+<hr>
+
+<h2>2. スコープ制約 <span class="badge">最重要</span></h2>
+<p>Claude がスコープ外の機能を勝手に追加しないための制約として明記する。</p>
+<ul>
+  <li>実装する機能の範囲</li>
+  <li>明示的に実装しない機能のリスト</li>
+</ul>
+
+<hr>
+
+<h2>3. 技術スタック・ポート定義</h2>
+<p>Claude が適切な技術・ライブラリを選択するために必要。</p>
+<ul>
+  <li>各レイヤーの技術名とバージョン</li>
+  <li>開発時のポート番号</li>
+  <li>実行環境（Docker等）</li>
+</ul>
+
+<hr>
+
+<h2>4. ディレクトリ構成ルール</h2>
+<p>「どこに何を書くか」を Claude に示す。新規ファイル作成時の配置先を明確にする。</p>
+<ul>
+  <li>ページ・コンポーネント・API・型定義・テストの配置先</li>
+  <li>本体コードとテストコードの分離ルール</li>
+</ul>
+
+<hr>
+
+<h2>5. コーディング規約</h2>
+<p>Claude が生成するコードの品質・スタイルを統一するため。</p>
+<ul>
+  <li>型の扱い（<code>any</code> 禁止など）</li>
+  <li>API通信の方法（クライアント経由必須など）</li>
+  <li>使用禁止ライブラリ・パターン（ORM不使用など）</li>
+  <li>命名規則・ファイル構成のルール</li>
+</ul>
+
+<hr>
+
+<h2>6. テスト方針</h2>
+<p>Claude がテストを正しい場所・方法で作成・実行できるようにするため。</p>
+<ul>
+  <li>テストフレームワーク</li>
+  <li>テストコードの配置場所</li>
+  <li>テスト実行コマンド</li>
+  <li>テストの種類（ユニット・結合など）</li>
+</ul>
+
+<hr>
+
+<h2>7. 開発コマンド</h2>
+<p>Claude が環境操作を正しく行えるようにするため。</p>
+<ul>
+  <li>起動・停止コマンド</li>
+  <li>環境変数の準備方法</li>
+  <li>動作確認URL</li>
+</ul>
+
+<hr>
+
+<h2>8. Gitブランチ規約</h2>
+<p>Claude がブランチ・コミットを正しい形式で扱えるようにするため。</p>
+<ul>
+  <li>ブランチ命名規則</li>
+  <li>PRの向き先ブランチ</li>
+</ul>
+
+<hr>
+
+<h2>まとめ：優先度</h2>
+
+<table>
+  <thead>
+    <tr><th>優先度</th><th>項目</th><th>理由</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="badge">必須</span></td>
+      <td>スコープ制約</td>
+      <td>不要な機能の実装を防ぐ</td>
+    </tr>
+    <tr>
+      <td><span class="badge">必須</span></td>
+      <td>技術スタック</td>
+      <td>誤ったライブラリ選択を防ぐ</td>
+    </tr>
+    <tr>
+      <td><span class="badge">必須</span></td>
+      <td>ディレクトリ構成</td>
+      <td>ファイルの配置ミスを防ぐ</td>
+    </tr>
+    <tr>
+      <td><span class="badge recommended">推奨</span></td>
+      <td>コーディング規約</td>
+      <td>コード品質・一貫性を保つ</td>
+    </tr>
+    <tr>
+      <td><span class="badge recommended">推奨</span></td>
+      <td>テスト方針</td>
+      <td>テストの抜け漏れ・場所ミスを防ぐ</td>
+    </tr>
+    <tr>
+      <td><span class="badge optional">補助</span></td>
+      <td>開発コマンド</td>
+      <td>環境操作のミスを防ぐ</td>
+    </tr>
+    <tr>
+      <td><span class="badge optional">補助</span></td>
+      <td>Gitブランチ規約</td>
+      <td>コミット・PR管理を統一する</td>
+    </tr>
+  </tbody>
+</table>
+
+</body>
+</html>
