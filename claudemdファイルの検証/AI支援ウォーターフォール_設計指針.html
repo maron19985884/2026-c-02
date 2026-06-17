@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI支援ウォーターフォール 設計指針</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      background: #f4f6fb;
+      color: #1a1a2e;
+      line-height: 1.75;
+      padding: 2rem;
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* ヘッダー */
+    .page-header {
+      background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+      color: #fff;
+      padding: 2rem 2.5rem;
+      border-radius: 10px;
+      margin-bottom: 2.5rem;
+    }
+    .page-header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+    .page-header p {
+      font-size: 0.9rem;
+      opacity: 0.75;
+    }
+
+    /* セクション */
+    .section {
+      background: #fff;
+      border-radius: 10px;
+      padding: 1.8rem 2rem;
+      margin-bottom: 1.8rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #0f3460;
+      border-left: 4px solid #0f3460;
+      padding-left: 0.75rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .section-subtitle {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #333;
+      margin: 1.4rem 0 0.6rem;
+    }
+
+    p { margin: 0.5rem 0; }
+
+    ul, ol {
+      padding-left: 1.5rem;
+      margin: 0.4rem 0;
+    }
+    li { margin: 0.3rem 0; }
+
+    /* コードブロック */
+    pre {
+      background: #1a1a2e;
+      color: #cdd6f4;
+      padding: 1rem 1.2rem;
+      border-radius: 7px;
+      font-family: "Consolas", "Courier New", monospace;
+      font-size: 0.85rem;
+      line-height: 1.65;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+    }
+    code {
+      background: #e8eaf6;
+      padding: 0.1em 0.4em;
+      border-radius: 3px;
+      font-family: "Consolas", "Courier New", monospace;
+      font-size: 0.88em;
+    }
+    pre code { background: none; padding: 0; font-size: inherit; color: inherit; }
+
+    /* テーブル */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.8rem 0;
+      font-size: 0.92rem;
+    }
+    th {
+      background: #0f3460;
+      color: #fff;
+      padding: 0.6rem 1rem;
+      text-align: left;
+      font-weight: 600;
+    }
+    td {
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid #e0e4f0;
+    }
+    tr:nth-child(even) td { background: #f0f3fb; }
+
+    /* バッジ */
+    .badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.15em 0.65em;
+      border-radius: 10px;
+      vertical-align: middle;
+      margin-left: 0.4rem;
+    }
+    .badge-danger  { background: #e94560; color: #fff; }
+    .badge-primary { background: #0f3460; color: #fff; }
+    .badge-gray    { background: #888; color: #fff; }
+
+    /* 警告ボックス */
+    .callout {
+      border-left: 4px solid #e94560;
+      background: #fff5f7;
+      padding: 0.8rem 1rem;
+      border-radius: 0 6px 6px 0;
+      margin: 0.8rem 0;
+    }
+    .callout.info {
+      border-color: #0f3460;
+      background: #eef2fc;
+    }
+    .callout strong { color: #e94560; }
+    .callout.info strong { color: #0f3460; }
+
+    /* フロー図 */
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.4rem;
+      margin: 1rem 0;
+    }
+    .flow-box {
+      background: #0f3460;
+      color: #fff;
+      padding: 0.45rem 0.9rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .flow-box.human  { background: #16213e; }
+    .flow-box.claude { background: #533483; }
+    .flow-box.both   { background: #1b4332; }
+    .flow-box.star   { background: #e94560; }
+    .flow-arrow {
+      color: #999;
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+    .flow-label {
+      font-size: 0.72rem;
+      color: #666;
+      margin-top: 0.2rem;
+    }
+    .flow-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* 凡例 */
+    .legend {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin: 0.5rem 0 1rem;
+      font-size: 0.8rem;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+    }
+
+    /* 2カラムグリッド */
+    .grid2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 0.8rem 0;
+    }
+    .grid-card {
+      background: #f4f6fb;
+      border-radius: 7px;
+      padding: 0.9rem 1rem;
+    }
+    .grid-card h4 {
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #0f3460;
+    }
+    .grid-card ul { font-size: 0.86rem; }
+
+    @media (max-width: 600px) {
+      .grid2 { grid-template-columns: 1fr; }
+      .flow { flex-direction: column; align-items: flex-start; }
+    }
+
+    hr { border: none; border-top: 1px solid #e0e4f0; margin: 1.5rem 0; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ページヘッダー -->
+  <div class="page-header">
+    <h1>AI支援ウォーターフォール 設計指針</h1>
+    <p>Claude を活用した開発プロセスの最適化 ／ 詳細設計の粒度設定</p>
+  </div>
+
+  <!-- セクション1：ベストプラクティス -->
+  <div class="section">
+    <div class="section-title">1. AI支援ウォーターフォールのベストプラクティス</div>
+
+    <p>Claude に詳細設計・製造を担わせる場合、工程の順序と人間のレビューポイントが品質を左右する。</p>
+
+    <h3 class="section-subtitle">推奨する工程順序</h3>
+
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#16213e"></div>人間が担当</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#533483"></div>Claudeが担当</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#1b4332"></div>Claude作成 → 人間レビュー</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#e94560"></div>重要ゲート</div>
+    </div>
+
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-box human">要件定義</div>
+        <div class="flow-label">人間</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-box human">基本設計</div>
+        <div class="flow-label">人間</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-box both">詳細設計</div>
+        <div class="flow-label">Claude→人間承認</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-box star">CLAUDE.md 確定</div>
+        <div class="flow-label">製造前に完成</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-box both">テスト設計</div>
+        <div class="flow-label">Claude→人間承認</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-box claude">製造</div>
+        <div class="flow-label">Claude</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-box claude">テスト実行</div>
+        <div class="flow-label">Claude</div>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <strong>鍵となるゲート：</strong>詳細設計を人間がレビュー・承認してから製造を開始する。承認前に製造を始めると、Claude が設計判断を勝手に行い手戻りが増える。
+    </div>
+
+    <hr>
+
+    <h3 class="section-subtitle">「製造→詳細設計」順序のアンチパターン</h3>
+
+    <table>
+      <thead><tr><th>問題</th><th>理由</th></tr></thead>
+      <tbody>
+        <tr><td>Claude が製造中に設計判断を行う</td><td>基本設計だけでは情報が不足しているため</td></tr>
+        <tr><td>詳細設計が実装の追認になる</td><td>設計ではなく「ドキュメント化」になってしまう</td></tr>
+        <tr><td>手戻りが増える</td><td>人間レビューで設計NG → 製造やり直しのリスク</td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h3 class="section-subtitle">例外：プロトタイプ先行アプローチ</h3>
+    <p>不確実性が高い場合に限り有効。ただしプロトタイプは<strong>捨てることを前提</strong>にし、そのまま製造物にしない。</p>
+    <pre>基本設計（人間）→ PoC/プロトタイプ（Claude）→ 詳細設計（Claude・人間承認）→ 本製造（Claude）→ テスト</pre>
+
+    <hr>
+
+    <h3 class="section-subtitle">CLAUDE.md と工程の関係</h3>
+    <table>
+      <thead><tr><th>タイミング</th><th>CLAUDE.md に追記する内容</th></tr></thead>
+      <tbody>
+        <tr><td>要件定義完了後</td><td>スコープ制約・プロジェクト概要</td></tr>
+        <tr><td>基本設計完了後</td><td>技術スタック・アーキテクチャ・ポート定義</td></tr>
+        <tr><td>詳細設計承認後</td><td>ディレクトリ構成・コーディング規約・テスト方針 ← 製造前に完成させる</td></tr>
+        <tr><td>製造中</td><td>判明した規約・禁止パターンを随時追記</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- セクション2：粒度設定 -->
+  <div class="section">
+    <div class="section-title">2. 詳細設計の粒度設定が肝</div>
+
+    <p>詳細設計は製造と並走してブラッシュアップされる。最初から完全に書こうとするのは非現実的。<br>
+    <strong>粒度の設定基準：それが間違っていたとき、どれだけの製造物が影響を受けるか。</strong></p>
+
+    <div class="callout info">
+      <strong>原則：</strong>外部境界（他の設計・実装が依存するもの）は詳細に。内部実装は Claude に委ねてレビューすればよい。
+    </div>
+
+    <h3 class="section-subtitle">粒度の判断基準</h3>
+
+    <div class="grid2">
+      <div class="grid-card">
+        <h4>詳細に書くべきもの</h4>
+        <ul>
+          <li>DBスキーマ・テーブル定義</li>
+          <li>APIエンドポイント（URL・リクエスト・レスポンス型）</li>
+          <li>コンポーネントのインターフェース（props・戻り値の型）</li>
+        </ul>
+      </div>
+      <div class="grid-card">
+        <h4>粗くてよいもの</h4>
+        <ul>
+          <li>関数内部の実装ロジック</li>
+          <li>CSS・スタイリングの詳細</li>
+          <li>エラーハンドリングの細部</li>
+        </ul>
+      </div>
+    </div>
+
+    <hr>
+
+    <h3 class="section-subtitle">CLAUDE.md と詳細設計の役割分担</h3>
+    <p>CLAUDE.md に書いたルールは詳細設計に重複して書かなくてよい。詳細設計はインターフェース定義に集中できる。</p>
+
+    <table>
+      <thead><tr><th>定義場所</th><th>内容</th><th>粒度</th></tr></thead>
+      <tbody>
+        <tr><td>CLAUDE.md</td><td>プロジェクト全体に効くルール（<code>any</code>禁止・ディレクトリ構成など）</td><td>方針レベル</td></tr>
+        <tr><td>詳細設計書</td><td>機能ごとの仕様（API定義・DB設計・画面仕様）</td><td>境界レベル</td></tr>
+        <tr><td>製造時のプロンプト</td><td>その実装タスク固有の指示</td><td>タスクレベル</td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h3 class="section-subtitle">製造と並走する詳細設計の運用</h3>
+
+    <table>
+      <thead><tr><th>製造前に確定</th><th>製造中にブラッシュアップ</th></tr></thead>
+      <tbody>
+        <tr><td>DBスキーマ</td><td>インデックス設計</td></tr>
+        <tr><td>APIエンドポイント</td><td>エラーレスポンスの細部</td></tr>
+        <tr><td>画面遷移</td><td>バリデーションの条件追加</td></tr>
+        <tr><td>コンポーネント分割</td><td>共通化できるものの抽出</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <strong>製造前に確定すべきもの＝他の設計・実装が依存するもの。</strong>
+      依存されていないものは後から確定してよい。
+    </div>
+
+    <hr>
+
+    <h3 class="section-subtitle">このプロジェクト（書店アプリ）への適用例</h3>
+
+    <div class="grid2">
+      <div class="grid-card">
+        <h4>製造前に確定（API境界）</h4>
+        <pre style="font-size:0.78rem; margin-top:0.4rem;">GET  /api/books
+  → {id,title,author,
+     price,description}[]
+
+GET  /api/books/:id
+  → {id,title,author,
+     price,description}
+
+POST /api/orders
+  body: {items,name,
+         address,email}
+  → {orderId}</pre>
+      </div>
+      <div class="grid-card">
+        <h4>製造しながら確定してよい</h4>
+        <ul style="margin-top:0.4rem;">
+          <li>バリデーションのエラーメッセージ文言</li>
+          <li>カートの状態管理の実装方法</li>
+          <li>スタイリングの詳細</li>
+          <li>共通コンポーネントの切り出し判断</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
