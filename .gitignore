@@ -12,6 +12,7 @@ frontend/out/
 # TypeScript ビルド成果物
 backend/dist/
 
+
 # MySQL データ（ローカル）
 mysql/data/
 

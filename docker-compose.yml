@@ -7,7 +7,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       target: development          # 本番時は production に変更
-    container_name: frontend
+    container_name: h1nakamu_frontend
     ports:
       - "3000:3000"
     volumes:
@@ -28,7 +28,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
       target: development          # 本番時は production に変更
-    container_name: backend
+    container_name: h1nakamu_backend
     ports:
       - "4000:4000"
     volumes:
@@ -53,10 +53,10 @@ services:
   # ============================================================
   mysql:
     image: mysql:8.0
-    container_name: mysql
+    container_name: h1nakamu_mysql
     restart: unless-stopped
     ports:
-      - "3306:3306"
+      - "3307:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-rootpassword}
       - MYSQL_DATABASE=${DB_NAME:-appdb}
