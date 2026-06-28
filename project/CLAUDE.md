@@ -98,3 +98,9 @@
 - 関数・メソッドには必ずdocstringまたは同等のコメントを付ける
 - 「何をしているか」ではなく「なぜそうしているか」をコメントする
 - 未解決事項は `TODO: [内容] (@担当者名)` 形式で記載する
+
+<!-- SPECKIT START -->
+For additional context about technologies to be used, project structure,
+shell commands, and other important information, read the current plan:
+@specs/002-cart-management/plan.md
+<!-- SPECKIT END -->

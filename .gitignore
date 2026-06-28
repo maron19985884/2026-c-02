@@ -18,3 +18,6 @@ mysql/data/
 # OS
 .DS_Store
 Thumbs.db
+
+# Claude Code 個人設定（チーム共有しない）
+CLAUDE.local.md
