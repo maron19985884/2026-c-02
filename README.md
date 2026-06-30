@@ -1,25 +1,4 @@
-# 2026-c-02 — オンライン書店
-
-個人運営オンライン書店の購買フローを実装したWebアプリです。
-
-## 画面一覧
-
-| 画面 | URL | 機能 |
-|------|-----|------|
-| 商品一覧 | `http://localhost:3000/` | 書籍グリッド表示 |
-| 商品詳細 | `http://localhost:3000/books/:id` | 書籍詳細・カートに追加 |
-| カート | `http://localhost:3000/cart` | 数量変更・削除・合計確認 |
-| 注文フォーム | `http://localhost:3000/checkout` | 氏名・住所・メール入力・注文確定 |
-| 注文完了 | `http://localhost:3000/order-complete` | 注文番号表示 |
-
-## API エンドポイント
-
-| Method | Path | 説明 |
-|--------|------|------|
-| GET | `/health` | ヘルスチェック → `{"status":"ok"}` |
-| GET | `/books` | 書籍一覧取得 |
-| GET | `/books/:id` | 書籍詳細取得 |
-| POST | `/orders` | 注文確定 → `{"orderNumber":"ORD-XXXXXX"}` |
+# 2026-c-02
 
 # Git ブランチ作成〜Docker起動 手順書
 
