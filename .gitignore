@@ -12,6 +12,9 @@ frontend/out/
 # TypeScript ビルド成果物
 backend/dist/
 
+# テスト実行結果
+backend/test-results/
+
 
 # MySQL データ（ローカル）
 mysql/data/
