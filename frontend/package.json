@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "test:e2e": "playwright test",
-    "test:e2e:report": "playwright test --reporter=html && playwright show-report e2e/playwright-report"
+    "test:e2e:report": "playwright test --reporter=html && playwright show-report e2e/playwright-report",
+    "lint": "eslint ."
   },
   "dependencies": {
     "next": "14.2.3",
@@ -15,10 +16,13 @@
     "react-dom": "^18"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3",
     "@playwright/test": "^1.60.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.3",
     "typescript": "^5"
   }
 }

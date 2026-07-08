@@ -11,6 +11,7 @@ frontend/out/
 
 # TypeScript ビルド成果物
 backend/dist/
+*.tsbuildinfo
 
 # テスト実行結果
 backend/test-results/

@@ -30,6 +30,8 @@ describe('POST /orders', () => {
       rollback: jest.fn().mockResolvedValue(undefined),
       release: jest.fn(),
     };
+    // mysql2のPoolConnection型を完全に満たすモックの作成コストが高いため、anyで許容する
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     mockPool.getConnection.mockResolvedValue(mockConn as any);
   });
 

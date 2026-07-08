@@ -18,6 +18,8 @@ const sampleBooks = [
 
 describe('GET /books', () => {
   it('書籍一覧を返す', async () => {
+    // mysql2のquery戻り値の型が複雑なオーバーロードのため、モックではanyで許容する
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     mockPool.query.mockResolvedValueOnce([sampleBooks, []] as any);
 
     const res = await request(app).get('/books');
@@ -30,6 +32,7 @@ describe('GET /books', () => {
 
 describe('GET /books/:id', () => {
   it('指定したIDの書籍を返す', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     mockPool.query.mockResolvedValueOnce([[sampleBooks[0]], []] as any);
 
     const res = await request(app).get('/books/1');
@@ -39,6 +42,7 @@ describe('GET /books/:id', () => {
   });
 
   it('存在しないIDの場合は404を返す', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     mockPool.query.mockResolvedValueOnce([[], []] as any);
 
     const res = await request(app).get('/books/999');

@@ -112,6 +112,22 @@ docker compose down
 
 ---
 
+## 9. Lint（静的解析）
+
+各パッケージにESLintを導入済み。
+
+```bash
+cd frontend && npm run lint   # eslint-config-next (next/core-web-vitals) ベース
+cd backend && npm run lint    # @eslint/js + typescript-eslint ベース
+```
+
+- 導入時点（2026-07-08）はbackend側で`any`型7件を検出。すべてmysql2の型（`RowDataPacket` / `ResultSetHeader`）への置き換え、またはテストモック部分へのeslint-disableコメントで解消済み
+- frontend側で`@next/next/no-img-element`警告3件（`page.tsx` / `cart/page.tsx` / `books/[id]/page.tsx`の`<img>`タグ）を検出。`next/image`への置き換えは挙動（読み込み最適化・width/height必須化等）に触れる可能性があるため「要注意」として今回は未対応。次回対応時に検討すること
+- 対象外: `mysql/init/*.sql`（SQL linter未導入）、`frontend/Dockerfile` / `backend/Dockerfile`（hadolint等未導入）。必要になった際に別途検討する
+- CI設定（GitHub Actions等）自体がまだこのリポジトリに存在しないため、lintのCI組み込みは未実施。CIを導入する際はビルド/テストの後段にlintステップを追加すること
+
+---
+
 ## トラブルシューティング
 
 ### コンテナ名が競合してエラーになる

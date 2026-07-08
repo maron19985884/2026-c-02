@@ -1,4 +1,5 @@
 import { Router, Request, Response } from "express";
+import type { ResultSetHeader, RowDataPacket } from "mysql2";
 import pool from "../db";
 
 const router = Router();
@@ -31,7 +32,7 @@ router.post("/", async (req: Request, res: Response) => {
     // 書籍の現在価格を取得して合計を計算
     const bookIds = items.map((i) => i.book_id);
     const [bookRows] = await conn.query("SELECT id, price FROM books WHERE id IN (?)", [bookIds]);
-    const priceMap = new Map((bookRows as any[]).map((b) => [b.id, b.price]));
+    const priceMap = new Map((bookRows as RowDataPacket[]).map((b) => [b.id, b.price]));
 
     const total_amount = items.reduce((sum, item) => {
       return sum + (priceMap.get(item.book_id) ?? 0) * item.quantity;
@@ -43,7 +44,7 @@ router.post("/", async (req: Request, res: Response) => {
       "INSERT INTO orders (order_number, customer_name, address, email, total_amount) VALUES (?, ?, ?, ?, ?)",
       [order_number, customer_name, address, email, total_amount]
     );
-    const orderId = (orderResult as any).insertId;
+    const orderId = (orderResult as ResultSetHeader).insertId;
 
     for (const item of items) {
       await conn.query(
