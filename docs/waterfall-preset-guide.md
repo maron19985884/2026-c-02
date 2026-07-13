@@ -13,8 +13,8 @@ Spec Kit公式は、presetによって「Agile、Kanban、Waterfallなど、利�
 
 | ウォーターフォールフェーズ | Spec Kitコマンド | 承認ゲート（追加） |
 |---|---|---|
-| 要件定義 | `/speckit.constitution` → `/speckit.specify` | 要件定義書レビュー・承認（顧客/PM） |
-| 基本設計・詳細設計 | `/speckit.clarify` → `/speckit.plan` | 設計レビュー・承認（アーキテクト/リーダー） |
+| 要件定義 | 要件定義書（人間が作成）→ `/speckit.specify` で `spec.md` に落とす | 要件定義書レビュー・承認（顧客/PM） |
+| 基本設計・詳細設計 | 技術選定書（人間が作成）→ `/speckit.clarify` → `/speckit.plan` で `plan.md` に落とす | 設計レビュー・承認（アーキテクト/リーダー） |
 | 実装計画 | `/speckit.tasks` | タスク一覧レビュー（PM/リーダー） |
 | 実装 | `/speckit.implement` | コードレビュー＋Lint品質ゲート（`.github/workflows/quality-gate.yml`） |
 | テスト | （実装後）テスト計画書に基づく単体・結合・総合テスト | テスト結果レビュー・承認 |
@@ -26,7 +26,7 @@ Spec Kit公式は、presetによって「Agile、Kanban、Waterfallなど、利�
    specify preset add <company-waterfall-preset>
    ```
 2. **フェーズを後退させない運用ルール**: ウォーターフォールでは前フェーズへの後戻りを最小化する前提のため、`/speckit.clarify` を `/speckit.plan` 前に必ず実行し、計画確定後の要件変更は変更管理プロセス（別途、変更要求書）を経由させる。
-3. **ドキュメント成果物の正式化**: `specs/<feature>/spec.md`・`plan.md`・`tasks.md` を、そのまま社内の「要件定義書」「設計書」「作業計画書」として正式承認フローに乗せる（Markdownのままでも、必要であればWord/PDFへ変換）。
+3. **ドキュメント成果物の正式化**: 人間が用意した「要件定義書」「技術選定書」を入力とし、そこから生成された `specs/<feature>/spec.md`（詳細仕様）・`plan.md`（設計）・`tasks.md`（作業計画）を正式承認フローに乗せる（Markdownのままでも、必要であればWord/PDFへ変換）。入力ドキュメントと生成物の両方を版管理し、承認の証跡とする。
 
 ## 💡 Claude補足
 - **注意点**: Spec Kit自体はSDD（仕様駆動開発）の思想に基づき、仕様を「実装後も更新され続ける生きた文書」として扱う設計です。ウォーターフォールの「フェーズ確定後は原則変更しない」という運用にする場合は、上記のように承認ゲートをpreset側で追加する運用ルールが必要であり、Spec Kit本体がウォーターフォール専用モードを持っているわけではありません。
