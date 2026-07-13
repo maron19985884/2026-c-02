@@ -1,0 +1,48 @@
+name: Quality Gate (Lint)
+
+# Spec Kitの /speckit.implement 実行後、AIエージェントが生成・変更した
+# コードに対してLintを強制するためのサンプルCI。
+# 言語別のLintコマンドは組織のpreset（docs/lint-preset-guide.md参照）に合わせて置き換える。
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # --- 例1: Node.js / TypeScript プロジェクトの場合 ---
+      - name: Setup Node.js
+        if: hashFiles('package.json') != ''
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install & Run ESLint
+        if: hashFiles('package.json') != ''
+        run: |
+          npm ci
+          npm run lint
+
+      # --- 例2: Python プロジェクトの場合 ---
+      - name: Setup Python
+        if: hashFiles('pyproject.toml') != ''
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install & Run Ruff
+        if: hashFiles('pyproject.toml') != ''
+        run: |
+          pip install ruff
+          ruff check .
+
+      # --- 判定: Lintエラーがあればマージ不可 ---
+      - name: Fail on Lint Errors
+        run: echo "Lintジョブが失敗した場合、このワークフロー自体が red 表示となりマージがブロックされます。"
