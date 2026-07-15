@@ -19,3 +19,6 @@
 | 4 | 2026-07-15 | 画面 URL は `/checkout`, `/orders/[id]` 等に固定 | 全ブランチでばらついたため。詳細は CLAUDE.md 参照 |
 | 5 | 2026-07-15 | orders テーブルの顧客カラムは `customer_` プレフィックス付き | 多数派方式。意味の明確さを優先 |
 | 6 | 2026-07-15 | 注文完了画面へのデータ受け渡しは URL パス + API 再取得 | Context のみの保持はリロードで消失するバグリスクがあるため禁止 |
+| 7 | 2026-07-15 | 新規ライブラリの依存追加はユーザー承認制 | 無断の依存追加を防ぐため permissions.deny で `npm install` 等をブロック |
+| 8 | 2026-07-15 | AI の編集対象は許可ディレクトリのみ（`backend/src` `frontend/src` `docs` `mysql/init` `.claude` 等） | 設定ファイル・lockfile の意図しない変更を防ぐため hook で強制。リストは `.claude/hooks/check-edit-path.sh` |
+| 9 | 2026-07-15 | 規約はルート CLAUDE.md が正、`backend/` `frontend/` の CLAUDE.md はサブセット再掲 | 条件付き指示の脱落対策としてディレクトリ別に自動読み込みさせる。二重管理の矛盾はルート優先で解消 |

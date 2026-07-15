@@ -25,6 +25,7 @@ Claude Code（生成 AI）を使ったチーム開発で、担当者・セッシ
 - **「決めないとばらつくこと」だけを書く**: ポート番号・API レスポンス形式・URL 設計・DB 命名規則・禁止事項
 - 「〜が望ましい」ではなく**宣言形**で書く（例: 「レスポンスは常に `{ data, error, message }`」）
 - 目安は 100〜150 行以内。超えたら `docs/` に切り出してリンクする
+- **ディレクトリ別 CLAUDE.md**（`backend/CLAUDE.md`, `frontend/CLAUDE.md`）: そのディレクトリのファイルを扱う際に自動で読み込まれる。「backend を修正するときは API 規約を読め」のような条件付き指示は自然言語で書いても長いセッションで脱落するため、この仕組みで機械的に注入する。ルートの CLAUDE.md が正（マスター）、ディレクトリ別はサブセットの再掲とする
 
 ### docs/decisions.md（層②）
 
@@ -33,9 +34,22 @@ Claude Code（生成 AI）を使ったチーム開発で、担当者・セッシ
 
 ### 機械的強制（層③）
 
-- 「`console.log` 禁止」「`any` 禁止」のような検証可能なルールは、CLAUDE.md に書くだけでなく ESLint ルール + CI で落とすのが確実
-- 原則: **機械で検証できるルールは機械に、判断が要るルールだけを CLAUDE.md に**
-- `.claude/settings.json` にはチーム共通の権限設定を置く（個人設定は `settings.local.json`）
+原則: **settings.json / hooks が強制し、CLAUDE.md は理由を教える**。順守が必須のルールは CLAUDE.md（確率的にしか効かない）ではなく、ハーネスが機械的に実行する仕組みに載せる。
+
+本テンプレートに実装済みのガードレール:
+
+| ガードレール | 実装 |
+|---|---|
+| 新規依存の追加禁止 | `.claude/settings.json` の `permissions.deny`（`npm install` / `yarn add` 等をブロック） |
+| lockfile の編集禁止 | 同上（`Edit(**/package-lock.json)`） |
+| 許可ディレクトリ外の編集禁止 | `.claude/hooks/check-edit-path.sh`（PreToolUse hook、許可外は exit 2 でブロック） |
+| ワークフローの自動リマインド | 同 hook が編集のたびに「決定事項の確認・仕様の空白は decisions.md へ」を注入 |
+
+- hook スクリプトは POSIX シェル（bash）で実装している。Windows では Claude Code 必須の Git Bash で動作し、mac / Linux でもそのまま使える（Node や PowerShell 実行ポリシーに依存させない）
+- ブロックだけだと Claude が回避策を探して無駄なターンを消費するため、**同じ内容を CLAUDE.md の禁止事項にも理由付きで1行書く**（両方に書くのがベストプラクティス）
+- deny のコマンドパターンはプレフィックス一致のため複合コマンドに掛からないことがある。依存追加の最終防衛線は CI での lockfile 差分チェックに置く
+- 「`console.log` 禁止」「`any` 禁止」のような検証可能なルールは ESLint + CI でも落とす
+- `.claude/settings.json` はチーム共通設定としてコミットする（個人設定は `settings.local.json`）
 
 ### 工程手順（層④）
 
@@ -55,7 +69,7 @@ Claude Code（生成 AI）を使ったチーム開発で、担当者・セッシ
 
 ## 新しいプロジェクトへの展開手順
 
-1. main ブランチに本テンプレート一式（`CLAUDE.md`, `docs/decisions.md`, `.claude/settings.json`）を置く
+1. main ブランチに本テンプレート一式（`CLAUDE.md`, ディレクトリ別 `CLAUDE.md`, `docs/decisions.md`, `.claude/settings.json`, `.claude/hooks/`）を置く
 2. `CLAUDE.md` のプロジェクト概要・技術スタック・コマンド・決定事項をそのプロジェクトの値に書き換える
 3. 全担当者が feature ブランチを切る**前に** 1〜2 を完了させる（ブランチを切った時点で CLAUDE.md が存在する状態にする）
 4. 開発中に見つかった仕様の空白は `docs/decisions.md` → `CLAUDE.md` の順で埋めていく
