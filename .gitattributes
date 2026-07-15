@@ -1,0 +1,2 @@
+# hook スクリプトは CRLF だと bash が解釈できないため LF 固定
+*.sh text eol=lf
