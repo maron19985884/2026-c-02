@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>詳細設計書 - 個人運営オンライン書店（購買フロー特化版）</title>
+<style>
+  body { font-family: "Segoe UI", "Hiragino Kaku Gothic ProN", sans-serif; max-width: 960px; margin: 2rem auto; padding: 0 1rem; line-height: 1.6; color: #222; }
+  h1 { border-bottom: 3px solid #2c5f8a; padding-bottom: .5rem; }
+  h2 { border-left: 6px solid #2c5f8a; padding-left: .5rem; margin-top: 2.5rem; }
+  table { border-collapse: collapse; width: 100%; margin: .75rem 0; }
+  th, td { border: 1px solid #ccc; padding: .5rem .75rem; text-align: left; vertical-align: top; }
+  th { background: #f0f4f8; }
+  code { background: #f0f0f0; padding: .1rem .3rem; border-radius: 3px; }
+  .meta { color: #666; font-size: .9rem; }
+  .label { display:inline-block; font-size:.75rem; padding:.1rem .4rem; border-radius:3px; background:#2c5f8a; color:#fff; margin-right:.3rem; }
+</style>
+</head>
+<body>
+
+<h1>詳細設計書：個人運営オンライン書店（購買フロー特化版）</h1>
+<p class="meta">
+  作成日: 2026-08-05 ／ 対応: <code>plan.md</code> / <code>data-model.md</code> / <code>contracts/</code> ／
+  憲法（<code>.specify/memory/constitution.md</code> 7章）に基づきHTMLで作成（パラメータ・修正対象ファイル・処理概要・In/Out）
+</p>
+
+<h2>1. <span class="label">API</span> GET /api/books（商品一覧取得）</h2>
+<table>
+<tr><th>修正/新規対象ファイル</th><td><code>backend/src/api/books.ts</code>（新規）／<code>backend/src/services/bookService.ts</code>（新規）</td></tr>
+<tr><th>パラメータ</th><td>なし</td></tr>
+<tr><th>処理概要</th><td><code>books</code>テーブルを全件SELECTし、一覧表示に必要な列（id, title, author, price, image_url）のみ抽出して返却する。<code>description</code>は一覧では返さない。</td></tr>
+<tr><th>In</th><td>なし</td></tr>
+<tr><th>Out</th><td><code>200</code>: <code>Book[]</code>（<code>contracts/books-api.md</code>参照）</td></tr>
+</table>
+
+<h2>2. <span class="label">API</span> GET /api/books/:id（商品詳細取得）</h2>
+<table>
+<tr><th>修正/新規対象ファイル</th><td><code>backend/src/api/books.ts</code>／<code>backend/src/services/bookService.ts</code></td></tr>
+<tr><th>パラメータ</th><td><code>id</code>（pathパラメータ, number, 必須）</td></tr>
+<tr><th>処理概要</th><td><code>books</code>テーブルを<code>id</code>でSELECT。該当行がなければ404を返す。</td></tr>
+<tr><th>In</th><td><code>id: number</code></td></tr>
+<tr><th>Out</th><td><code>200</code>: 書籍詳細（id, title, author, price, description, imageUrl）／<code>404</code>: <code>{ error: "BOOK_NOT_FOUND" }</code></td></tr>
+</table>
+
+<h2>3. <span class="label">API</span> POST /api/orders（注文確定）</h2>
+<table>
+<tr><th>修正/新規対象ファイル</th><td>
+  <code>backend/src/api/orders.ts</code>（新規）／
+  <code>backend/src/services/orderService.ts</code>（新規）／
+  <code>backend/src/services/orderValidation.ts</code>（新規）／
+  <code>backend/src/services/orderNumber.ts</code>（新規）
+</td></tr>
+<tr><th>パラメータ</th><td>
+  リクエストボディ: <code>customerName: string</code>（必須）,
+  <code>address: string</code>（必須）,
+  <code>email: string</code>（必須・メール形式）,
+  <code>items: { bookId: number, quantity: number }[]</code>（1件以上必須）
+</td></tr>
+<tr><th>処理概要</th><td>
+  ①<code>orderValidation.ts</code>で必須・形式・items非空を検証（不正なら400）→
+  ②各<code>bookId</code>が<code>books</code>テーブルに存在するか確認（存在しなければ404）→
+  ③書籍の現在価格から明細ごとの小計・合計金額を算出→
+  ④<code>orderNumber.ts</code>で<code>ORD-YYYYMMDD-NNNN</code>形式の注文番号を採番→
+  ⑤<code>orders</code>・<code>order_items</code>へトランザクションでINSERT（書籍タイトル・単価はスナップショットとして複製）→
+  ⑥登録結果を返却
+</td></tr>
+<tr><th>In</th><td>OrderRequest（<code>contracts/orders-api.md</code>参照）</td></tr>
+<tr><th>Out</th><td><code>201</code>: OrderResponse（orderNumber, createdAt, items, totalAmount）／<code>400</code>: VALIDATION_ERROR／<code>404</code>: BOOK_NOT_FOUND</td></tr>
+</table>
+
+<h2>4. <span class="label">フロントエンド</span> カート状態管理（CartContext）</h2>
+<table>
+<tr><th>修正/新規対象ファイル</th><td><code>frontend/src/contexts/CartContext.tsx</code>（新規）</td></tr>
+<tr><th>パラメータ／公開関数</th><td>
+  <code>addItem(bookId, book)</code>／
+  <code>increaseQuantity(bookId)</code>／
+  <code>decreaseQuantity(bookId)</code>／
+  <code>removeItem(bookId)</code>
+</td></tr>
+<tr><th>処理概要</th><td>
+  <code>addItem</code>: 既存の<code>bookId</code>があれば数量+1、なければ新規追加（FR-021）。
+  <code>decreaseQuantity</code>: 数量1のときは何もしない（下限1。FR-022）。
+  変更のたびに<code>totalAmount</code>（全明細の<code>price * quantity</code>の合計）を再計算する。
+</td></tr>
+<tr><th>In</th><td>bookId, 数量変更操作</td></tr>
+<tr><th>Out</th><td>Context経由でカート画面・注文フォーム画面に渡す<code>items[]</code>・<code>totalAmount</code></td></tr>
+</table>
+
+<h2>5. <span class="label">フロントエンド</span> 注文フォームバリデーション</h2>
+<table>
+<tr><th>修正/新規対象ファイル</th><td><code>frontend/src/components/OrderForm.tsx</code>（新規）／<code>frontend/src/services/validation.ts</code>（新規）</td></tr>
+<tr><th>パラメータ</th><td><code>customerName: string</code>, <code>address: string</code>, <code>email: string</code></td></tr>
+<tr><th>処理概要</th><td>
+  「注文する」押下時に3項目の必須チェックとメールアドレスの形式チェック（正規表現 <code>^[^\s@]+@[^\s@]+\.[^\s@]+$</code>）をクライアント側で行い、
+  不正があれば該当項目にエラーメッセージを表示して送信しない（FR-013）。
+  すべて正しい場合のみ<code>POST /api/orders</code>を呼び出す。
+</td></tr>
+<tr><th>In</th><td>フォーム入力値</td></tr>
+<tr><th>Out</th><td>フィールドごとのエラーメッセージ有無、またはAPI呼び出し結果に基づく画面遷移</td></tr>
+</table>
+
+</body>
+</html>

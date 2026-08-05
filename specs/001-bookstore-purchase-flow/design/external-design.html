@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>外部設計書 - 個人運営オンライン書店（購買フロー特化版）</title>
+<style>
+  body { font-family: "Segoe UI", "Hiragino Kaku Gothic ProN", sans-serif; max-width: 960px; margin: 2rem auto; padding: 0 1rem; line-height: 1.6; color: #222; }
+  h1 { border-bottom: 3px solid #2c5f8a; padding-bottom: .5rem; }
+  h2 { border-left: 6px solid #2c5f8a; padding-left: .5rem; margin-top: 2.5rem; }
+  h3 { color: #2c5f8a; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+  th, td { border: 1px solid #ccc; padding: .5rem .75rem; text-align: left; vertical-align: top; }
+  th { background: #f0f4f8; }
+  code { background: #f0f0f0; padding: .1rem .3rem; border-radius: 3px; }
+  .meta { color: #666; font-size: .9rem; }
+  .fr { color: #2c5f8a; font-size: .85rem; }
+  svg text { font-family: inherit; }
+</style>
+</head>
+<body>
+
+<h1>外部設計書：個人運営オンライン書店（購買フロー特化版）</h1>
+<p class="meta">
+  作成日: 2026-08-05 ／ 対応spec: <code>specs/001-bookstore-purchase-flow/spec.md</code> ／
+  憲法（<code>.specify/memory/constitution.md</code> 7章）に基づきHTML・UML準拠で作成
+</p>
+
+<h2>1. 画面遷移図（UMLステートマシン図）</h2>
+<svg viewBox="0 0 900 260" width="100%" height="260" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#2c5f8a" />
+    </marker>
+  </defs>
+  <!-- states -->
+  <g font-size="14" text-anchor="middle">
+    <rect x="10" y="90" width="140" height="60" rx="8" fill="#eaf2f8" stroke="#2c5f8a"/>
+    <text x="80" y="115">商品一覧</text><text x="80" y="133" font-size="11">(U-01〜U-03)</text>
+
+    <rect x="200" y="90" width="140" height="60" rx="8" fill="#eaf2f8" stroke="#2c5f8a"/>
+    <text x="270" y="115">商品詳細</text><text x="270" y="133" font-size="11">(U-04〜U-06)</text>
+
+    <rect x="390" y="90" width="140" height="60" rx="8" fill="#eaf2f8" stroke="#2c5f8a"/>
+    <text x="460" y="115">カート</text><text x="460" y="133" font-size="11">(U-07〜U-11)</text>
+
+    <rect x="580" y="90" width="140" height="60" rx="8" fill="#eaf2f8" stroke="#2c5f8a"/>
+    <text x="650" y="115">注文フォーム</text><text x="650" y="133" font-size="11">(U-12〜U-15)</text>
+
+    <rect x="770" y="90" width="120" height="60" rx="8" fill="#eaf2f8" stroke="#2c5f8a"/>
+    <text x="830" y="115">注文完了</text><text x="830" y="133" font-size="11">(U-16〜U-18)</text>
+  </g>
+  <!-- transitions -->
+  <line x1="150" y1="120" x2="198" y2="120" stroke="#2c5f8a" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="175" y="110" font-size="11" text-anchor="middle">クリック</text>
+
+  <line x1="340" y1="120" x2="388" y2="120" stroke="#2c5f8a" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="364" y="110" font-size="11" text-anchor="middle">カートに追加</text>
+
+  <path d="M270,88 C270,40 80,40 80,88" fill="none" stroke="#888" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="175" y="30" font-size="11" text-anchor="middle">追加後も一覧に戻れる</text>
+
+  <line x1="530" y1="120" x2="578" y2="120" stroke="#2c5f8a" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="554" y="110" font-size="11" text-anchor="middle">注文手続きへ</text>
+  <text x="554" y="145" font-size="10" text-anchor="middle" fill="#a33">カート1件以上のみ (FR-020)</text>
+
+  <line x1="720" y1="120" x2="768" y2="120" stroke="#2c5f8a" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="744" y="110" font-size="11" text-anchor="middle">注文する</text>
+  <text x="744" y="145" font-size="10" text-anchor="middle" fill="#a33">入力OKの場合のみ (FR-013)</text>
+
+  <path d="M770,150 C700,220 300,220 80,150" fill="none" stroke="#888" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="425" y="235" font-size="11" text-anchor="middle">商品一覧へ戻るリンク</text>
+</svg>
+
+<h2>2. 商品一覧画面</h2>
+<h3>概要</h3>
+<p>販売中の書籍をグリッド形式で一覧表示する。トップ画面であり、カートが空でも常にアクセス可能。</p>
+<h3>表示項目</h3>
+<table>
+<tr><th>項目</th><th>内容</th><th>対応要件</th></tr>
+<tr><td>書籍グリッド</td><td>販売中の書籍を複数冊、グリッド形式で表示</td><td class="fr">FR-001</td></tr>
+<tr><td>書籍カード</td><td>書影・タイトル・著者・価格</td><td class="fr">FR-002</td></tr>
+</table>
+<h3>操作</h3>
+<table>
+<tr><th>操作</th><th>遷移先／結果</th><th>対応要件</th></tr>
+<tr><td>書籍カードをクリック</td><td>商品詳細画面へ遷移</td><td class="fr">FR-003</td></tr>
+</table>
+
+<h2>3. 商品詳細画面</h2>
+<h3>概要</h3>
+<p>選択した1冊の詳細情報を表示し、カートへの追加を行う画面。</p>
+<h3>表示項目</h3>
+<table>
+<tr><th>項目</th><th>内容</th><th>対応要件</th></tr>
+<tr><td>書籍詳細</td><td>書影・タイトル・著者・価格・説明文</td><td class="fr">FR-004</td></tr>
+</table>
+<h3>操作</h3>
+<table>
+<tr><th>操作</th><th>遷移先／結果</th><th>対応要件</th></tr>
+<tr><td>「カートに追加」ボタン</td><td>カートに書籍を追加（同一書籍は数量加算）。画面は商品一覧に遷移</td><td class="fr">FR-005, FR-006, FR-021</td></tr>
+</table>
+
+<h2>4. カート画面</h2>
+<h3>概要</h3>
+<p>カートに入れた書籍の一覧確認・数量変更・削除を行い、注文手続きへ進む画面。</p>
+<h3>表示項目</h3>
+<table>
+<tr><th>項目</th><th>内容</th><th>対応要件</th></tr>
+<tr><td>カート明細一覧</td><td>書名・単価・数量・小計（明細ごと）</td><td class="fr">FR-007</td></tr>
+<tr><td>合計金額</td><td>カート全体の合計（送料等の表示は対象外）</td><td class="fr">FR-010</td></tr>
+<tr><td>「注文手続きに進む」導線</td><td>カートが1件以上のときのみ表示</td><td class="fr">FR-020</td></tr>
+</table>
+<h3>操作</h3>
+<table>
+<tr><th>操作</th><th>遷移先／結果</th><th>対応要件</th></tr>
+<tr><td>数量の増減</td><td>小計・合計金額を即時更新。数量下限1（1未満不可）</td><td class="fr">FR-008, FR-022</td></tr>
+<tr><td>削除</td><td>カートから明細を削除し、合計金額を即時更新</td><td class="fr">FR-009</td></tr>
+<tr><td>「注文手続きに進む」</td><td>注文フォーム画面へ遷移</td><td class="fr">FR-011</td></tr>
+</table>
+
+<h2>5. 注文フォーム画面</h2>
+<h3>概要</h3>
+<p>注文者情報を入力し、カート内容を確認しながら注文を確定する画面。</p>
+<h3>表示項目</h3>
+<table>
+<tr><th>項目</th><th>内容</th><th>対応要件</th></tr>
+<tr><td>入力フォーム</td><td>氏名・住所・メールアドレス（すべて必須）</td><td class="fr">FR-012</td></tr>
+<tr><td>注文内容</td><td>カートの注文商品と合計金額を同画面に表示</td><td class="fr">FR-014</td></tr>
+</table>
+<h3>操作</h3>
+<table>
+<tr><th>操作</th><th>遷移先／結果</th><th>対応要件</th></tr>
+<tr><td>「注文する」（未入力/形式不正あり）</td><td>該当項目にエラーメッセージを表示し、画面に留まる</td><td class="fr">FR-013</td></tr>
+<tr><td>「注文する」（すべて正しい）</td><td>注文を確定し、注文完了画面へ遷移</td><td class="fr">FR-015</td></tr>
+</table>
+
+<h2>6. 注文完了画面</h2>
+<h3>概要</h3>
+<p>注文確定を通知し、注文番号を提示する画面。</p>
+<h3>表示項目</h3>
+<table>
+<tr><th>項目</th><th>内容</th><th>対応要件</th></tr>
+<tr><td>完了メッセージ</td><td>注文が受け付けられたことを示すメッセージ</td><td class="fr">FR-016</td></tr>
+<tr><td>注文番号</td><td>その注文を特定できる番号（<code>ORD-YYYYMMDD-NNNN</code>形式）</td><td class="fr">FR-017</td></tr>
+</table>
+<h3>操作</h3>
+<table>
+<tr><th>操作</th><th>遷移先／結果</th><th>対応要件</th></tr>
+<tr><td>「商品一覧へ戻る」リンク</td><td>商品一覧画面へ遷移</td><td class="fr">FR-018</td></tr>
+</table>
+
+</body>
+</html>

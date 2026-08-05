@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>テーブル定義書 - 個人運営オンライン書店（購買フロー特化版）</title>
+<style>
+  body { font-family: "Segoe UI", "Hiragino Kaku Gothic ProN", sans-serif; max-width: 960px; margin: 2rem auto; padding: 0 1rem; line-height: 1.6; color: #222; }
+  h1 { border-bottom: 3px solid #2c5f8a; padding-bottom: .5rem; }
+  h2 { border-left: 6px solid #2c5f8a; padding-left: .5rem; margin-top: 2.5rem; }
+  table { border-collapse: collapse; width: 100%; margin: .75rem 0; }
+  th, td { border: 1px solid #ccc; padding: .5rem .75rem; text-align: left; vertical-align: top; }
+  th { background: #f0f4f8; }
+  code { background: #f0f0f0; padding: .1rem .3rem; border-radius: 3px; }
+  .meta { color: #666; font-size: .9rem; }
+  .pk { color: #a33; font-weight: bold; }
+  .fk { color: #2c5f8a; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<h1>テーブル定義書：個人運営オンライン書店（購買フロー特化版）</h1>
+<p class="meta">
+  作成日: 2026-08-05 ／ DB: SQLite（<code>docs/tech-stack-template.md</code>で確定） ／
+  対応: <code>data-model.md</code> ／ 憲法（.specify/memory/constitution.md 7章）に基づきHTMLで作成
+</p>
+
+<h2>ER概要</h2>
+<pre>Book (1) ── (0..n) OrderItem (n..1) ── (1) Order</pre>
+
+<h2>1. books（書籍）</h2>
+<p>管理画面がないため、DB初期化処理でのシードデータ投入のみで更新される（research.md参照）。</p>
+<table>
+<tr><th>カラム名</th><th>型</th><th>制約</th><th>説明</th></tr>
+<tr><td class="pk">id</td><td>INTEGER</td><td>PRIMARY KEY AUTOINCREMENT</td><td>書籍ID</td></tr>
+<tr><td>title</td><td>TEXT</td><td>NOT NULL</td><td>タイトル</td></tr>
+<tr><td>author</td><td>TEXT</td><td>NOT NULL</td><td>著者</td></tr>
+<tr><td>price</td><td>INTEGER</td><td>NOT NULL, &gt; 0</td><td>価格（円、税込）</td></tr>
+<tr><td>description</td><td>TEXT</td><td>NOT NULL</td><td>説明文</td></tr>
+<tr><td>image_url</td><td>TEXT</td><td>NOT NULL</td><td>書影画像URL</td></tr>
+</table>
+
+<h2>2. orders（注文）</h2>
+<p><code>POST /api/orders</code>実行時にのみ1行作成される（更新・削除APIなし）。</p>
+<table>
+<tr><th>カラム名</th><th>型</th><th>制約</th><th>説明</th></tr>
+<tr><td class="pk">id</td><td>INTEGER</td><td>PRIMARY KEY AUTOINCREMENT</td><td>内部ID</td></tr>
+<tr><td>order_number</td><td>TEXT</td><td>NOT NULL, UNIQUE</td><td>画面表示用注文番号（<code>ORD-YYYYMMDD-NNNN</code>）</td></tr>
+<tr><td>customer_name</td><td>TEXT</td><td>NOT NULL</td><td>氏名</td></tr>
+<tr><td>address</td><td>TEXT</td><td>NOT NULL</td><td>住所</td></tr>
+<tr><td>email</td><td>TEXT</td><td>NOT NULL</td><td>メールアドレス</td></tr>
+<tr><td>total_amount</td><td>INTEGER</td><td>NOT NULL, &gt;= 0</td><td>注文確定時点の合計金額</td></tr>
+<tr><td>created_at</td><td>TEXT</td><td>NOT NULL</td><td>注文日時（ISO8601）</td></tr>
+</table>
+
+<h2>3. order_items（注文明細）</h2>
+<p>注文確定時点の書籍タイトル・単価をスナップショットとして保持する。</p>
+<table>
+<tr><th>カラム名</th><th>型</th><th>制約</th><th>説明</th></tr>
+<tr><td class="pk">id</td><td>INTEGER</td><td>PRIMARY KEY AUTOINCREMENT</td><td>内部ID</td></tr>
+<tr><td class="fk">order_id</td><td>INTEGER</td><td>NOT NULL, FOREIGN KEY → orders.id</td><td>対象注文</td></tr>
+<tr><td class="fk">book_id</td><td>INTEGER</td><td>NOT NULL, FOREIGN KEY → books.id</td><td>対象書籍</td></tr>
+<tr><td>title</td><td>TEXT</td><td>NOT NULL</td><td>注文確定時点の書籍タイトル（スナップショット）</td></tr>
+<tr><td>price</td><td>INTEGER</td><td>NOT NULL</td><td>注文確定時点の単価（スナップショット）</td></tr>
+<tr><td>quantity</td><td>INTEGER</td><td>NOT NULL, &gt;= 1</td><td>数量</td></tr>
+<tr><td>subtotal</td><td>INTEGER</td><td>NOT NULL</td><td><code>price * quantity</code></td></tr>
+</table>
+
+<h2>備考</h2>
+<p>カート（Cart, CartItem）はDBに永続化しない。ログイン機構がないためフロントエンドの画面状態としてのみ保持し、注文確定時にのみ<code>order_items</code>として永続化される（research.md「4. カートの永続化方式」参照）。</p>
+
+</body>
+</html>
