@@ -1,0 +1,388 @@
+
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Spec Kit 評価レポート</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #1f2328;
+    background: #ffffff;
+    padding: 32px 16px 48px;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; }
+
+  h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .meta { color: #57606a; font-size: 13px; margin-bottom: 32px; }
+
+  /* Score card */
+  .scorecard {
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .total-score { text-align: center; }
+  .total-score .num { font-size: 48px; font-weight: 800; color: #3b82d4; line-height: 1; }
+  .total-score .denom { font-size: 20px; color: #57606a; }
+  .total-score .label { font-size: 12px; color: #57606a; margin-top: 4px; }
+  .score-breakdown { flex: 1; min-width: 260px; }
+  .score-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .score-row .dim { width: 160px; font-size: 13px; color: #57606a; }
+  .bar-wrap { flex: 1; height: 8px; background: #e5e7eb; border-radius: 4px; }
+  .bar { height: 100%; border-radius: 4px; }
+  .bar.high   { background: #3b82d4; }
+  .bar.mid    { background: #f59e0b; }
+  .bar.low    { background: #ef4444; }
+  .score-row .pts { font-size: 13px; font-weight: 600; width: 36px; text-align: right; color: #1f2328; }
+
+  /* Verdict badge */
+  .verdict {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-left: 12px;
+    vertical-align: middle;
+  }
+  .v-good    { background: #dbeafe; color: #1d4ed8; }
+  .v-mid     { background: #fef3c7; color: #92400e; }
+  .v-weak    { background: #fee2e2; color: #991b1b; }
+
+  /* Section */
+  h2 { font-size: 15px; font-weight: 700; margin: 28px 0 12px; padding-bottom: 6px; border-bottom: 1px solid #e5e7eb; }
+  h3 { font-size: 13px; font-weight: 700; margin: 16px 0 8px; color: #1f2328; }
+
+  /* Finding cards */
+  .finding {
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    background: #fff;
+  }
+  .finding-header { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 6px; }
+  .badge {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .b-crit   { background: #fee2e2; color: #991b1b; }
+  .b-high   { background: #fef3c7; color: #92400e; }
+  .b-mid    { background: #dbeafe; color: #1d4ed8; }
+  .b-low    { background: #f0fdf4; color: #166534; }
+  .finding-title { font-weight: 600; font-size: 13px; }
+  .finding p { font-size: 13px; color: #57606a; margin-top: 4px; }
+  .finding .file { font-family: monospace; font-size: 11px; color: #57606a; background: #f7f8fa; padding: 1px 6px; border-radius: 3px; border: 1px solid #e5e7eb; }
+  .rec { margin-top: 6px; font-size: 13px; }
+  .rec strong { color: #1d4ed8; }
+
+  /* Table */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
+  th { background: #f7f8fa; text-align: left; padding: 7px 10px; border: 1px solid #e5e7eb; font-weight: 600; }
+  td { padding: 7px 10px; border: 1px solid #e5e7eb; vertical-align: top; }
+  tr:nth-child(even) td { background: #fafafa; }
+
+  /* Summary list */
+  .sum-list { list-style: none; padding: 0; }
+  .sum-list li { padding: 5px 0; border-bottom: 1px solid #f0f0f0; font-size: 13px; display: flex; gap: 8px; }
+  .sum-list li:last-child { border-bottom: none; }
+  .icon-ok   { color: #16a34a; font-weight: 700; }
+  .icon-warn { color: #d97706; font-weight: 700; }
+  .icon-ng   { color: #dc2626; font-weight: 700; }
+
+  footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid #e5e7eb; text-align: center; font-size: 12px; color: #57606a; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Spec Kit テンプレート — AI as a Judge 評価レポート</h1>
+  <p class="meta">対象: <code>worktrees/h1nakamu_speckit</code> 全ファイル精読  |  評価観点: 汎用性・ウォーターフォール整合・AI駆動度・保守性</p>
+
+  
+  <div class="scorecard">
+    <div class="total-score">
+      <div><span class="num">62</span><span class="denom">/100</span></div>
+      <div class="label">総合スコア</div>
+    </div>
+    <div class="score-breakdown">
+      <div class="score-row">
+        <span class="dim">① フロー設計</span>
+        <div class="bar-wrap"><div class="bar high" style="width:80%"></div></div>
+        <span class="pts">16/20</span>
+      </div>
+      <div class="score-row">
+        <span class="dim">② AI命令の精度</span>
+        <div class="bar-wrap"><div class="bar mid" style="width:65%"></div></div>
+        <span class="pts">13/20</span>
+      </div>
+      <div class="score-row">
+        <span class="dim">③ ウォーターフォール整合</span>
+        <div class="bar-wrap"><div class="bar low" style="width:40%"></div></div>
+        <span class="pts">8/20</span>
+      </div>
+      <div class="score-row">
+        <span class="dim">④ 汎用性・移植性</span>
+        <div class="bar-wrap"><div class="bar mid" style="width:65%"></div></div>
+        <span class="pts">13/20</span>
+      </div>
+      <div class="score-row">
+        <span class="dim">⑤ 保守性・一貫性</span>
+        <div class="bar-wrap"><div class="bar mid" style="width:60%"></div></div>
+        <span class="pts">12/20</span>
+      </div>
+    </div>
+  </div>
+
+  
+  <h2>エグゼクティブサマリー</h2>
+  <ul class="sum-list">
+    <li><span class="icon-ok">✓</span> Spec Kit の仕様駆動フロー（specify → clarify → plan → tasks → implement → analyze）が<strong>正しく揃っている</strong>。骨格は機能する。</li>
+    <li><span class="icon-ok">✓</span> 憲法・要件定義書・技術選定書の「人間が決める／AIが生成する」<strong>責任分担の思想</strong>が明確で、汎用テンプレートとして再利用しやすい設計になっている。</li>
+    <li><span class="icon-ok">✓</span> <code>docs/</code> のガイド群（waterfall / brownfield / lint-preset）に<strong>出典URLと「確証が取れなかった情報」の明示</strong>があり、誠実な情報品質管理ができている。</li>
+    <li><span class="icon-warn">△</span> ウォーターフォールを謳っているが、<strong>テストフェーズの成果物・承認ゲートがほぼ未定義</strong>。ガイドに「ウォーターフォール対応表」があっても、実際の運用に使えるテンプレートがない。</li>
+    <li><span class="icon-warn">△</span> <code>constitution.md</code> に<strong>未解決プレースホルダー</strong>（<code>[組織名]</code>、<code>[例: 80%]</code>、<code>[標準的なCSSルール]</code>）と <code>※要修正</code> 注記が残っており、そのまま本番利用できない。</li>
+    <li><span class="icon-warn">△</span> <code>CLAUDE.md</code> の命名規則とスコープ外リストが<strong>書籍販売アプリ固有の内容</strong>のまま。「汎用テンプレート」に切り替えるには上書きが必要。</li>
+    <li><span class="icon-ng">✗</span> <code>plan-template.md</code> のソースコード構造が Next.js + Express.js <strong>固定</strong>で、他技術スタックで使えない。</li>
+    <li><span class="icon-ng">✗</span> <code>speckit.plan.md</code> が「技術を選ばない」と宣言しているのに、<code>plan-template.md</code> 側で技術スタックを決め打ちしており<strong>矛盾</strong>している。</li>
+    <li><span class="icon-ng">✗</span> <code>speckit.implement.md</code> が <code>.gitignore</code> を Node.js/TypeScript 固定で検証する命令を持っており、<strong>言語非依存でない</strong>。</li>
+  </ul>
+
+  
+  <h2>詳細所見 — 優先度順</h2>
+
+  <h3>CRITICAL（リリース前に必須対処）</h3>
+
+  <div class="finding">
+    <div class="finding-header">
+      <span class="badge b-crit">CRITICAL</span>
+      <span class="finding-title">constitution.md に未解決プレースホルダーと ※要修正 が残存</span>
+    </div>
+    <span class="file">.specify/memory/constitution.md</span>
+    <p>「<code>[組織名]</code>」「<code>[例: 80%]</code>」「<code>[標準的なCSSルール]</code>」「<code>[WCAG 2.1 AA]</code>（角括弧のままで定義として機能しない）」「<code>※要修正</code>」が複数残っている。憲法は最優先ルールとして CLAUDE.md から <code>@</code> インポートされるため、AIがこれらを<strong>実際の制約として解釈してしまうリスク</strong>がある。特に「<code>[標準的なCSSルール]</code>」は意味不明な指示になる。</p>
+    <p class="rec"><strong>→ 対処:</strong> プレースホルダーを実値または「未定義（プロジェクトで記入）」という明示的な表現に置き換える。WCAG 2.1 AA は角括弧を外して正式に記述する。</p>
+  </div>
+
+  <div class="finding">
+    <div class="finding-header">
+      <span class="badge b-crit">CRITICAL</span>
+      <span class="finding-title">plan-template.md のソースコード構造が Next.js+Express 固定</span>
+    </div>
+    <span class="file">.specify/templates/plan-template.md</span>
+    <p><code>backend/src/models/</code>、<code>frontend/src/components/</code> という具体的なディレクトリツリーがハードコードされ、「Structure Decision: Web application (Next.js frontend + Express.js backend)」と書かれている。Python CLI や Java バックエンドのプロジェクトに適用すると、AIがこの構造を前提に計画を生成してしまう。</p>
+    <p class="rec"><strong>→ 対処:</strong> 「Option 1: Single project」「Option 2: Web application」「Option 3: Mobile+API」のような選択肢形式に戻し、具体技術名を除去する。</p>
+  </div>
+
+  <div class="finding">
+    <div class="finding-header">
+      <span class="badge b-crit">CRITICAL</span>
+      <span class="finding-title">speckit.plan.md の「技術を選ばない」宣言と plan-template.md の決め打ちが矛盾</span>
+    </div>
+    <span class="file">.claude/commands/speckit.plan.md &amp; .specify/templates/plan-template.md</span>
+    <p>コマンドファイルは「Do NOT select technology」と明示しているのに、参照先のテンプレートには Next.js / Express.js 固定の構造が書かれている。AIは template をコピーして埋めるため、コマンドの制約より template の内容が優先されてしまう。命令と素材が矛盾する構造は AI の挙動を不安定にする。</p>
+    <p class="rec"><strong>→ 対処:</strong> template 側を技術非依存の形式に修正し、コマンドとテンプレートの一貫性を確保する。</p>
+  </div>
+
+  <h3>HIGH（ウォーターフォール運用に影響）</h3>
+
+  <div class="finding">
+    <div class="finding-header">
+      <span class="badge b-high">HIGH</span>
+      <span class="finding-title">テストフェーズの成果物テンプレートが存在しない</span>
+    </div>
+    <span class="file">docs/ 全体</span>
+    <p><code>waterfall-preset-guide.md</code> の対応表にはテストフェーズがあるが、「テスト計画書」「テスト報告書」「テスト結果承認記録」に対応するテンプレートが一切ない。ウォーターフォールの最大の価値は各フェーズの成果物が揃っていることにあるため、この欠如はフロー全体の信頼性を下げる。</p>
+    <p class="rec"><strong>→ 対処:</strong> <code>docs/test-plan-template.md</code>（テスト計画）、<code>docs/review-gate-template.md</code>（フェーズ承認記録）を新規作成する。</p>
+  </div>
+
+  <div class="finding">
+    <div class="finding-header">
+      <span class="badge b-high">HIGH</span>
+      <span class="finding-title">各フェーズの完了定義（DoD）が未定義</span>
+    </div>
+    <span class="file">docs/waterfall-preset-guide.md</span>
+    <p>「要件定義フェーズの完了」とはいつか？ spec.md が生成されたとき？ 顧客が承認したとき？ 承認ゲートの存在は言及されているが、「何をもって完了とするか」の判定基準が書かれていないため、誰が見ても同じ判断を下せない。</p>
+    <p class="rec"><strong>→ 対処:</strong> 各フェーズに DoD（Definition of Done）チェックリストを追加する。 <code>/speckit.checklist</code> コマンドの活用先としても自然な拡張になる。</p>
+  </div>
+
+  <div class="finding">
+    <div class="finding-header">
+      <span class="badge b-high">HIGH</span>
+      <span class="finding-title">変更管理プロセスが言及のみで実体がない</span>
+    </div>
+    <span class="file">docs/waterfall-preset-guide.md</span>
+    <p>「計画確定後の要件変更は変更管理プロセス（別途、変更要求書）を経由させる」と書かれているが、その「変更要求書」テンプレートが存在しない。ウォーターフォールで最も頻繁に問題になるのが要件変更の管理であるため、実体のないプロセス参照はリスクになる。</p>
+    <p class="rec"><strong>→ 対処:</strong> <code>docs/change-request-template.md</code>（変更要求書）を作成する。</p>
+  </div>
+
+  <h3>MEDIUM（汎用性・保守性に影響）</h3>
+
+  <div class="finding">
+    <div class="finding-header">
+      <span class="badge b-mid">MEDIUM</span>
+      <span class="finding-title">CLAUDE.md の命名規則・スコープ外リストが書籍アプリ固有</span>
+    </div>
+    <span class="file">CLAUDE.md</span>
+    <p>「BookCard.tsx」「cartUtils.ts」「CartItem」「Order」という具体例、および「ログイン・会員管理」「決済処理」などのスコープ外リストが書籍販売アプリのもの。汎用テンプレートとして配布すると、新規プロジェクトの AI が誤ってこれらの制約を適用してしまう可能性がある。</p>
+    <p class="rec"><strong>→ 対処:</strong> 命名規則の例を汎用的な記号（例: <code>FeatureName.tsx</code>）に置き換え、スコープ外リストを「プロジェクトで記入」形式にする。</p>
+  </div>
+
+  <div class="finding">
+    <div class="finding-header">
+      <span class="badge b-mid">MEDIUM</span>
+      <span class="finding-title">speckit.implement.md の .gitignore 検証が Node.js 固定</span>
+    </div>
+    <span class="file">.claude/commands/speckit.implement.md</span>
+    <p>「.gitignore に Node.js/TypeScript と Docker のパターンが含まれているか検証する」という命令がある。これは現プロジェクトには適切だが、汎用テンプレートとして Python や Java プロジェクトに使うと不適切な検証が走る。</p>
+    <p class="rec"><strong>→ 対処:</strong> 「<code>plan.md</code> の技術スタックを参照し、その言語に対応するパターンを確認する」という動的な命令に書き換える。</p>
+  </div>
+
+  <div class="finding">
+    <div class="finding-header">
+      <span class="badge b-mid">MEDIUM</span>
+      <span class="finding-title">requirements-template.md に版管理・承認欄がない</span>
+    </div>
+    <span class="file">docs/requirements-template.md</span>
+    <p>ウォーターフォールでは要件定義書は正式ドキュメントとして版管理・承認が必要。現テンプレートには変更履歴テーブルも承認欄もなく、誰が・いつ・何を変更したかの追跡ができない。<code>requirements.md</code> 本体には変更履歴があるのに、テンプレートにはない点も矛盾している。</p>
+    <p class="rec"><strong>→ 対処:</strong> 変更履歴テーブルとフェーズゲート承認欄（承認者・承認日・承認条件）を追加する。</p>
+  </div>
+
+  <div class="finding">
+    <div class="finding-header">
+      <span class="badge b-mid">MEDIUM</span>
+      <span class="finding-title">spec-template.md が英語、他ドキュメントが日本語で言語不統一</span>
+    </div>
+    <span class="file">.specify/templates/spec-template.md 他</span>
+    <p><code>spec-template.md</code>、<code>plan-template.md</code>、<code>tasks-template.md</code> は英語。<code>requirements-template.md</code>、<code>constitution.md</code>、<code>CLAUDE.md</code> は日本語。AI が生成する成果物の言語が揺れると、レビューや検索効率が下がる。また日本語環境の開発者にとってテンプレートが英語だと記入障壁になる。</p>
+    <p class="rec"><strong>→ 対処:</strong> テンプレート言語をプロジェクトで統一する方針を <code>constitution.md</code> または <code>docs/overview.md</code> に明記する。</p>
+  </div>
+
+  <h3>LOW（品質向上）</h3>
+
+  <div class="finding">
+    <div class="finding-header">
+      <span class="badge b-low">LOW</span>
+      <span class="finding-title">constitution.md セクション7「設計ルール」の書式が不揃い</span>
+    </div>
+    <span class="file">.specify/memory/constitution.md</span>
+    <p>セクション1〜6はスペース区切りの箇条書きだが、セクション7は<code>-基本設計書について</code>（ハイフンの後にスペースなし）と書式が崩れている。AIの解析精度に軽微な影響がある可能性がある。</p>
+    <p class="rec"><strong>→ 対処:</strong> 他セクションと同様のフォーマットに統一する。</p>
+  </div>
+
+  <div class="finding">
+    <div class="finding-header">
+      <span class="badge b-low">LOW</span>
+      <span class="finding-title">speckit.checklist.md コマンドが docs/ のガイドを参照していない</span>
+    </div>
+    <span class="file">.claude/commands/speckit.checklist.md</span>
+    <p><code>waterfall-preset-guide.md</code> や <code>requirements-template.md</code> がフェーズゲートの基準として存在しているのに、チェックリスト生成コマンドからそれらへの参照がない。チェックリストがプロジェクト固有の基準を反映しにくい構造になっている。</p>
+    <p class="rec"><strong>→ 対処:</strong> 「<code>docs/waterfall-preset-guide.md</code> の DoD を参照してフェーズゲートチェックリストを生成できる」旨を明記する。</p>
+  </div>
+
+  
+  <h2>観点別サマリー</h2>
+  <table>
+    <tr>
+      <th>観点</th>
+      <th>評価</th>
+      <th>一言コメント</th>
+    </tr>
+    <tr>
+      <td>フロー設計（specify→plan→tasks→implement）</td>
+      <td><span class="verdict v-good">良好 16/20</span></td>
+      <td>コマンドが揃い、handoffs も設定されている。骨格は完成。</td>
+    </tr>
+    <tr>
+      <td>AI命令の精度・曖昧さのなさ</td>
+      <td><span class="verdict v-mid">要改善 13/20</span></td>
+      <td>コマンドとテンプレートの矛盾、固有技術の混在が判断を揺らす。</td>
+    </tr>
+    <tr>
+      <td>ウォーターフォール整合</td>
+      <td><span class="verdict v-weak">不足 8/20</span></td>
+      <td>ガイドはあるが実働するテンプレート（テスト・承認・変更管理）が欠如。</td>
+    </tr>
+    <tr>
+      <td>汎用性・他プロジェクトへの移植性</td>
+      <td><span class="verdict v-mid">要改善 13/20</span></td>
+      <td>思想は汎用的だが、具体技術・ドメイン固有の記述が随所に残る。</td>
+    </tr>
+    <tr>
+      <td>保守性・ドキュメント一貫性</td>
+      <td><span class="verdict v-mid">要改善 12/20</span></td>
+      <td>言語不統一、プレースホルダー未解決、書式崩れが信頼性を下げている。</td>
+    </tr>
+  </table>
+
+  
+  <h2>推奨する対応優先順位</h2>
+  <table>
+    <tr><th>#</th><th>対応内容</th><th>対象ファイル</th><th>難度</th></tr>
+    <tr>
+      <td>1</td>
+      <td><code>constitution.md</code> のプレースホルダー・※要修正を解消する</td>
+      <td><code>.specify/memory/constitution.md</code></td>
+      <td>低</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><code>plan-template.md</code> を技術非依存の選択肢形式に戻す</td>
+      <td><code>.specify/templates/plan-template.md</code></td>
+      <td>低</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><code>CLAUDE.md</code> の命名規則・スコープ外リストを汎用化する</td>
+      <td><code>CLAUDE.md</code></td>
+      <td>低</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>テスト計画・フェーズ承認・変更要求書テンプレートを新規作成</td>
+      <td><code>docs/</code> 新規3ファイル</td>
+      <td>中</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><code>requirements-template.md</code> に変更履歴・承認欄を追加</td>
+      <td><code>docs/requirements-template.md</code></td>
+      <td>低</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><code>waterfall-preset-guide.md</code> に各フェーズの DoD を追加</td>
+      <td><code>docs/waterfall-preset-guide.md</code></td>
+      <td>中</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td><code>speckit.implement.md</code> の gitignore 検証を動的化</td>
+      <td><code>.claude/commands/speckit.implement.md</code></td>
+      <td>低</td>
+    </tr>
+  </table>
+
+</div>
+
+<footer>
+  <p>Made with IBM Bob</p>
+</footer>
+
+</body>
+</html>
