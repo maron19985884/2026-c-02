@@ -82,7 +82,8 @@ backend/
 │   └── types/
 │       └── book.ts             # Book / BookSummary 型定義
 └── tests/
-    └── booksRoutes.test.ts     # Supertestによる統合テスト
+    ├── booksRoutes.test.ts     # Supertestによる統合テスト
+    └── bookRepository.test.ts  # リポジトリ層の単体テスト（カバレッジ確保のため追加）
 
 frontend/
 ├── package.json             # next@14, react@18, typescript
@@ -94,6 +95,8 @@ frontend/
 ├── vitest.config.ts
 ├── src/
 │   └── app/
+│       ├── layout.tsx                  # ルートレイアウト（App Router必須ファイル）
+│       ├── globals.css                 # 全画面共通のデザイントークン・スタイル
 │       ├── page.tsx                    # 商品一覧画面
 │       ├── books/
 │       │   └── [id]/
@@ -107,13 +110,24 @@ frontend/
 │           ├── booksApi.ts             # 書籍一覧・詳細取得
 │           └── cartStore.ts            # クライアント側カート状態（localStorage）
 └── tests/
+    ├── setup.ts                 # RTLの自動クリーンアップ等の共通セットアップ
     ├── BookGrid.test.tsx
     ├── BookDetailPage.test.tsx
+    ├── HomePage.test.tsx         # 商品一覧画面の状態分岐テスト（カバレッジ確保のため追加）
+    ├── AddToCartButton.test.tsx  # 成功/失敗表示のテスト（カバレッジ確保のため追加）
+    ├── apiClient.test.ts         # fetchJsonの分岐テスト（カバレッジ確保のため追加）
+    ├── booksApi.test.ts          # listBooks/getBookのテスト（カバレッジ確保のため追加）
     └── cartStore.test.ts
 
 mysql/
 └── init/
     └── 01_books_seed.sql       # booksテーブル作成 + サンプルデータ投入（CREATE/INSERTのみ）
+
+e2e/                        # Playwrightによる再実行可能なE2Eテスト（別途追加）
+├── package.json
+├── playwright.config.ts
+└── tests/
+    └── book-catalog.spec.ts
 ```
 
 **Structure Decision**: Option 2（Web application: frontend + backend）を採用。バックエンドは読み取り専用のREST APIを`/api/books`配下に追加し、フロントエンドはNext.js App Routerの`app/books/[id]`で詳細画面を新設する。カート機能は本機能の対象外のため、クライアント側の一時的な状態（`cartStore.ts`）としてのみ実装する。

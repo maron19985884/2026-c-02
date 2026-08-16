@@ -689,7 +689,7 @@ type Book = BookSummary & { description: string };</pre>
         <td><code>addItem(bookId)</code></td>
         <td><code>bookId: number</code></td>
         <td>既存カート（<code>localStorage</code>）に同一<code>bookId</code>があれば<code>quantity</code>を+1、なければ新規追加して保存</td>
-        <td>なし（void）</td>
+        <td><code>boolean</code>（保存成功時<code>true</code>、<code>localStorage</code>書き込み失敗時<code>false</code>。呼び出し元の<code>AddToCartButton</code>が成功/失敗表示の分岐に使用）</td>
       </tr>
       <tr>
         <td><code>getItems()</code></td>
