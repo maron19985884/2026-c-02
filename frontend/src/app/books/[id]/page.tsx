@@ -5,7 +5,7 @@ import Link from "next/link";
 import { getBook, type Book } from "../../lib/booksApi";
 import AddToCartButton from "../../components/AddToCartButton";
 
-const PLACEHOLDER_COVER = "/images/placeholder-book.png";
+const PLACEHOLDER_COVER = "/images/placeholder-book.svg";
 
 type PageState =
   | { status: "loading" }

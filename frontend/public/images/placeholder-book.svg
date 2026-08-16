@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 360" width="240" height="360" role="img" aria-label="書影なし">
+  <rect width="240" height="360" fill="#eef1f5"/>
+
+  <!-- 本の外形（開いた本を正面から見た簡易アイコン） -->
+  <g transform="translate(60,110)">
+    <path d="M0 6 C0 2 3 0 7 1 L58 10 C61 10.5 63 13 63 16 L63 128 C63 131 61 133 58 132 L7 123 C3 122 0 120 0 117 Z"
+          fill="#d6dbe2" stroke="#aeb7c2" stroke-width="2"/>
+    <path d="M120 6 C120 2 117 0 113 1 L62 10 C59 10.5 57 13 57 16 L57 128 C57 131 59 133 62 132 L113 123 C117 122 120 120 120 117 Z"
+          fill="#e3e7ec" stroke="#aeb7c2" stroke-width="2"/>
+    <line x1="60" y1="9" x2="60" y2="131" stroke="#aeb7c2" stroke-width="2"/>
+
+    <line x1="12" y1="28" x2="46" y2="32" stroke="#aeb7c2" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="12" y1="42" x2="46" y2="46" stroke="#aeb7c2" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="12" y1="56" x2="40" y2="60" stroke="#aeb7c2" stroke-width="2.5" stroke-linecap="round"/>
+
+    <line x1="74" y1="32" x2="108" y2="28" stroke="#aeb7c2" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="74" y1="46" x2="108" y2="42" stroke="#aeb7c2" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="80" y1="60" x2="108" y2="56" stroke="#aeb7c2" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+
+  <text x="120" y="290" text-anchor="middle" font-family="-apple-system, 'Segoe UI', system-ui, sans-serif" font-size="15" fill="#8a94a3">書影なし</text>
+</svg>

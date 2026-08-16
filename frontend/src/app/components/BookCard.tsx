@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { BookSummary } from "../lib/booksApi";
 
-const PLACEHOLDER_COVER = "/images/placeholder-book.png";
+const PLACEHOLDER_COVER = "/images/placeholder-book.svg";
 
 type Props = {
   book: BookSummary;

@@ -76,10 +76,10 @@ Web application構成（plan.md参照）: `backend/src/`, `backend/tests/`, `fro
 - [x] T017 [US1] Implement `listForSale(): Promise<BookSummary[]>` in `backend/src/repositories/bookRepository.ts`（`SELECT id, title, author, price, cover_image_url FROM books WHERE is_for_sale = 1 ORDER BY created_at DESC, id DESC`、T010のpoolとT011の型を使用）
 - [x] T018 [US1] Implement `GET /` handler in `backend/src/routes/booksRoutes.ts`（T017の`listForSale()`を呼び出し、`{books: [...]}`形式でJSON応答。`try/catch`で例外を捕捉し500を返す。詳細は`detail-design.html`図D1・例外処理表参照）
 - [x] T019 [P] [US1] Implement `listBooks(): Promise<BookSummary[]>` in `frontend/src/app/lib/booksApi.ts`（T012の`fetchJson`を使い`GET /api/books`を呼び出す。フロントエンド用`BookSummary`型（camelCase、`contracts/books-api.md`準拠）をここでexportする）
-- [x] T020 [P] [US1] Implement `frontend/src/app/components/BookCard.tsx`: 書影（`coverImageUrl`が`null`なら`/images/placeholder-book.png`）・タイトル・著者・価格を表示し、`next/link`で`/books/{id}`へのリンクにする。画像には書籍タイトルを`alt`属性に設定する（WCAG 2.1 AA、憲法セクション3）
+- [x] T020 [P] [US1] Implement `frontend/src/app/components/BookCard.tsx`: 書影（`coverImageUrl`が`null`なら`/images/placeholder-book.svg`）・タイトル・著者・価格を表示し、`next/link`で`/books/{id}`へのリンクにする。画像には書籍タイトルを`alt`属性に設定する（WCAG 2.1 AA、憲法セクション3）
 - [x] T021 [US1] Implement `frontend/src/app/components/BookGrid.tsx`: 書籍配列をグリッド表示し、空配列の場合は「現在販売中の書籍はありません」を表示する（FR-008, 項目I-06）
 - [x] T022 [US1] Replace `frontend/src/app/page.tsx`（商品一覧画面）: 読み込み中→`listBooks()`呼び出し→例外/0件/通常表示の4状態分岐を実装する（`detail-design.html`図D5準拠）
-- [x] T023 [P] [US1] Add placeholder cover image asset at `frontend/public/images/placeholder-book.png`
+- [x] T023 [P] [US1] Add placeholder cover image asset at `frontend/public/images/placeholder-book.svg`
 
 **Checkpoint**: この時点で商品一覧画面（US1）は単独で完結し、デモ・検証が可能
 
@@ -192,7 +192,7 @@ Task: "Component test for BookGrid in frontend/tests/BookGrid.test.tsx"
 # US1の独立した実装タスクを並行実行
 Task: "Implement listBooks() in frontend/src/app/lib/booksApi.ts"
 Task: "Implement BookCard.tsx in frontend/src/app/components/BookCard.tsx"
-Task: "Add placeholder cover image asset at frontend/public/images/placeholder-book.png"
+Task: "Add placeholder cover image asset at frontend/public/images/placeholder-book.svg"
 ```
 
 ---
