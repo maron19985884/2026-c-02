@@ -28,11 +28,11 @@
 ```bash
 curl -X POST http://localhost:4000/api/orders \
   -H "Content-Type: application/json" \
-  -d '{"customerName":"山田太郎","address":"東京都千代田区1-1-1","email":"taro@example.com","items":[{"bookId":1,"quantity":2}]}'
+  -d '{"customerName":"山田太郎","customerAddress":"東京都千代田区1-1-1","customerEmail":"taro@example.com","items":[{"bookId":1,"quantity":2}]}'
 
 curl -X POST http://localhost:4000/api/orders \
   -H "Content-Type: application/json" \
-  -d '{"customerName":"","address":"","email":"invalid","items":[]}'   # 400 validation_error を確認
+  -d '{"customerName":"","customerAddress":"","customerEmail":"invalid","items":[]}'   # 400 validation_error を確認
 ```
 
 ## テスト実行

@@ -235,7 +235,7 @@
     <h4>処理概要</h4>
     <p><code>POST /api/orders</code>のリクエスト・レスポンスと、リポジトリ層の入出力に用いる型定義のみ。<code>ordersRoutes.ts</code>・<code>orderRepository.ts</code>の双方からimportされる（呼び出し関係図には表れない）。</p>
     <pre>type OrderItemRequest = { bookId: number; quantity: number };
-type OrderRequest = { customerName: string; address: string; email: string; items: OrderItemRequest[] };
+type OrderRequest = { customerName: string; customerAddress: string; customerEmail: string; items: OrderItemRequest[] };
 
 type CreateOrderInput = OrderRequest;
 
@@ -310,7 +310,7 @@ type OrderResult = { orderNumber: string; totalAmount: number; items: OrderRespo
       <tr><th>関数</th><th>パラメータ</th><th>処理概要</th><th>Out</th></tr>
       <tr>
         <td><code>createOrder(input)</code></td>
-        <td><code>input: CreateOrderInput</code>（<code>customerName</code>, <code>address</code>, <code>email</code>, <code>items[]</code>）</td>
+        <td><code>input: CreateOrderInput</code>（<code>customerName</code>, <code>customerAddress</code>, <code>customerEmail</code>, <code>items[]</code>）</td>
         <td><code>books</code>の存在・販売可否確認、<code>orders</code>・<code>order_items</code>への単一トランザクションでのINSERT、注文番号（<code>ORD-</code>+<code>id</code>6桁ゼロ埋め、research.md #1）の生成</td>
         <td><code>Promise&lt;OrderResult&gt;</code>（成功時）。失敗時は<code>UnavailableItemsError</code>または元の例外をthrow</td>
       </tr>
@@ -336,8 +336,8 @@ type OrderResult = { orderNumber: string; totalAmount: number; items: OrderRespo
       <line x1="240" y1="38" x2="240" y2="52" stroke="#1f2328" marker-end="url(#fa2c)"/>
 
       <polygon points="240,54 350,88 240,122 130,88" fill="#fff6da" stroke="#a1750a" stroke-width="1.5"/>
-      <text x="240" y="84" text-anchor="middle" font-size="9">customerName/address/email</text>
-      <text x="240" y="96" text-anchor="middle" font-size="9">が空文字・emailが不正形式・</text>
+      <text x="240" y="84" text-anchor="middle" font-size="9">customerName/customerAddress/</text>
+      <text x="240" y="96" text-anchor="middle" font-size="9">customerEmailが空文字・不正形式・</text>
       <text x="240" y="108" text-anchor="middle" font-size="9">itemsが空配列？</text>
 
       <line x1="350" y1="88" x2="410" y2="88" stroke="#1f2328" marker-end="url(#fa2c)"/>
@@ -378,7 +378,7 @@ type OrderResult = { orderNumber: string; totalAmount: number; items: OrderRespo
     <h4>例外処理</h4>
     <table>
       <tr><th>例外・エラーケース</th><th>発生条件</th><th>本モジュールでの対応</th></tr>
-      <tr><td>入力値の未入力・空文字</td><td><code>customerName</code>/<code>address</code>/<code>email</code>のいずれかが未指定または空文字列（FR-003）</td><td><code>orderRepository.createOrder()</code>を呼ばず、400 <code>validation_error</code>＋<code>details</code>配列（該当項目名）を返す</td></tr>
+      <tr><td>入力値の未入力・空文字</td><td><code>customerName</code>/<code>customerAddress</code>/<code>customerEmail</code>のいずれかが未指定または空文字列（FR-003）</td><td><code>orderRepository.createOrder()</code>を呼ばず、400 <code>validation_error</code>＋<code>details</code>配列（該当項目名）を返す</td></tr>
       <tr><td>メールアドレスの形式不正</td><td><code>/^[^\s@]+@[^\s@]+\.[^\s@]+$/</code>相当を満たさない（FR-004、research.md #5）</td><td>同上、<code>details</code>に含める</td></tr>
       <tr><td>カートが空</td><td><code>items</code>が空配列（FR-010）</td><td>同上、<code>details</code>に含める</td></tr>
       <tr><td>注文不可な書籍を含む</td><td><code>orderRepository.createOrder()</code>が<code>UnavailableItemsError</code>をthrow</td><td>400 <code>unavailable_items</code>＋<code>bookIds</code>を返す（<code>contracts/orders-api.md</code>）</td></tr>
@@ -527,7 +527,7 @@ type OrderResult = { orderNumber: string; totalAmount: number; items: OrderRespo
   </div>
   <div class="module-body">
     <h4>処理概要</h4>
-    <p>注文フォーム画面本体（SC-04）。マウント時に<code>booksApi.listBooks()</code>と<code>cartStore.getItems()</code>を突き合わせ（003の<code>cart/page.tsx</code>と同じ合成ロジック）、販売対象外の項目を除いた表示用データを<code>OrderSummary</code>に渡す。氏名・住所・メールアドレスの入力値と各項目のエラーメッセージを<code>state</code>で保持する。「注文する」押下時の処理は下記フロー参照。</p>
+    <p>注文フォーム画面本体（SC-04）。マウント時に<code>booksApi.listBooks()</code>と<code>cartStore.getItems()</code>を突き合わせ（003の<code>cart/page.tsx</code>と同じ合成ロジック）、販売対象外の項目を除いた表示用データを<code>OrderSummary</code>に渡す。氏名・住所・メールアドレスの入力値と各項目のエラーメッセージを<code>state</code>で保持する。「注文する」押下時の処理は下記フロー参照。バリデーション関数<code>validate(fields)</code>はページコンポーネント内に閉じず、テスト容易性のため同ファイル内でexportする（コンポーネント外部からの直接呼び出しは想定しないが、コンポーネントをレンダリングせず関数単体でテストできるようにするため）。</p>
 
     <h4>処理フロー: 「注文する」押下時（FR-003〜FR-006）</h4>
     <div class="diagram-box">
@@ -599,7 +599,7 @@ type OrderResult = { orderNumber: string; totalAmount: number; items: OrderRespo
     <h4>パラメータ・In/Out詳細</h4>
     <table>
       <tr><th>関数</th><th>パラメータ</th><th>処理概要</th><th>Out</th></tr>
-      <tr><td><code>validate(fields)</code></td><td><code>{"{ customerName, address, email }"}</code></td><td>未入力・メール形式（<code>/^[^\s@]+@[^\s@]+\.[^\s@]+$/</code>相当、research.md #5）をチェック</td><td><code>{"{ isValid: boolean; errors: Record<string, string> }"}</code></td></tr>
+      <tr><td><code>validate(fields)</code></td><td><code>{"{ customerName, customerAddress, customerEmail }"}</code></td><td>未入力・メール形式（<code>/^[^\s@]+@[^\s@]+\.[^\s@]+$/</code>相当、research.md #5）をチェック</td><td><code>{"{ isValid: boolean; errors: Record<string, string> }"}</code></td></tr>
       <tr><td><code>handleSubmit(event)</code></td><td><code>FormEvent</code></td><td>図D4のフロー全体を実行</td><td>なし（void。成功時は画面遷移）</td></tr>
     </table>
   </div>
