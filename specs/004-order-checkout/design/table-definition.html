@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>テーブル定義書 - 注文フォーム・注文完了画面（004-order-checkout）</title>
+<style>
+  :root {
+    --ink: #1a1d24; --ink-muted: #5b6472;
+    --paper: #f3f5fa; --surface: #ffffff; --line: #dbe1ea;
+    --blueprint: #2f5fd9; --blueprint-soft: #e8eefc;
+    --pk: #7233c9;
+    --warn-bg: #fff8d6; --warn-fg: #6b5000; --warn-line: #d8b23a;
+    --sheet-bg: #eef3fc; --sheet-line: #cfdcf3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #e7eaf1; --ink-muted: #97a1b3;
+      --paper: #13161c; --surface: #1a1e26; --line: #2b303c;
+      --blueprint: #7fa0ff; --blueprint-soft: rgba(127,160,255,.14);
+      --pk: #cca4ff;
+      --warn-bg: rgba(220,180,50,.14); --warn-fg: #e8c65a; --warn-line: #7c611f;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #e7eaf1; --ink-muted: #97a1b3;
+    --paper: #13161c; --surface: #1a1e26; --line: #2b303c;
+    --blueprint: #7fa0ff; --blueprint-soft: rgba(127,160,255,.14);
+    --pk: #cca4ff;
+    --warn-bg: rgba(220,180,50,.14); --warn-fg: #e8c65a; --warn-line: #7c611f;
+  }
+  :root[data-theme="light"] {
+    --ink: #1a1d24; --ink-muted: #5b6472;
+    --paper: #f3f5fa; --surface: #ffffff; --line: #dbe1ea;
+    --blueprint: #2f5fd9; --blueprint-soft: #e8eefc;
+    --pk: #7233c9;
+    --warn-bg: #fff8d6; --warn-fg: #6b5000; --warn-line: #d8b23a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 14.5px; line-height: 1.7; color: var(--ink); background: var(--paper);
+    padding: 40px 16px 72px;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; }
+  .kicker {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--blueprint); font-weight: 700; margin-bottom: 10px;
+  }
+  h1 { font-size: 25px; font-weight: 800; letter-spacing: -0.01em; text-wrap: balance; margin-bottom: 14px; }
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 8px 18px;
+    color: var(--ink-muted); font-size: 12.5px; margin-bottom: 20px;
+    padding-bottom: 20px; border-bottom: 1px solid var(--line);
+  }
+  h2 {
+    font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em;
+    margin-top: 46px; margin-bottom: 16px;
+    padding: 9px 14px; background: var(--blueprint-soft); color: var(--blueprint);
+    border-left: 3px solid var(--blueprint); border-radius: 0 4px 4px 0;
+  }
+  h3 { font-size: 15px; font-weight: 700; margin-top: 22px; margin-bottom: 8px; color: var(--ink); }
+  p { margin-bottom: 10px; color: var(--ink); }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0 20px; font-size: 13px; font-variant-numeric: tabular-nums; }
+  th, td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--surface); font-weight: 700; color: var(--ink-muted); font-size: 11.5px; text-transform: uppercase; letter-spacing: .03em; }
+  td { background: var(--surface); color: var(--ink); }
+  code {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    background: var(--blueprint-soft); border: 1px solid var(--line); border-radius: 4px;
+    padding: 1px 5px; font-size: 12.5px; color: var(--ink);
+  }
+  .pk { color: var(--pk); font-weight: 700; }
+  .idx-box {
+    border: 1px solid var(--line); border-radius: 8px; background: var(--surface);
+    padding: 16px; margin: 12px 0 20px;
+  }
+  .note {
+    background: var(--warn-bg); border: 1px solid var(--warn-line); color: var(--warn-fg);
+    border-radius: 6px; padding: 10px 14px; font-size: 13px; margin: 12px 0;
+  }
+  .diagram-box {
+    border: 1px solid var(--line); border-radius: 8px; background: var(--sheet-bg);
+    padding: 18px; margin: 16px 0 24px; overflow-x: auto;
+    background-image:
+      linear-gradient(var(--sheet-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--sheet-line) 1px, transparent 1px);
+    background-size: 24px 24px; background-position: -1px -1px;
+  }
+  .diagram-box svg { display: block; margin: 0 auto; }
+  .diagram-caption { font-size: 12.5px; color: var(--ink-muted); margin-top: 10px; text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="kicker">テーブル定義書 &middot; Table Definition</div>
+<h1>注文フォーム・注文完了画面</h1>
+<div class="meta">
+  <span>対象feature: <code>004-order-checkout</code></span>
+  <span>作成日: 2026-08-16</span>
+  <span>対応data-model: <code>specs/004-order-checkout/data-model.md</code></span>
+  <span>DBMS: MySQL 8.0</span>
+</div>
+
+<h2>1. テーブル一覧</h2>
+<table>
+  <tr><th>物理テーブル名</th><th>論理名</th><th>概要</th><th>初期化スクリプト</th></tr>
+  <tr><td><code>orders</code></td><td>注文</td><td>1回の注文確定操作を表す注文ヘッダー（顧客情報・合計金額）</td><td><code>mysql/init/02_orders_seed.sql</code></td></tr>
+  <tr><td><code>order_items</code></td><td>注文商品</td><td>注文に含まれる書籍1件分の明細（書名・単価のスナップショット、数量）</td><td><code>mysql/init/02_orders_seed.sql</code></td></tr>
+</table>
+
+<div class="note">
+本機能は002の<code>books</code>テーブルを変更しない（読み取りのみ）。カート項目（003）は引き続きサーバー側で永続化しないため、対応するテーブルは存在しない（<code>data-model.md</code>参照）。
+</div>
+
+<h2>2. orders テーブル</h2>
+
+<h3>2.1 カラム定義</h3>
+<table>
+  <tr><th>物理名</th><th>論理名</th><th>型</th><th>NULL</th><th>デフォルト</th><th>PK/FK</th><th>説明</th></tr>
+  <tr>
+    <td><code>id</code></td><td>注文ID</td><td>INT</td><td>NOT NULL</td><td>AUTO_INCREMENT</td><td class="pk">PK</td>
+    <td>注文を一意に識別するID。注文番号（<code>ORD-</code>+6桁ゼロ埋め）の採番元（research.md #1）</td>
+  </tr>
+  <tr>
+    <td><code>customer_name</code></td><td>氏名</td><td>VARCHAR(255)</td><td>NOT NULL</td><td>-</td><td></td>
+    <td>注文者の氏名（自由記述）</td>
+  </tr>
+  <tr>
+    <td><code>customer_address</code></td><td>住所</td><td>VARCHAR(500)</td><td>NOT NULL</td><td>-</td><td></td>
+    <td>注文者の住所（自由記述）</td>
+  </tr>
+  <tr>
+    <td><code>customer_email</code></td><td>メールアドレス</td><td>VARCHAR(255)</td><td>NOT NULL</td><td>-</td><td></td>
+    <td>形式検証済み（<code>local@domain</code>構造、research.md #5）</td>
+  </tr>
+  <tr>
+    <td><code>total_amount</code></td><td>合計金額</td><td>INT</td><td>NOT NULL</td><td>-</td><td></td>
+    <td>合計金額（日本円）。バックエンドが<code>order_items</code>から再計算した値</td>
+  </tr>
+  <tr>
+    <td><code>created_at</code></td><td>注文日時</td><td>TIMESTAMP</td><td>NOT NULL</td><td>CURRENT_TIMESTAMP</td><td></td>
+    <td>注文確定日時</td>
+  </tr>
+</table>
+
+<h3>2.2 インデックス定義</h3>
+<div class="idx-box">
+<table>
+  <tr><th>インデックス名</th><th>種別</th><th>対象カラム</th><th>目的</th></tr>
+  <tr><td><code>PRIMARY</code></td><td>PRIMARY KEY</td><td><code>id</code></td><td>一意識別。注文番号の採番元でもある</td></tr>
+</table>
+</div>
+
+<h3>2.3 制約</h3>
+<table>
+  <tr><th>制約</th><th>内容</th></tr>
+  <tr><td>CHECK（アプリケーション側）</td><td><code>customer_name</code>・<code>customer_address</code>・<code>customer_email</code> はいずれも空文字列不可（spec.md FR-003、アプリケーション側バリデーション）</td></tr>
+  <tr><td>CHECK（アプリケーション側）</td><td><code>customer_email</code> は<code>local@domain</code>の基本構造を満たすこと（spec.md FR-004）</td></tr>
+</table>
+
+<h2>3. order_items テーブル</h2>
+
+<h3>3.1 カラム定義</h3>
+<table>
+  <tr><th>物理名</th><th>論理名</th><th>型</th><th>NULL</th><th>デフォルト</th><th>PK/FK</th><th>説明</th></tr>
+  <tr>
+    <td><code>id</code></td><td>注文商品ID</td><td>INT</td><td>NOT NULL</td><td>AUTO_INCREMENT</td><td class="pk">PK</td>
+    <td>注文商品明細を一意に識別するID</td>
+  </tr>
+  <tr>
+    <td><code>order_id</code></td><td>注文ID</td><td>INT</td><td>NOT NULL</td><td>-</td><td class="pk">FK</td>
+    <td><code>orders.id</code>を参照。どの注文に属するか</td>
+  </tr>
+  <tr>
+    <td><code>book_id</code></td><td>書籍ID</td><td>INT</td><td>NOT NULL</td><td>-</td><td class="pk">FK</td>
+    <td><code>books.id</code>を参照。書籍が後で変更・削除されても本レコードは変化しない</td>
+  </tr>
+  <tr>
+    <td><code>title</code></td><td>書名（スナップショット）</td><td>VARCHAR(255)</td><td>NOT NULL</td><td>-</td><td></td>
+    <td>注文確定時点の書名（research.md #2）</td>
+  </tr>
+  <tr>
+    <td><code>price</code></td><td>単価（スナップショット）</td><td>INT</td><td>NOT NULL</td><td>-</td><td></td>
+    <td>注文確定時点の単価（日本円）</td>
+  </tr>
+  <tr>
+    <td><code>quantity</code></td><td>数量</td><td>INT</td><td>NOT NULL</td><td>-</td><td></td>
+    <td>1以上の整数</td>
+  </tr>
+</table>
+
+<h3>3.2 インデックス定義</h3>
+<div class="idx-box">
+<table>
+  <tr><th>インデックス名</th><th>種別</th><th>対象カラム</th><th>目的</th></tr>
+  <tr><td><code>PRIMARY</code></td><td>PRIMARY KEY</td><td><code>id</code></td><td>一意識別</td></tr>
+  <tr>
+    <td><code>idx_order_items_order</code></td>
+    <td>INDEX</td>
+    <td><code>order_id</code></td>
+    <td>注文完了画面・将来の注文照会で「ある注文の明細一覧」を取得するクエリを効率化する</td>
+  </tr>
+</table>
+</div>
+
+<h3>3.3 制約</h3>
+<table>
+  <tr><th>制約</th><th>内容</th></tr>
+  <tr><td>FOREIGN KEY</td><td><code>order_id</code> → <code>orders.id</code>。<code>ON DELETE CASCADE</code>（注文自体を削除する操作は本機能にないが、将来の整合性のため設定）</td></tr>
+  <tr><td>FOREIGN KEY</td><td><code>book_id</code> → <code>books.id</code>。<code>ON DELETE</code>は設定しない（書籍が削除されても注文明細のスナップショットは残す想定。ただし現状<code>books</code>の削除操作自体が存在しないためスコープ外）</td></tr>
+  <tr><td>CHECK（アプリケーション側）</td><td><code>quantity</code> は1以上の整数（003 spec.md FR-009のカート側制約を踏襲）</td></tr>
+  <tr><td>整合性（アプリケーション側）</td><td>1件の注文に紐づく<code>order_items</code>は1件以上（空の注文は作成できない、spec.md FR-010）</td></tr>
+</table>
+
+<h3>3.4 ER図</h3>
+<div class="diagram-box">
+<svg viewBox="0 0 700 260" width="100%" height="260" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="erArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#57606a"/>
+    </marker>
+  </defs>
+
+  <rect x="20" y="20" width="180" height="150" rx="6" fill="#eef3fc" stroke="#0969da" stroke-width="1.5"/>
+  <rect x="20" y="20" width="180" height="32" rx="6" fill="#0969da"/>
+  <text x="110" y="41" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">books（002・変更なし）</text>
+  <g font-size="11" font-family="ui-monospace, Menlo, monospace">
+    <text x="30" y="68">PK id</text>
+    <text x="30" y="86">   title</text>
+    <text x="30" y="104">   price</text>
+    <text x="30" y="122">   is_for_sale</text>
+  </g>
+
+  <rect x="260" y="20" width="200" height="150" rx="6" fill="#fbefff" stroke="#8250df" stroke-width="1.5"/>
+  <rect x="260" y="20" width="200" height="32" rx="6" fill="#8250df"/>
+  <text x="360" y="41" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">orders（新規）</text>
+  <g font-size="11" font-family="ui-monospace, Menlo, monospace">
+    <text x="270" y="68">PK id</text>
+    <text x="270" y="86">   customer_name</text>
+    <text x="270" y="104">   customer_address</text>
+    <text x="270" y="122">   customer_email</text>
+    <text x="270" y="140">   total_amount</text>
+    <text x="270" y="158">   created_at</text>
+  </g>
+
+  <rect x="500" y="20" width="180" height="150" rx="6" fill="#fbefff" stroke="#8250df" stroke-width="1.5"/>
+  <rect x="500" y="20" width="180" height="32" rx="6" fill="#8250df"/>
+  <text x="590" y="41" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">order_items（新規）</text>
+  <g font-size="11" font-family="ui-monospace, Menlo, monospace">
+    <text x="510" y="68">PK id</text>
+    <text x="510" y="86">FK order_id</text>
+    <text x="510" y="104">FK book_id</text>
+    <text x="510" y="122">   title</text>
+    <text x="510" y="140">   price</text>
+    <text x="510" y="158">   quantity</text>
+  </g>
+
+  <line x1="460" y1="95" x2="495" y2="95" stroke="#57606a" stroke-width="1.5" marker-end="url(#erArrow)"/>
+  <text x="478" y="88" text-anchor="middle" font-size="10" fill="#57606a">1</text>
+  <text x="490" y="112" text-anchor="middle" font-size="9" fill="#57606a">N</text>
+
+  <line x1="200" y1="200" x2="590" y2="175" stroke="#57606a" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#erArrow)"/>
+  <text x="380" y="215" text-anchor="middle" font-size="10" fill="#57606a">参照（スナップショットのため実質的な依存は注文確定時のみ）</text>
+</svg>
+<div class="diagram-caption">図: orders・order_itemsとbooksの関係（1注文=N注文商品、注文商品はbooksを参照しつつtitle/priceを自身に保持）</div>
+</div>
+
+<h2>4. 初期データ（シード）方針</h2>
+<p>
+<code>mysql/init/02_orders_seed.sql</code>にて、<code>orders</code>・<code>order_items</code>テーブルを<code>CREATE TABLE IF NOT EXISTS</code>で作成する。初期データ（サンプル注文）は投入しない（注文はAPI経由でのみ作成されるべきデータであり、シードで作成した注文は実際の操作履歴と混同を招くため）。<code>DROP</code>・<code>TRUNCATE</code>・<code>DELETE</code>は含めない（CLAUDE.md「破壊的DDLの直接生成禁止」に対応）。
+</p>
+
+<div class="note">
+本ドキュメントの正本（Source of Truth）は <code>specs/004-order-checkout/data-model.md</code> である。齟齬が生じた場合はdata-model.md側を正とし、本ドキュメントを更新する。
+</div>
+
+</div>
+</body>
+</html>

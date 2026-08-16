@@ -1,0 +1,442 @@
+<!--
+  [新規 2026-08-16] constitution.md セクション7の改訂に伴い新規作成。
+  002-book-catalog-detail/design/basic-design.html を実際に作りながら判明した
+  必須セクション（1〜9）を、あらかじめ埋め込んだ空テンプレート。
+  背景は docs/design-doc-guide.md を参照。
+-->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>基本設計書 - 注文フォーム・注文完了画面（004-order-checkout）</title>
+<style>
+  :root {
+    --ink: #1a1d24; --ink-muted: #5b6472;
+    --paper: #f3f5fa; --surface: #ffffff; --line: #dbe1ea;
+    --blueprint: #2f5fd9; --blueprint-soft: #e8eefc;
+    --fe-bg: #e6f4ff; --fe-fg: #1462b0;
+    --be-bg: #fff2e0; --be-fg: #a15c00;
+    --db-bg: #f3e8ff; --db-fg: #7233c9;
+    --new-bg: #e3f8ea; --new-fg: #1a7f45;
+    --warn-bg: #fff8d6; --warn-fg: #6b5000; --warn-line: #d8b23a;
+    --sheet-bg: #eef3fc; --sheet-line: #cfdcf3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #e7eaf1; --ink-muted: #97a1b3;
+      --paper: #13161c; --surface: #1a1e26; --line: #2b303c;
+      --blueprint: #7fa0ff; --blueprint-soft: rgba(127,160,255,.14);
+      --fe-bg: rgba(70,150,255,.16); --fe-fg: #8ec1ff;
+      --be-bg: rgba(255,160,60,.16); --be-fg: #ffbd75;
+      --db-bg: rgba(180,120,255,.18); --db-fg: #cca4ff;
+      --new-bg: rgba(60,200,120,.16); --new-fg: #7fe0aa;
+      --warn-bg: rgba(220,180,50,.14); --warn-fg: #e8c65a; --warn-line: #7c611f;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #e7eaf1; --ink-muted: #97a1b3;
+    --paper: #13161c; --surface: #1a1e26; --line: #2b303c;
+    --blueprint: #7fa0ff; --blueprint-soft: rgba(127,160,255,.14);
+    --fe-bg: rgba(70,150,255,.16); --fe-fg: #8ec1ff;
+    --be-bg: rgba(255,160,60,.16); --be-fg: #ffbd75;
+    --db-bg: rgba(180,120,255,.18); --db-fg: #cca4ff;
+    --new-bg: rgba(60,200,120,.16); --new-fg: #7fe0aa;
+    --warn-bg: rgba(220,180,50,.14); --warn-fg: #e8c65a; --warn-line: #7c611f;
+  }
+  :root[data-theme="light"] {
+    --ink: #1a1d24; --ink-muted: #5b6472;
+    --paper: #f3f5fa; --surface: #ffffff; --line: #dbe1ea;
+    --blueprint: #2f5fd9; --blueprint-soft: #e8eefc;
+    --fe-bg: #e6f4ff; --fe-fg: #1462b0;
+    --be-bg: #fff2e0; --be-fg: #a15c00;
+    --db-bg: #f3e8ff; --db-fg: #7233c9;
+    --new-bg: #e3f8ea; --new-fg: #1a7f45;
+    --warn-bg: #fff8d6; --warn-fg: #6b5000; --warn-line: #d8b23a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 14.5px; line-height: 1.7; color: var(--ink); background: var(--paper);
+    padding: 40px 16px 72px;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; }
+  .kicker {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--blueprint); font-weight: 700; margin-bottom: 10px;
+  }
+  h1 { font-size: 25px; font-weight: 800; letter-spacing: -0.01em; text-wrap: balance; margin-bottom: 14px; }
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 8px 18px;
+    color: var(--ink-muted); font-size: 12.5px; margin-bottom: 20px;
+    padding-bottom: 20px; border-bottom: 1px solid var(--line);
+  }
+  h2 {
+    font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em;
+    margin-top: 46px; margin-bottom: 16px;
+    padding: 9px 14px; background: var(--blueprint-soft); color: var(--blueprint);
+    border-left: 3px solid var(--blueprint); border-radius: 0 4px 4px 0;
+  }
+  h3 { font-size: 15px; font-weight: 700; margin-top: 26px; margin-bottom: 8px; color: var(--ink); }
+  p { margin-bottom: 10px; color: var(--ink); }
+  ul, ol { margin: 8px 0 12px 22px; }
+  li { margin-bottom: 4px; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0 20px; font-size: 13px; font-variant-numeric: tabular-nums; }
+  th, td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--surface); font-weight: 700; color: var(--ink-muted); font-size: 11.5px; text-transform: uppercase; letter-spacing: .03em; }
+  td { background: var(--surface); }
+  code {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    background: var(--blueprint-soft); border: 1px solid var(--line); border-radius: 4px;
+    padding: 1px 5px; font-size: 12.5px; color: var(--ink);
+  }
+  .diagram-box {
+    border: 1px solid var(--line); border-radius: 8px; background: var(--sheet-bg);
+    padding: 18px; margin: 16px 0 24px; overflow-x: auto;
+    background-image:
+      linear-gradient(var(--sheet-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--sheet-line) 1px, transparent 1px);
+    background-size: 24px 24px; background-position: -1px -1px;
+  }
+  .diagram-caption { font-size: 12.5px; color: var(--ink-muted); margin-top: 10px; text-align: center; }
+  .badge {
+    display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px;
+    border-radius: 10px; background: var(--blueprint-soft); color: var(--blueprint); margin-left: 8px;
+  }
+  .note {
+    background: var(--warn-bg); border: 1px solid var(--warn-line); color: var(--warn-fg);
+    border-radius: 6px; padding: 10px 14px; font-size: 13px; margin: 12px 0;
+  }
+  .todo { color: var(--blueprint); font-style: italic; }
+  svg text { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; }
+  .diagram-box svg { display: block; margin: 0 auto; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="kicker">基本設計書 &middot; Basic Design</div>
+<h1>注文フォーム・注文完了画面</h1>
+<div class="meta">
+  <span>対象feature: <code>004-order-checkout</code></span>
+  <span>作成日: 2026-08-16</span>
+  <span>対応spec: <code>specs/004-order-checkout/spec.md</code></span>
+  <span>対応plan: <code>specs/004-order-checkout/plan.md</code></span>
+</div>
+
+<h2>1. システム概要</h2>
+<p>
+注文フォーム画面（<code>/order</code>）と注文完了画面（<code>/order/complete</code>）を新設する。注文フォームでは、カート画面（003-cart-management）の<code>cartStore</code>と既存<code>GET /api/books</code>から合成した注文商品・合計金額を表示しつつ、氏名・住所・メールアドレスを入力させる。入力内容はフロントエンドでバリデーションした上で、新規API<code>POST /api/orders</code>に送信する。バックエンドは<code>orders</code>・<code>order_items</code>テーブルに注文情報を永続化し、一意な注文番号を発行してレスポンスする。フロントエンドは注文番号を受け取り、カートをクリアしたうえで注文完了画面へ遷移し、完了メッセージ・注文番号・一覧へ戻るリンクを表示する。002・003ではバックエンド・DBへの変更を伴わなかったが、本機能で初めてバックエンドAPIとMySQLスキーマの追加が発生する。
+</p>
+<p>対応する要件: <code>requirements.md</code> REQ-012〜REQ-018</p>
+
+<h2>2. アーキテクチャ構成図</h2>
+<p>003までとは異なり、本機能ではbackend・mysqlの双方に変更が発生する（新規API・新規テーブル）。</p>
+<div class="diagram-box">
+<svg viewBox="0 0 800 300" width="100%" height="300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowD1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/>
+    </marker>
+  </defs>
+
+  <rect x="20" y="110" width="120" height="60" rx="6" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+  <text x="80" y="135" text-anchor="middle" font-size="13" font-weight="700">ブラウザ</text>
+  <text x="80" y="153" text-anchor="middle" font-size="11" fill="#57606a">(利用者)</text>
+
+  <rect x="190" y="30" width="580" height="240" rx="8" fill="none" stroke="#57606a" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="480" y="50" text-anchor="middle" font-size="12" fill="#57606a" font-weight="700">Docker Compose</text>
+
+  <rect x="220" y="90" width="150" height="90" rx="6" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+  <text x="295" y="112" text-anchor="middle" font-size="13" font-weight="700">frontend</text>
+  <text x="295" y="129" text-anchor="middle" font-size="10.5">/order, /order/complete（新規）</text>
+  <text x="295" y="144" text-anchor="middle" font-size="10" fill="#57606a">cartStore = localStorage</text>
+  <text x="295" y="158" text-anchor="middle" font-size="11" fill="#57606a">:3000</text>
+
+  <rect x="440" y="90" width="150" height="80" rx="6" fill="#fff2e0" stroke="#a15c00" stroke-width="1.5"/>
+  <text x="515" y="115" text-anchor="middle" font-size="13" font-weight="700">backend</text>
+  <text x="515" y="132" text-anchor="middle" font-size="10">POST /api/orders（新規）</text>
+  <text x="515" y="150" text-anchor="middle" font-size="11" fill="#57606a">:4000</text>
+
+  <rect x="660" y="90" width="100" height="80" rx="6" fill="#f3e8ff" stroke="#7233c9" stroke-width="1.5"/>
+  <text x="710" y="115" text-anchor="middle" font-size="13" font-weight="700">mysql</text>
+  <text x="710" y="132" text-anchor="middle" font-size="9.5">orders, order_items（新規）</text>
+  <text x="710" y="150" text-anchor="middle" font-size="11" fill="#57606a">:3306</text>
+
+  <line x1="140" y1="140" x2="215" y2="130" stroke="#1f2328" stroke-width="1.5" marker-end="url(#arrowD1)"/>
+  <text x="175" y="122" text-anchor="middle" font-size="10.5">HTTP</text>
+
+  <line x1="370" y1="130" x2="435" y2="130" stroke="#1f2328" stroke-width="1.5" marker-end="url(#arrowD1)"/>
+  <text x="402" y="122" text-anchor="middle" font-size="9">GET /api/books（既存）+</text>
+  <text x="402" y="182" text-anchor="middle" font-size="9">POST /api/orders（新規）</text>
+
+  <line x1="590" y1="130" x2="655" y2="130" stroke="#1f2328" stroke-width="1.5" marker-end="url(#arrowD1)"/>
+  <text x="622" y="122" text-anchor="middle" font-size="9">INSERT</text>
+
+  <text x="480" y="250" text-anchor="middle" font-size="11" fill="#57606a">frontendはbooksの読み取りに既存APIを、注文確定に新規POST /api/ordersを使用する</text>
+</svg>
+<div class="diagram-caption">図1: コンポーネント構成図（backend・mysqlに新規要素が追加される。frontendは実線でbackendへ通信）</div>
+</div>
+
+<h2>3. 外部インターフェース仕様（API一覧）</h2>
+<p>frontendがbackendに対して呼び出すREST APIの一覧。詳細なリクエスト・レスポンスのスキーマは<code>contracts/orders-api.md</code>を正本とする。</p>
+<table>
+<tr><th>メソッド</th><th>パス</th><th>概要</th><th>認証</th><th>対応画面</th><th>対応FR</th></tr>
+<tr><td><code>GET</code></td><td><code>/api/books</code></td><td>販売中の書籍一覧を取得する（002で実装済み）</td><td>なし（匿名アクセス）</td><td>SC-04 注文フォーム画面</td><td>FR-001</td></tr>
+<tr><td><code>POST</code></td><td><code>/api/orders</code></td><td>注文情報を永続化し、注文番号を発行する（新規）</td><td>なし（匿名アクセス）</td><td>SC-04 注文フォーム画面</td><td>FR-002〜FR-008, FR-010</td></tr>
+</table>
+
+<h3>3.1 共通仕様</h3>
+<table>
+<tr><th>項目</th><th>内容</th></tr>
+<tr><td>ベースURL</td><td><code>http://localhost:4000</code>（002・003と同一）</td></tr>
+<tr><td>データ形式</td><td>リクエスト・レスポンスともに<code>application/json</code>（002・003と同一）</td></tr>
+<tr><td>認証方式</td><td>なし。注文確定は匿名の利用者として行える（spec.mdの前提）</td></tr>
+<tr><td>共通エラー形式</td><td>002と同一の<code>{"{error: string}"}</code>形式に加え、バリデーションエラーは<code>details</code>配列を含む（本書「8. エラー処理方針」、<code>contracts/orders-api.md</code>参照）</td></tr>
+</table>
+
+<h2>4. 画面一覧</h2>
+<table>
+<tr><th>画面ID</th><th>画面名</th><th>パス</th><th>概要</th><th>対応REQ</th></tr>
+<tr><td>SC-04</td><td>注文フォーム画面</td><td><code>/order</code></td><td>顧客情報入力・注文内容確認・注文確定</td><td>REQ-012〜015</td></tr>
+<tr><td>SC-05</td><td>注文完了画面</td><td><code>/order/complete</code></td><td>注文完了メッセージ・注文番号表示・一覧へ戻る導線</td><td>REQ-016〜018</td></tr>
+</table>
+
+<h2>5. 画面レイアウト・項目定義</h2>
+
+<h3>5.1 SC-04 注文フォーム画面</h3>
+<div class="diagram-box">
+<svg viewBox="0 0 700 460" width="100%" height="460" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="20" width="660" height="420" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+  <rect x="20" y="20" width="660" height="34" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.5"/>
+  <text x="34" y="42" font-size="12" font-weight="700">オンライン書店</text>
+  <text x="630" y="42" text-anchor="end" font-size="12" fill="#2f5fd9" font-weight="700">カート</text>
+
+  <text x="40" y="80" font-size="15" font-weight="700">注文手続き</text>
+
+  <!-- order summary -->
+  <rect x="40" y="96" width="620" height="76" rx="4" fill="#eef3fc" stroke="#8aa8db"/>
+  <text x="52" y="114" font-size="11" font-weight="700">注文商品</text>
+  <text x="52" y="132" font-size="10">書名A × 2　　¥2,000</text>
+  <text x="52" y="148" font-size="10">書名B × 1　　¥1,500</text>
+  <text x="620" y="164" text-anchor="end" font-size="12" font-weight="700">合計: ¥3,500</text>
+  <line x1="660" y1="96" x2="690" y2="80" stroke="#57606a"/>
+  <text x="694" y="76" font-size="9" fill="#57606a">I-26 注文商品 / I-27 合計</text>
+
+  <!-- form fields -->
+  <text x="40" y="196" font-size="11" font-weight="700">氏名</text>
+  <rect x="40" y="202" width="300" height="26" rx="3" fill="#ffffff" stroke="#8a94a3"/>
+  <line x1="340" y1="215" x2="380" y2="200" stroke="#57606a"/>
+  <text x="384" y="197" font-size="9" fill="#57606a">I-28</text>
+
+  <text x="40" y="248" font-size="11" font-weight="700">住所</text>
+  <rect x="40" y="254" width="300" height="26" rx="3" fill="#ffffff" stroke="#8a94a3"/>
+  <line x1="340" y1="267" x2="380" y2="252" stroke="#57606a"/>
+  <text x="384" y="249" font-size="9" fill="#57606a">I-29</text>
+
+  <text x="40" y="300" font-size="11" font-weight="700">メールアドレス</text>
+  <rect x="40" y="306" width="300" height="26" rx="3" fill="#ffffff" stroke="#c62828"/>
+  <text x="40" y="346" font-size="10" fill="#c62828">メールアドレスの形式が正しくありません</text>
+  <line x1="340" y1="319" x2="380" y2="304" stroke="#57606a"/>
+  <text x="384" y="301" font-size="9" fill="#57606a">I-30 入力欄</text>
+  <line x1="220" y1="346" x2="260" y2="360" stroke="#57606a"/>
+  <text x="264" y="374" font-size="9" fill="#57606a">I-31 エラーメッセージ</text>
+
+  <rect x="480" y="380" width="180" height="36" rx="4" fill="#2f5fd9"/>
+  <text x="570" y="403" text-anchor="middle" font-size="12" fill="#ffffff" font-weight="700">注文する</text>
+  <line x1="480" y1="398" x2="440" y2="410" stroke="#57606a"/>
+  <text x="436" y="424" text-anchor="end" font-size="9" fill="#57606a">I-32</text>
+</svg>
+<div class="diagram-caption">図2: 注文フォーム画面ワイヤーフレーム（メールアドレス欄はエラー表示状態を例示）</div>
+</div>
+<table>
+<tr><th>項目ID</th><th>項目名</th><th>種別</th><th>データソース</th><th>表示内容・条件</th></tr>
+<tr><td>I-26</td><td>注文商品一覧</td><td>テキスト（複数行）</td><td><code>cartStore.getItems()</code> ＋ <code>GET /api/books</code>（003 cart/page.tsxと同じ合成ロジック）</td><td>書名・単価・数量・小計。003で「販売対象外」と判定された項目は含めない</td></tr>
+<tr><td>I-27</td><td>合計金額</td><td>数値（円表記）</td><td>算出（I-26の小計の総和）</td><td>カート画面（003）の合計と同じ計算方法</td></tr>
+<tr><td>I-28</td><td>氏名入力欄</td><td>テキスト入力</td><td>利用者入力</td><td>必須。未入力時はI-31にエラー表示（FR-003）</td></tr>
+<tr><td>I-29</td><td>住所入力欄</td><td>テキスト入力</td><td>利用者入力</td><td>必須。未入力時はI-31にエラー表示（FR-003）</td></tr>
+<tr><td>I-30</td><td>メールアドレス入力欄</td><td>テキスト入力</td><td>利用者入力</td><td>必須。未入力または形式不正時はI-31にエラー表示（FR-003, FR-004）</td></tr>
+<tr><td>I-31</td><td>エラーメッセージ</td><td>テキスト</td><td>算出（クライアント側バリデーション結果、またはAPI 400応答）</td><td>該当する入力欄の直下に表示。「注文する」押下時のみ表示を更新する</td></tr>
+<tr><td>I-32</td><td>「注文する」ボタン</td><td>ボタン</td><td>-</td><td>押下でバリデーション実行、成功時は<code>POST /api/orders</code>を呼び出す（FR-005）</td></tr>
+</table>
+
+<h3>5.2 SC-05 注文完了画面</h3>
+<div class="diagram-box">
+<svg viewBox="0 0 700 260" width="100%" height="260" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="20" width="660" height="220" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+  <rect x="20" y="20" width="660" height="34" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.5"/>
+  <text x="34" y="42" font-size="12" font-weight="700">オンライン書店</text>
+
+  <text x="350" y="110" text-anchor="middle" font-size="16" font-weight="700">ご注文ありがとうございました</text>
+  <line x1="350" y1="118" x2="350" y2="140" stroke="#57606a"/>
+  <text x="354" y="150" font-size="9" fill="#57606a">I-33 注文完了メッセージ</text>
+
+  <text x="350" y="150" text-anchor="middle" font-size="13" fill="#2f5fd9" font-weight="700">注文番号: ORD-000123</text>
+  <line x1="440" y1="150" x2="480" y2="165" stroke="#57606a"/>
+  <text x="484" y="179" font-size="9" fill="#57606a">I-34 注文番号</text>
+
+  <text x="350" y="200" text-anchor="middle" font-size="12" fill="#2f5fd9" text-decoration="underline">商品一覧へ戻る</text>
+  <line x1="350" y1="205" x2="350" y2="222" stroke="#57606a"/>
+  <text x="354" y="232" font-size="9" fill="#57606a">I-35</text>
+</svg>
+<div class="diagram-caption">図3: 注文完了画面ワイヤーフレーム</div>
+</div>
+<table>
+<tr><th>項目ID</th><th>項目名</th><th>種別</th><th>データソース</th><th>表示内容・条件</th></tr>
+<tr><td>I-33</td><td>注文完了メッセージ</td><td>テキスト</td><td>-</td><td>固定文言。この画面に到達すること自体が注文成功の証（FR-007）</td></tr>
+<tr><td>I-34</td><td>注文番号</td><td>テキスト</td><td><code>POST /api/orders</code>のレスポンス（<code>orderNumber</code>）</td><td>例: <code>ORD-000123</code>。画面遷移時に受け渡す（詳細はdetail-design.html参照）</td></tr>
+<tr><td>I-35</td><td>「商品一覧へ戻る」リンク</td><td>リンク</td><td>-</td><td>押下で商品一覧画面（<code>/</code>）へ遷移（FR-009）</td></tr>
+</table>
+
+<h2>6. 画面遷移図</h2>
+<div class="diagram-box">
+<svg viewBox="0 0 900 220" width="100%" height="220" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowD2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/>
+    </marker>
+  </defs>
+
+  <rect x="20" y="60" width="150" height="60" rx="30" fill="#f6f8fa" stroke="#8a94a3" stroke-width="1.5"/>
+  <text x="95" y="85" text-anchor="middle" font-size="12" font-weight="700" fill="#57606a">カート</text>
+  <text x="95" y="103" text-anchor="middle" font-size="9" fill="#57606a">(003, 変更なし)</text>
+
+  <rect x="250" y="60" width="150" height="60" rx="30" fill="#fbefff" stroke="#8250df" stroke-width="1.5"/>
+  <text x="325" y="85" text-anchor="middle" font-size="12" font-weight="700">注文フォーム</text>
+  <text x="325" y="103" text-anchor="middle" font-size="9" fill="#57606a">(SC-04, 本feature)</text>
+
+  <rect x="480" y="60" width="150" height="60" rx="30" fill="#fbefff" stroke="#8250df" stroke-width="1.5"/>
+  <text x="555" y="85" text-anchor="middle" font-size="12" font-weight="700">注文完了</text>
+  <text x="555" y="103" text-anchor="middle" font-size="9" fill="#57606a">(SC-05, 本feature)</text>
+
+  <rect x="710" y="60" width="150" height="60" rx="30" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+  <text x="785" y="85" text-anchor="middle" font-size="12" font-weight="700">商品一覧</text>
+  <text x="785" y="103" text-anchor="middle" font-size="9" fill="#57606a">(002, 変更なし)</text>
+
+  <line x1="170" y1="90" x2="245" y2="90" stroke="#1f2328" stroke-width="1.5" marker-end="url(#arrowD2)"/>
+  <text x="207" y="82" text-anchor="middle" font-size="10">注文手続きへ (003 FR-007)</text>
+
+  <line x1="400" y1="90" x2="475" y2="90" stroke="#1f2328" stroke-width="1.5" marker-end="url(#arrowD2)"/>
+  <text x="437" y="82" text-anchor="middle" font-size="10">注文する (FR-005〜007)</text>
+
+  <line x1="630" y1="90" x2="705" y2="90" stroke="#1f2328" stroke-width="1.5" marker-end="url(#arrowD2)"/>
+  <text x="667" y="82" text-anchor="middle" font-size="10">商品一覧へ戻る (FR-009)</text>
+</svg>
+<div class="diagram-caption">図4: 画面遷移図（注文フォームで入力エラーの場合は同じ画面に留まる。本図では正常系のみ表示）</div>
+</div>
+
+<h2>7. シーケンス図</h2>
+
+<h3>7.1 US2: 顧客情報を入力し注文を確定する（正常系）</h3>
+<div class="diagram-box">
+<svg viewBox="0 0 700 340" width="100%" height="340" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowDS1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/></marker>
+  </defs>
+  <g font-size="12" font-weight="700" text-anchor="middle">
+    <rect x="20" y="10" width="100" height="34" rx="4" fill="#f6f8fa" stroke="#1f2328"/><text x="70" y="31">利用者</text>
+    <rect x="230" y="10" width="150" height="34" rx="4" fill="#ddf4ff" stroke="#0969da"/><text x="305" y="31" font-size="10.5">order/page.tsx</text>
+    <rect x="470" y="10" width="150" height="34" rx="4" fill="#fff2e0" stroke="#a15c00"/><text x="545" y="31" font-size="10.5">POST /api/orders</text>
+  </g>
+  <line x1="70" y1="44" x2="70" y2="320" stroke="#c9d1d9" stroke-dasharray="4 3"/>
+  <line x1="305" y1="44" x2="305" y2="320" stroke="#c9d1d9" stroke-dasharray="4 3"/>
+  <line x1="545" y1="44" x2="545" y2="320" stroke="#c9d1d9" stroke-dasharray="4 3"/>
+
+  <g font-size="11">
+    <line x1="70" y1="66" x2="300" y2="66" stroke="#1f2328" marker-end="url(#arrowDS1)"/>
+    <text x="185" y="59" text-anchor="middle">① 氏名・住所・メールを入力し「注文する」を押す</text>
+
+    <text x="305" y="88" text-anchor="middle" font-size="10" fill="#57606a">② クライアント側バリデーション（未入力・メール形式）</text>
+
+    <line x1="305" y1="106" x2="540" y2="106" stroke="#1f2328" marker-end="url(#arrowDS1)"/>
+    <text x="425" y="99" text-anchor="middle" font-size="10">③ POST /api/orders（items含む）</text>
+
+    <text x="545" y="128" text-anchor="middle" font-size="10" fill="#57606a">④ サーバー側バリデーション・書籍存在確認</text>
+    <text x="545" y="144" text-anchor="middle" font-size="10" fill="#57606a">⑤ トランザクション: orders→order_items INSERT</text>
+
+    <line x1="540" y1="164" x2="310" y2="164" stroke="#57606a" stroke-dasharray="5 3" marker-end="url(#arrowDS1)"/>
+    <text x="425" y="157" text-anchor="middle" font-size="10">⑥ 201 {"{orderNumber, totalAmount, items}"}</text>
+
+    <text x="305" y="186" text-anchor="middle" font-size="10" fill="#57606a">⑦ cartStore.clear()</text>
+
+    <line x1="305" y1="204" x2="75" y2="204" stroke="#57606a" stroke-dasharray="5 3" marker-end="url(#arrowDS1)"/>
+    <text x="185" y="197" text-anchor="middle">⑧ 注文完了画面（/order/complete）へ遷移</text>
+  </g>
+
+  <g font-size="10.5" fill="#57606a">
+    <text x="70" y="240">分岐: ②または④でエラーがある場合</text>
+    <line x1="20" y1="248" x2="600" y2="248" stroke="#d0d7de"/>
+    <text x="70" y="266">②'（クライアント側）画面遷移せず、該当項目にエラーメッセージを表示</text>
+    <text x="70" y="282">④'（サーバー側400）レスポンスのdetails/bookIdsをもとにエラーメッセージを表示（詳細は本書「8. エラー処理方針」）</text>
+  </g>
+</svg>
+<div class="diagram-caption">図5: 注文確定のシーケンス図（US2）</div>
+</div>
+
+<h3>7.2 US3: 注文完了を確認する</h3>
+<div class="diagram-box">
+<svg viewBox="0 0 560 220" width="100%" height="220" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowDS2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/></marker>
+  </defs>
+  <g font-size="12" font-weight="700" text-anchor="middle">
+    <rect x="20" y="10" width="100" height="34" rx="4" fill="#f6f8fa" stroke="#1f2328"/><text x="70" y="31">利用者</text>
+    <rect x="220" y="10" width="180" height="34" rx="4" fill="#ddf4ff" stroke="#0969da"/><text x="310" y="31" font-size="10">order/complete/page.tsx</text>
+    <rect x="450" y="10" width="90" height="34" rx="4" fill="#ddf4ff" stroke="#0969da"/><text x="495" y="31" font-size="10">商品一覧</text>
+  </g>
+  <line x1="70" y1="44" x2="70" y2="200" stroke="#c9d1d9" stroke-dasharray="4 3"/>
+  <line x1="310" y1="44" x2="310" y2="200" stroke="#c9d1d9" stroke-dasharray="4 3"/>
+  <line x1="495" y1="44" x2="495" y2="200" stroke="#c9d1d9" stroke-dasharray="4 3"/>
+
+  <g font-size="11">
+    <text x="310" y="76" text-anchor="middle" font-size="10" fill="#57606a">① 遷移元（order/page.tsx）から受け取った注文番号を表示</text>
+
+    <line x1="310" y1="94" x2="80" y2="94" stroke="#57606a" stroke-dasharray="5 3" marker-end="url(#arrowDS2)"/>
+    <text x="195" y="87" text-anchor="middle">② 完了メッセージ・注文番号を表示</text>
+
+    <line x1="70" y1="130" x2="305" y2="130" stroke="#1f2328" marker-end="url(#arrowDS2)"/>
+    <text x="185" y="123" text-anchor="middle">③「商品一覧へ戻る」を押す</text>
+
+    <line x1="310" y1="150" x2="490" y2="150" stroke="#1f2328" marker-end="url(#arrowDS2)"/>
+    <text x="400" y="143" text-anchor="middle" font-size="10">④ 画面遷移（/）</text>
+  </g>
+</svg>
+<div class="diagram-caption">図6: 注文完了確認のシーケンス図（US3。backend・mysqlへの通信なし）</div>
+</div>
+
+<h2>8. エラー処理方針（共通）</h2>
+<p>002・003の方針（基本設計書「8. エラー処理方針」）を継続し、本機能固有の状態として「入力エラー」「注文不可な項目を含む」を追加する。</p>
+<table>
+<tr><th>状態</th><th>発生条件</th><th>HTTPステータス</th><th>UI表示</th><th>対象画面・項目</th></tr>
+<tr><td>通常表示</td><td>データ取得・注文確定成功</td><td>200 / 201</td><td>取得したデータ・完了内容を表示</td><td>注文フォーム・注文完了画面</td></tr>
+<tr><td>入力エラー</td><td>氏名・住所・メールアドレスのいずれかが未入力、またはメールアドレスの形式不正</td><td>-（クライアント側判定） / 400</td><td>該当項目にエラーメッセージを表示（I-31）。画面遷移しない</td><td>注文フォーム画面（FR-003, FR-004）</td></tr>
+<tr><td>注文不可な項目を含む</td><td>注文確定リクエストの<code>items</code>に、存在しないか販売対象外の<code>bookId</code>が含まれる（research.md #3）</td><td>400</td><td>汎用エラーメッセージ（「カートの内容を確認してください」等）を表示し、カート画面への導線を示す</td><td>注文フォーム画面</td></tr>
+<tr><td>カートが空</td><td><code>items</code>が空配列</td><td>400</td><td>003の方針を踏襲し、カートが空の場合は注文フォームへの導線自体が存在しない（spec.md Assumptions）。直接アクセス時の挙動は本書スコープ外</td><td>注文フォーム画面（FR-010）</td></tr>
+<tr><td>読み込み中</td><td><code>GET /api/books</code>応答待ち、または「注文する」押下後<code>POST /api/orders</code>応答待ち</td><td>-</td><td>ローディング表示・ボタンの二重送信防止（押下後は非活性化）</td><td>注文フォーム画面</td></tr>
+<tr><td>予期しないエラー</td><td>サーバー内部エラー・ネットワーク断・タイムアウト等</td><td>500 または fetch例外</td><td>汎用エラーメッセージ＋再試行の案内</td><td>注文フォーム画面</td></tr>
+</table>
+
+<h3>8.1 方針</h3>
+<ul>
+<li>入力エラーは異常系として扱わない。002・003と同様、専用の状態として個別に表示する</li>
+<li>予期しないエラー（500系）ではサーバー内部の情報（スタックトレース、SQLエラー詳細等）をレスポンスに含めない（002「8. エラー処理方針」の方針を継続）</li>
+<li>バリデーションはフロントエンド（即時フィードバック）とバックエンド（信頼境界での防御）の両方で行う。フロントエンド側のチェックを回避してAPIを直接呼び出した場合でも、バックエンド側の400応答により不正なデータが永続化されることはない（research.md #5）</li>
+<li>注文確定（<code>POST /api/orders</code>）はDB書き込みを伴うため、二重送信を防ぐ目的で「注文する」ボタンは押下後から応答が返るまで非活性化する</li>
+</ul>
+
+<h2>9. 非機能要件との対応</h2>
+<table>
+<tr><th>憲法セクション</th><th>本機能での対応</th></tr>
+<tr><td>3. UX一貫性</td><td>002・003で確立したデザイントークン・共通クラス（<code>.page</code>・<code>.state-message</code>・<code>.state-message--error</code>・<code>.button</code>等）をそのまま再利用し、独自のスタイルを新設しない</td></tr>
+<tr><td>4. パフォーマンス要件</td><td>数値要件なし。002・003と同じ暫定基準（95パーセンタイルで2秒以内）を適用する。注文確定はDBトランザクションを伴うが、書き込み対象は最大でもカート項目数（数十件未満）程度であり性能上の懸念は小さい</td></tr>
+</table>
+
+<div class="note">
+本ドキュメントは <code>plan.md</code> / <code>data-model.md</code> / <code>contracts/*.md</code> の内容をUML形式で可視化したものであり、内容の正本（Source of Truth）は各Markdownファイルである。齟齬が生じた場合はMarkdown側を正とし、本ドキュメントを更新する。
+</div>
+
+</div>
+</body>
+</html>
