@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>詳細設計書 - 注文フォーム・注文完了画面（004-order-checkout）</title>
+<style>
+  :root {
+    --ink: #1a1d24; --ink-muted: #5b6472;
+    --paper: #f3f5fa; --surface: #ffffff; --line: #dbe1ea;
+    --blueprint: #2f5fd9; --blueprint-soft: #e8eefc;
+    --fe-bg: #e6f4ff; --fe-fg: #1462b0;
+    --be-bg: #fff2e0; --be-fg: #a15c00;
+    --db-bg: #f3e8ff; --db-fg: #7233c9;
+    --new-bg: #e3f8ea; --new-fg: #1a7f45;
+    --warn-bg: #fff8d6; --warn-fg: #6b5000; --warn-line: #d8b23a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #e7eaf1; --ink-muted: #97a1b3;
+      --paper: #13161c; --surface: #1a1e26; --line: #2b303c;
+      --blueprint: #7fa0ff; --blueprint-soft: rgba(127,160,255,.14);
+      --fe-bg: rgba(70,150,255,.16); --fe-fg: #8ec1ff;
+      --be-bg: rgba(255,160,60,.16); --be-fg: #ffbd75;
+      --db-bg: rgba(180,120,255,.18); --db-fg: #cca4ff;
+      --new-bg: rgba(60,200,120,.16); --new-fg: #7fe0aa;
+      --warn-bg: rgba(220,180,50,.14); --warn-fg: #e8c65a; --warn-line: #7c611f;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #e7eaf1; --ink-muted: #97a1b3;
+    --paper: #13161c; --surface: #1a1e26; --line: #2b303c;
+    --blueprint: #7fa0ff; --blueprint-soft: rgba(127,160,255,.14);
+    --fe-bg: rgba(70,150,255,.16); --fe-fg: #8ec1ff;
+    --be-bg: rgba(255,160,60,.16); --be-fg: #ffbd75;
+    --db-bg: rgba(180,120,255,.18); --db-fg: #cca4ff;
+    --new-bg: rgba(60,200,120,.16); --new-fg: #7fe0aa;
+    --warn-bg: rgba(220,180,50,.14); --warn-fg: #e8c65a; --warn-line: #7c611f;
+  }
+  :root[data-theme="light"] {
+    --ink: #1a1d24; --ink-muted: #5b6472;
+    --paper: #f3f5fa; --surface: #ffffff; --line: #dbe1ea;
+    --blueprint: #2f5fd9; --blueprint-soft: #e8eefc;
+    --fe-bg: #e6f4ff; --fe-fg: #1462b0;
+    --be-bg: #fff2e0; --be-fg: #a15c00;
+    --db-bg: #f3e8ff; --db-fg: #7233c9;
+    --new-bg: #e3f8ea; --new-fg: #1a7f45;
+    --warn-bg: #fff8d6; --warn-fg: #6b5000; --warn-line: #d8b23a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 14.5px; line-height: 1.7; color: var(--ink); background: var(--paper);
+    padding: 40px 16px 72px;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; }
+  .kicker {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--blueprint); font-weight: 700; margin-bottom: 10px;
+  }
+  h1 { font-size: 25px; font-weight: 800; letter-spacing: -0.01em; text-wrap: balance; margin-bottom: 14px; }
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 8px 18px;
+    color: var(--ink-muted); font-size: 12.5px; margin-bottom: 20px;
+    padding-bottom: 20px; border-bottom: 1px solid var(--line);
+  }
+  h2 {
+    font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em;
+    margin-top: 46px; margin-bottom: 16px;
+    padding: 9px 14px; background: var(--blueprint-soft); color: var(--blueprint);
+    border-left: 3px solid var(--blueprint); border-radius: 0 4px 4px 0;
+  }
+  .module {
+    border: 1px solid var(--line); border-radius: 8px; margin: 18px 0; overflow: hidden; background: var(--surface);
+  }
+  .module-header {
+    background: var(--paper); padding: 10px 16px; border-bottom: 1px solid var(--line);
+    display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 6px;
+  }
+  .module-header .file { font-family: ui-monospace, Menlo, monospace; font-weight: 700; font-size: 13.5px; color: var(--ink); }
+  .badge {
+    font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px;
+  }
+  .badge.new { background: var(--new-bg); color: var(--new-fg); }
+  .badge.frontend { background: var(--fe-bg); color: var(--fe-fg); }
+  .badge.backend { background: var(--be-bg); color: var(--be-fg); }
+  .badge.db { background: var(--db-bg); color: var(--db-fg); }
+  .module-body { padding: 12px 16px; }
+  .module-body h4 { font-size: 11.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-muted); margin-top: 12px; margin-bottom: 6px; font-weight: 700; }
+  .module-body h4:first-child { margin-top: 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; margin-bottom: 6px; font-variant-numeric: tabular-nums; }
+  th, td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--paper); font-weight: 700; color: var(--ink-muted); font-size: 11px; text-transform: uppercase; letter-spacing: .03em; }
+  td { color: var(--ink); }
+  code {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    background: var(--blueprint-soft); border: 1px solid var(--line); border-radius: 4px;
+    padding: 1px 5px; font-size: 12.5px; color: var(--ink);
+  }
+  pre {
+    background: var(--paper); border: 1px solid var(--line); border-radius: 6px;
+    padding: 10px 12px; font-size: 12.5px; overflow-x: auto; margin-bottom: 6px;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; color: var(--ink);
+  }
+  .note {
+    background: var(--warn-bg); border: 1px solid var(--warn-line); color: var(--warn-fg);
+    border-radius: 6px; padding: 10px 14px; font-size: 13px; margin: 12px 0;
+  }
+  .diagram-box {
+    border: 1px solid var(--line); border-radius: 8px; background: #eef3fc;
+    padding: 16px; margin: 10px 0 6px; overflow-x: auto;
+    background-image:
+      linear-gradient(#cfdcf3 1px, transparent 1px),
+      linear-gradient(90deg, #cfdcf3 1px, transparent 1px);
+    background-size: 22px 22px; background-position: -1px -1px;
+  }
+  .diagram-box svg { display: block; margin: 0 auto; }
+  .diagram-caption { font-size: 11.5px; color: var(--ink-muted); margin-top: 8px; text-align: center; }
+  .todo { color: var(--blueprint); font-style: italic; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="kicker">詳細設計書 &middot; Detailed Design</div>
+<h1>注文フォーム・注文完了画面</h1>
+<div class="meta">
+  <span>対象feature: <code>004-order-checkout</code></span>
+  <span>作成日: 2026-08-16</span>
+  <span>対応plan: <code>specs/004-order-checkout/plan.md</code></span>
+  <span>対応API契約: <code>specs/004-order-checkout/contracts/orders-api.md</code></span>
+</div>
+
+<p>本ドキュメントは、<code>plan.md</code>のProject Structureで定義した各ファイルについて、修正対象ファイル・処理概要・パラメータ・In/Out詳細をまとめたものである。型定義のみの参照（<code>backend/src/types/order.ts</code>）は呼び出し関係図から除外する（002 detail-design.htmlの方針を踏襲）。</p>
+
+<h2>0. 呼び出し関係図</h2>
+<p>実線＝関数呼び出し／コンポーネント使用（同一ランタイム内）、破線＝HTTP通信（フロントエンド／バックエンドの境界）、点線＝画面遷移（クリック操作・<code>router.push</code>によるルーティング）。<code>cart/page.tsx</code>・<code>booksApi.ts</code>（既存, 002/003）は変更がないため図中では現状のまま示す。</p>
+<div class="diagram-box">
+<svg viewBox="0 0 760 520" width="100%" height="520" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="fa0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/></marker>
+    <marker id="fa0d" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0969da"/></marker>
+    <marker id="fa0n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a94a3"/></marker>
+  </defs>
+
+  <rect x="20" y="16" width="170" height="36" rx="4" fill="#eef3fc" stroke="#8a94a3" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <text x="105" y="38" text-anchor="middle" font-size="10.5" fill="#57606a">cart/page.tsx（既存, 003）</text>
+
+  <rect x="250" y="16" width="180" height="36" rx="4" fill="#e3f8ea" stroke="#1a7f45" stroke-width="1.5"/>
+  <text x="340" y="38" text-anchor="middle" font-size="11" font-weight="700">order/page.tsx（新規）</text>
+
+  <rect x="560" y="12" width="170" height="44" rx="4" fill="#eef3fc" stroke="#8a94a3" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <text x="645" y="30" text-anchor="middle" font-size="10.5" fill="#57606a">booksApi.ts（既存, 002）</text>
+  <text x="645" y="45" text-anchor="middle" font-size="9" fill="#57606a">listBooks()のみ使用</text>
+
+  <rect x="250" y="96" width="180" height="40" rx="4" fill="#fff2e0" stroke="#a15c00" stroke-width="1.5"/>
+  <text x="340" y="120" text-anchor="middle" font-size="10.5">cartStore.ts（修正）</text>
+
+  <rect x="20" y="176" width="190" height="40" rx="4" fill="#e3f8ea" stroke="#1a7f45" stroke-width="1.5"/>
+  <text x="115" y="200" text-anchor="middle" font-size="10.5" font-weight="700">OrderSummary.tsx（新規）</text>
+
+  <rect x="250" y="176" width="180" height="40" rx="4" fill="#e3f8ea" stroke="#1a7f45" stroke-width="1.5"/>
+  <text x="340" y="200" text-anchor="middle" font-size="10.5" font-weight="700">ordersApi.ts（新規）</text>
+
+  <rect x="560" y="176" width="170" height="40" rx="4" fill="#e3f8ea" stroke="#1a7f45" stroke-width="1.5"/>
+  <text x="645" y="200" text-anchor="middle" font-size="10" font-weight="700">order/complete/page.tsx（新規）</text>
+
+  <line x1="20" y1="250" x2="740" y2="250" stroke="#8a94a3" stroke-width="1" stroke-dasharray="2 4"/>
+  <text x="380" y="266" text-anchor="middle" font-size="9.5" fill="#8a94a3">――― HTTP境界（backend） ―――</text>
+
+  <rect x="20" y="280" width="170" height="40" rx="4" fill="#fff2e0" stroke="#a15c00" stroke-width="1.5"/>
+  <text x="105" y="304" text-anchor="middle" font-size="10.5">index.ts（修正）</text>
+
+  <rect x="250" y="280" width="180" height="40" rx="4" fill="#e3f8ea" stroke="#1a7f45" stroke-width="1.5"/>
+  <text x="340" y="304" text-anchor="middle" font-size="10.5" font-weight="700">ordersRoutes.ts（新規）</text>
+
+  <rect x="250" y="360" width="200" height="44" rx="4" fill="#e3f8ea" stroke="#1a7f45" stroke-width="1.5"/>
+  <text x="350" y="384" text-anchor="middle" font-size="10.5" font-weight="700">orderRepository.ts（新規）</text>
+
+  <rect x="20" y="452" width="180" height="40" rx="4" fill="#eef3fc" stroke="#8a94a3" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <text x="110" y="470" text-anchor="middle" font-size="10" fill="#57606a">MySQL: books（既存）</text>
+  <text x="110" y="484" text-anchor="middle" font-size="9" fill="#57606a">読み取りのみ</text>
+
+  <rect x="490" y="452" width="230" height="44" rx="4" fill="#f3e8ff" stroke="#7233c9" stroke-width="1.5"/>
+  <text x="605" y="470" text-anchor="middle" font-size="10.5" font-weight="700">MySQL: orders / order_items</text>
+  <text x="605" y="486" text-anchor="middle" font-size="9">新規テーブル</text>
+
+  <!-- edges -->
+  <line x1="190" y1="34" x2="245" y2="34" stroke="#8a94a3" stroke-width="1.5" stroke-dasharray="2 3" marker-end="url(#fa0n)"/>
+  <text x="217" y="27" text-anchor="middle" font-size="8.5" fill="#8a94a3">「注文手続きへ」</text>
+
+  <line x1="430" y1="34" x2="555" y2="30" stroke="#0969da" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#fa0d)"/>
+  <text x="493" y="22" text-anchor="middle" font-size="9" fill="#0969da">listBooks()</text>
+
+  <line x1="340" y1="52" x2="340" y2="92" stroke="#1f2328" stroke-width="1.5" marker-end="url(#fa0)"/>
+  <text x="410" y="76" text-anchor="middle" font-size="9">getItems() / clear()</text>
+
+  <line x1="280" y1="136" x2="150" y2="172" stroke="#1f2328" stroke-width="1.5" marker-end="url(#fa0)"/>
+  <text x="185" y="150" text-anchor="middle" font-size="9">props（表示データ）</text>
+
+  <line x1="340" y1="136" x2="340" y2="172" stroke="#1f2328" stroke-width="1.5" marker-end="url(#fa0)"/>
+  <text x="405" y="158" text-anchor="middle" font-size="9">createOrder(input)</text>
+
+  <line x1="430" y1="196" x2="555" y2="196" stroke="#8a94a3" stroke-width="1.5" stroke-dasharray="2 3" marker-end="url(#fa0n)"/>
+  <text x="493" y="189" text-anchor="middle" font-size="8.5" fill="#8a94a3">router.push(成功時)</text>
+
+  <line x1="340" y1="216" x2="340" y2="276" stroke="#0969da" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#fa0d)"/>
+  <text x="440" y="248" text-anchor="middle" font-size="9" fill="#0969da">POST /api/orders</text>
+
+  <line x1="190" y1="300" x2="245" y2="300" stroke="#1f2328" stroke-width="1.5" marker-end="url(#fa0)"/>
+  <text x="217" y="293" text-anchor="middle" font-size="8.5">/api/ordersにマウント</text>
+
+  <line x1="340" y1="320" x2="345" y2="356" stroke="#1f2328" stroke-width="1.5" marker-end="url(#fa0)"/>
+  <text x="420" y="342" text-anchor="middle" font-size="9">createOrder(input)</text>
+
+  <line x1="290" y1="404" x2="130" y2="448" stroke="#1f2328" stroke-width="1.5" marker-end="url(#fa0)"/>
+  <text x="170" y="430" text-anchor="middle" font-size="9">SELECT（存在確認・スナップショット）</text>
+
+  <line x1="440" y1="404" x2="560" y2="448" stroke="#1f2328" stroke-width="1.5" marker-end="url(#fa0)"/>
+  <text x="540" y="430" text-anchor="middle" font-size="9">INSERT（トランザクション）</text>
+</svg>
+<div class="diagram-caption">図D0: モジュール呼び出し関係図</div>
+</div>
+
+<h2>1. Backend</h2>
+
+<div class="module">
+  <div class="module-header">
+    <span class="file">backend/src/types/order.ts</span>
+    <span><span class="badge backend">Backend</span> <span class="badge new">新規</span></span>
+  </div>
+  <div class="module-body">
+    <h4>処理概要</h4>
+    <p><code>POST /api/orders</code>のリクエスト・レスポンスと、リポジトリ層の入出力に用いる型定義のみ。<code>ordersRoutes.ts</code>・<code>orderRepository.ts</code>の双方からimportされる（呼び出し関係図には表れない）。</p>
+    <pre>type OrderItemRequest = { bookId: number; quantity: number };
+type OrderRequest = { customerName: string; address: string; email: string; items: OrderItemRequest[] };
+
+type CreateOrderInput = OrderRequest;
+
+type OrderResponseItem = { bookId: number; title: string; price: number; quantity: number; subtotal: number };
+type OrderResult = { orderNumber: string; totalAmount: number; items: OrderResponseItem[] };</pre>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="file">backend/src/repositories/orderRepository.ts</span>
+    <span><span class="badge backend">Backend</span> <span class="badge new">新規</span></span>
+  </div>
+  <div class="module-body">
+    <h4>処理概要</h4>
+    <p><code>orders</code>・<code>order_items</code>への書き込みを担う。<code>books</code>テーブルへの読み取りは既存の<code>bookRepository</code>を再利用せず、本モジュール内で単一トランザクション上の1クエリとして直接発行する（同一コネクション・同一トランザクションで完結させるため、research.md #4）。書名・単価はクライアントの入力を信用せず、このSELECT結果をスナップショットとして<code>order_items</code>に書き込む（research.md #2）。</p>
+
+    <h4>処理フロー: createOrder(input)</h4>
+    <div class="diagram-box">
+    <svg viewBox="0 0 500 380" width="100%" height="380" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="fa1c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/></marker></defs>
+      <rect x="150" y="8" width="200" height="32" rx="16" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="250" y="28" text-anchor="middle" font-size="10.5">createOrder(input)</text>
+      <line x1="250" y1="40" x2="250" y2="54" stroke="#1f2328" marker-end="url(#fa1c)"/>
+
+      <rect x="130" y="56" width="240" height="30" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+      <text x="250" y="75" text-anchor="middle" font-size="9.5">トランザクション開始</text>
+      <line x1="250" y1="86" x2="250" y2="100" stroke="#1f2328" marker-end="url(#fa1c)"/>
+
+      <rect x="110" y="102" width="280" height="34" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+      <text x="250" y="122" text-anchor="middle" font-size="9.5">SELECT id,title,price FROM books</text>
+      <text x="250" y="132" text-anchor="middle" font-size="8.5" fill="#57606a">WHERE id IN (...) AND is_for_sale=1</text>
+      <line x1="250" y1="136" x2="250" y2="150" stroke="#1f2328" marker-end="url(#fa1c)"/>
+
+      <polygon points="250,152 370,190 250,228 130,190" fill="#fff6da" stroke="#a1750a" stroke-width="1.5"/>
+      <text x="250" y="186" text-anchor="middle" font-size="9.5">全bookIdが取得できた?</text>
+      <text x="250" y="199" text-anchor="middle" font-size="8.5">(research.md #3)</text>
+
+      <line x1="370" y1="190" x2="420" y2="190" stroke="#1f2328" marker-end="url(#fa1c)"/>
+      <text x="395" y="182" text-anchor="middle" font-size="9" fill="#57606a">No</text>
+      <rect x="330" y="200" width="150" height="46" rx="4" fill="#ffe3e3" stroke="#c62828" stroke-width="1.5"/>
+      <text x="405" y="218" text-anchor="middle" font-size="9">rollback()</text>
+      <text x="405" y="232" text-anchor="middle" font-size="8.5">UnavailableItemsError</text>
+      <text x="405" y="244" text-anchor="middle" font-size="8.5">(bookIds)をthrow</text>
+
+      <line x1="250" y1="228" x2="250" y2="248" stroke="#1f2328" marker-end="url(#fa1c)"/>
+      <text x="230" y="240" text-anchor="middle" font-size="9" fill="#57606a">Yes</text>
+      <rect x="110" y="250" width="280" height="30" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+      <text x="250" y="269" text-anchor="middle" font-size="9.5">INSERT INTO orders（total_amountは算出値）</text>
+      <line x1="250" y1="280" x2="250" y2="294" stroke="#1f2328" marker-end="url(#fa1c)"/>
+
+      <rect x="110" y="296" width="280" height="30" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+      <text x="250" y="315" text-anchor="middle" font-size="9.5">INSERT INTO order_items（複数件）</text>
+      <line x1="250" y1="326" x2="250" y2="340" stroke="#1f2328" marker-end="url(#fa1c)"/>
+
+      <rect x="150" y="342" width="200" height="30" rx="15" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="250" y="361" text-anchor="middle" font-size="9.5">commit() → OrderResultを返す</text>
+    </svg>
+    <div class="diagram-caption">図D1: createOrder 処理フロー</div>
+    </div>
+
+    <h4>例外処理</h4>
+    <table>
+      <tr><th>例外・エラーケース</th><th>発生条件</th><th>本モジュールでの対応</th></tr>
+      <tr><td>注文不可な書籍を含む</td><td>リクエストの<code>items</code>に、存在しないか<code>is_for_sale=0</code>の<code>bookId</code>が含まれる（research.md #3）</td><td>トランザクションを<code>rollback()</code>し、対象<code>bookIds</code>を持つ<code>UnavailableItemsError</code>をthrowする。<code>ordersRoutes.ts</code>側でcatchし400に変換する</td></tr>
+      <tr><td>DB接続・クエリ失敗</td><td>コネクション取得失敗・SQL実行エラー等</td><td><code>rollback()</code>してから元の例外をそのままrethrowする（<code>ordersRoutes.ts</code>側で500に変換）</td></tr>
+      <tr><td>いずれの場合も</td><td>-</td><td><code>finally</code>ブロックで<code>connection.release()</code>を必ず呼ぶ</td></tr>
+    </table>
+
+    <h4>パラメータ・In/Out詳細</h4>
+    <table>
+      <tr><th>関数</th><th>パラメータ</th><th>処理概要</th><th>Out</th></tr>
+      <tr>
+        <td><code>createOrder(input)</code></td>
+        <td><code>input: CreateOrderInput</code>（<code>customerName</code>, <code>address</code>, <code>email</code>, <code>items[]</code>）</td>
+        <td><code>books</code>の存在・販売可否確認、<code>orders</code>・<code>order_items</code>への単一トランザクションでのINSERT、注文番号（<code>ORD-</code>+<code>id</code>6桁ゼロ埋め、research.md #1）の生成</td>
+        <td><code>Promise&lt;OrderResult&gt;</code>（成功時）。失敗時は<code>UnavailableItemsError</code>または元の例外をthrow</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="file">backend/src/routes/ordersRoutes.ts</span>
+    <span><span class="badge backend">Backend</span> <span class="badge new">新規</span></span>
+  </div>
+  <div class="module-body">
+    <h4>処理概要</h4>
+    <p><code>POST /</code>（<code>index.ts</code>で<code>/api/orders</code>にマウント）。リクエストボディの入力チェック（未入力・メール形式・<code>items</code>非空）を行い、問題があれば<code>orderRepository.createOrder()</code>を呼ばずに400を返す。問題なければ呼び出し、結果に応じてレスポンスを分岐する（<code>booksRoutes.ts</code>と同様の<code>try/catch</code>構成、002の踏襲）。</p>
+
+    <h4>処理フロー: POST /</h4>
+    <div class="diagram-box">
+    <svg viewBox="0 0 480 300" width="100%" height="300" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="fa2c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/></marker></defs>
+      <rect x="150" y="8" width="180" height="30" rx="15" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="240" y="27" text-anchor="middle" font-size="10">POST / を受信</text>
+      <line x1="240" y1="38" x2="240" y2="52" stroke="#1f2328" marker-end="url(#fa2c)"/>
+
+      <polygon points="240,54 350,88 240,122 130,88" fill="#fff6da" stroke="#a1750a" stroke-width="1.5"/>
+      <text x="240" y="84" text-anchor="middle" font-size="9">customerName/address/email</text>
+      <text x="240" y="96" text-anchor="middle" font-size="9">が空文字・emailが不正形式・</text>
+      <text x="240" y="108" text-anchor="middle" font-size="9">itemsが空配列？</text>
+
+      <line x1="350" y1="88" x2="410" y2="88" stroke="#1f2328" marker-end="url(#fa2c)"/>
+      <text x="380" y="80" text-anchor="middle" font-size="9" fill="#57606a">Yes</text>
+      <rect x="330" y="130" width="140" height="40" rx="4" fill="#ffe3e3" stroke="#c62828" stroke-width="1.5"/>
+      <text x="400" y="148" text-anchor="middle" font-size="9">400 validation_error</text>
+      <text x="400" y="162" text-anchor="middle" font-size="8">(details配列)</text>
+
+      <line x1="240" y1="122" x2="240" y2="140" stroke="#1f2328" marker-end="url(#fa2c)"/>
+      <text x="215" y="134" text-anchor="middle" font-size="9" fill="#57606a">No</text>
+      <rect x="140" y="142" width="200" height="30" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+      <text x="240" y="161" text-anchor="middle" font-size="9">orderRepository.createOrder()</text>
+      <line x1="240" y1="172" x2="240" y2="186" stroke="#1f2328" marker-end="url(#fa2c)"/>
+
+      <polygon points="240,188 350,220 240,252 130,220" fill="#fff6da" stroke="#a1750a" stroke-width="1.5"/>
+      <text x="240" y="216" text-anchor="middle" font-size="9">結果は？</text>
+
+      <rect x="150" y="260" width="180" height="30" rx="15" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="240" y="279" text-anchor="middle" font-size="9">201 {orderNumber,...}</text>
+      <line x1="240" y1="252" x2="240" y2="258" stroke="#1f2328" marker-end="url(#fa2c)"/>
+      <text x="255" y="243" text-anchor="middle" font-size="8.5" fill="#57606a">成功</text>
+
+      <line x1="130" y1="220" x2="60" y2="220" stroke="#1f2328" marker-end="url(#fa2c)"/>
+      <text x="95" y="212" text-anchor="middle" font-size="8" fill="#57606a">Unavailable</text>
+      <rect x="0" y="230" width="120" height="40" rx="4" fill="#ffe3e3" stroke="#c62828" stroke-width="1.5"/>
+      <text x="60" y="248" text-anchor="middle" font-size="8.5">400 unavailable_items</text>
+      <text x="60" y="261" text-anchor="middle" font-size="7.5">(bookIds)</text>
+
+      <line x1="350" y1="220" x2="420" y2="220" stroke="#1f2328" marker-end="url(#fa2c)"/>
+      <text x="390" y="212" text-anchor="middle" font-size="8" fill="#57606a">その他例外</text>
+      <rect x="360" y="230" width="120" height="40" rx="4" fill="#ffe3e3" stroke="#c62828" stroke-width="1.5"/>
+      <text x="420" y="248" text-anchor="middle" font-size="8.5">500</text>
+      <text x="420" y="261" text-anchor="middle" font-size="7.5">internal_server_error</text>
+    </svg>
+    <div class="diagram-caption">図D2: POST / 処理フロー</div>
+    </div>
+
+    <h4>例外処理</h4>
+    <table>
+      <tr><th>例外・エラーケース</th><th>発生条件</th><th>本モジュールでの対応</th></tr>
+      <tr><td>入力値の未入力・空文字</td><td><code>customerName</code>/<code>address</code>/<code>email</code>のいずれかが未指定または空文字列（FR-003）</td><td><code>orderRepository.createOrder()</code>を呼ばず、400 <code>validation_error</code>＋<code>details</code>配列（該当項目名）を返す</td></tr>
+      <tr><td>メールアドレスの形式不正</td><td><code>/^[^\s@]+@[^\s@]+\.[^\s@]+$/</code>相当を満たさない（FR-004、research.md #5）</td><td>同上、<code>details</code>に含める</td></tr>
+      <tr><td>カートが空</td><td><code>items</code>が空配列（FR-010）</td><td>同上、<code>details</code>に含める</td></tr>
+      <tr><td>注文不可な書籍を含む</td><td><code>orderRepository.createOrder()</code>が<code>UnavailableItemsError</code>をthrow</td><td>400 <code>unavailable_items</code>＋<code>bookIds</code>を返す（<code>contracts/orders-api.md</code>）</td></tr>
+      <tr><td>予期しないエラー</td><td>DB接続断等、上記以外の例外</td><td><code>console.error</code>でログのみ出力し、500 <code>internal_server_error</code>を返す（スタックトレース等はレスポンスに含めない、basic-design.html「8. エラー処理方針」）</td></tr>
+    </table>
+
+    <h4>パラメータ・In/Out詳細</h4>
+    <table>
+      <tr><th>関数</th><th>パラメータ</th><th>処理概要</th><th>Out</th></tr>
+      <tr><td><code>POST /</code>ハンドラ</td><td><code>req.body: OrderRequest</code></td><td>入力チェック→<code>createOrder()</code>呼び出し→レスポンス分岐</td><td><code>res</code>: 201 <code>OrderResult</code> / 400 / 500</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="file">backend/src/index.ts</span>
+    <span><span class="badge backend">Backend</span> <span class="badge new">修正</span></span>
+  </div>
+  <div class="module-body">
+    <h4>処理概要</h4>
+    <p><code>ordersRouter</code>をimportし、<code>app.use("/api/orders", ordersRouter)</code>を追加する（002の<code>booksRouter</code>マウントと同じパターン）。分岐処理は持たない。</p>
+
+    <h4>例外処理</h4>
+    <table>
+      <tr><th>例外・エラーケース</th><th>発生条件</th><th>本モジュールでの対応</th></tr>
+      <tr><td>該当なし</td><td>-</td><td>ルーターのマウントのみで、例外を発生させうる処理を持たない</td></tr>
+    </table>
+  </div>
+</div>
+
+<h2>2. Frontend</h2>
+
+<div class="module">
+  <div class="module-header">
+    <span class="file">frontend/src/app/lib/ordersApi.ts</span>
+    <span><span class="badge frontend">Frontend</span> <span class="badge new">新規</span></span>
+  </div>
+  <div class="module-body">
+    <h4>処理概要</h4>
+    <p><code>POST /api/orders</code>を呼び出す。<code>apiClient.ts</code>の<code>fetchJson()</code>はGET専用（404時に<code>null</code>を返す設計）であり、201/400のPOST応答を扱えないため、本モジュールで専用の<code>fetch</code>呼び出しを実装する（既存の<code>fetchJson()</code>は再利用しない）。400応答はエラー種別（<code>validation_error</code> / <code>unavailable_items</code>）ごとに専用のエラークラスをthrowし、呼び出し元（<code>order/page.tsx</code>）が表示を出し分けられるようにする。</p>
+
+    <h4>処理フロー: createOrder(input)</h4>
+    <div class="diagram-box">
+    <svg viewBox="0 0 460 280" width="100%" height="280" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="fa3c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/></marker></defs>
+      <rect x="130" y="8" width="200" height="30" rx="15" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="230" y="27" text-anchor="middle" font-size="10">createOrder(input)</text>
+      <line x1="230" y1="38" x2="230" y2="52" stroke="#1f2328" marker-end="url(#fa3c)"/>
+      <rect x="110" y="54" width="240" height="30" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+      <text x="230" y="73" text-anchor="middle" font-size="9.5">fetch(POST /api/orders, JSON body)</text>
+      <line x1="230" y1="84" x2="230" y2="98" stroke="#1f2328" marker-end="url(#fa3c)"/>
+
+      <polygon points="230,100 340,134 230,168 120,134" fill="#fff6da" stroke="#a1750a" stroke-width="1.5"/>
+      <text x="230" y="130" text-anchor="middle" font-size="9.5">response.status</text>
+
+      <rect x="150" y="176" width="160" height="28" rx="14" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="230" y="194" text-anchor="middle" font-size="9">201: OrderResultを返す</text>
+      <line x1="230" y1="168" x2="230" y2="176" stroke="#1f2328" marker-end="url(#fa3c)"/>
+      <text x="245" y="164" text-anchor="middle" font-size="8" fill="#57606a">201</text>
+
+      <line x1="340" y1="134" x2="410" y2="134" stroke="#1f2328" marker-end="url(#fa3c)"/>
+      <text x="378" y="127" text-anchor="middle" font-size="8" fill="#57606a">400</text>
+      <rect x="350" y="140" width="110" height="60" rx="4" fill="#ffe3e3" stroke="#c62828" stroke-width="1.5"/>
+      <text x="405" y="156" text-anchor="middle" font-size="8">bodyのerrorで分岐</text>
+      <text x="405" y="170" text-anchor="middle" font-size="7.5">ValidationError</text>
+      <text x="405" y="182" text-anchor="middle" font-size="7.5">UnavailableItemsError</text>
+      <text x="405" y="194" text-anchor="middle" font-size="7.5">をthrow</text>
+
+      <line x1="120" y1="134" x2="60" y2="134" stroke="#1f2328" marker-end="url(#fa3c)"/>
+      <text x="90" y="127" text-anchor="middle" font-size="8" fill="#57606a">500/他</text>
+      <rect x="10" y="140" width="100" height="40" rx="4" fill="#ffe3e3" stroke="#c62828" stroke-width="1.5"/>
+      <text x="60" y="156" text-anchor="middle" font-size="8">汎用Errorを</text>
+      <text x="60" y="168" text-anchor="middle" font-size="8">throw</text>
+    </svg>
+    <div class="diagram-caption">図D3: createOrder 処理フロー</div>
+    </div>
+
+    <h4>例外処理</h4>
+    <table>
+      <tr><th>例外・エラーケース</th><th>発生条件</th><th>本モジュールでの対応</th></tr>
+      <tr><td>入力バリデーションエラー</td><td>400 <code>{"{error: \"validation_error\", details}"}</code></td><td><code>ValidationError</code>（<code>details</code>を保持）をthrow。通常はクライアント側チェックで先に弾かれるため、ここに到達するのはAPI直叩き等の例外的な経路のみ</td></tr>
+      <tr><td>注文不可な書籍を含む</td><td>400 <code>{"{error: \"unavailable_items\", bookIds}"}</code></td><td><code>UnavailableItemsError</code>（<code>bookIds</code>を保持）をthrow</td></tr>
+      <tr><td>予期しないエラー</td><td>500応答、または<code>fetch</code>自体が失敗（ネットワーク断等）</td><td>汎用<code>Error</code>をthrow。呼び出し元で汎用エラーメッセージを表示</td></tr>
+    </table>
+
+    <h4>パラメータ・In/Out詳細</h4>
+    <table>
+      <tr><th>関数</th><th>パラメータ</th><th>処理概要</th><th>Out</th></tr>
+      <tr><td><code>createOrder(input)</code></td><td><code>input: OrderRequest</code></td><td><code>POST /api/orders</code>を呼び出し、応答を判定</td><td><code>Promise&lt;OrderResult&gt;</code>（成功時）。失敗時は上表の例外をthrow</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="file">frontend/src/app/lib/cartStore.ts</span>
+    <span><span class="badge frontend">Frontend</span> <span class="badge new">修正</span></span>
+  </div>
+  <div class="module-body">
+    <h4>処理概要</h4>
+    <p>003で実装済みの<code>cartStore</code>に、注文確定後にカートを空にするための<code>clear()</code>を追加する。既存の<code>getItems()</code>・<code>addItem()</code>・<code>updateQuantity()</code>・<code>removeItem()</code>は変更しない。<code>POST /api/orders</code>の成功応答を受け取った後にのみ<code>order/page.tsx</code>から呼ばれる（research.md #6。API呼び出し前にクリアしない）。</p>
+
+    <h4>例外処理</h4>
+    <table>
+      <tr><th>例外・エラーケース</th><th>発生条件</th><th>本モジュールでの対応</th></tr>
+      <tr><td><code>localStorage</code>書き込み失敗</td><td>容量超過・ストレージ無効化等</td><td>既存の各関数と同様に<code>try/catch</code>で捕捉し<code>false</code>を返す</td></tr>
+    </table>
+
+    <h4>パラメータ・In/Out詳細</h4>
+    <table>
+      <tr><th>関数</th><th>パラメータ</th><th>処理概要</th><th>Out</th></tr>
+      <tr><td><code>clear()</code></td><td>なし</td><td><code>localStorage</code>から<code>STORAGE_KEY</code>を空配列で上書きする（分岐なし、単純な保存処理）</td><td><code>boolean</code>（保存成否）</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="file">frontend/src/app/components/OrderSummary.tsx</span>
+    <span><span class="badge frontend">Frontend</span> <span class="badge new">新規</span></span>
+  </div>
+  <div class="module-body">
+    <h4>処理概要</h4>
+    <p>注文フォーム画面（SC-04）内で、注文商品（書名・単価・数量・小計）と合計金額を読み取り専用で表示する（FR-001）。003の<code>CartItemRow</code>と異なり数量変更・削除の操作を持たない、別コンポーネントとする（plan.md Structure Decision）。表示専用のため、状態管理・API呼び出しは行わない。</p>
+
+    <h4>例外処理</h4>
+    <table>
+      <tr><th>例外・エラーケース</th><th>発生条件</th><th>本モジュールでの対応</th></tr>
+      <tr><td>該当なし</td><td>-</td><td>本コンポーネントは表示のみで、例外を発生させうる処理（非同期処理・外部I/O）を持たない</td></tr>
+    </table>
+
+    <h4>パラメータ・In/Out詳細</h4>
+    <table>
+      <tr><th>Prop</th><th>型</th><th>説明</th></tr>
+      <tr><td><code>items</code></td><td><code>{"{ bookId: number; title: string; price: number; quantity: number }[]"}</code></td><td>販売対象外（<code>isAvailable=false</code>）の項目を除外済みの表示用データ（呼び出し元<code>order/page.tsx</code>が合成する）</td></tr>
+      <tr><td><code>totalAmount</code></td><td><code>number</code></td><td>合計金額（<code>items</code>の小計の総和。呼び出し元が算出）</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="file">frontend/src/app/order/page.tsx</span>
+    <span><span class="badge frontend">Frontend</span> <span class="badge new">新規</span></span>
+  </div>
+  <div class="module-body">
+    <h4>処理概要</h4>
+    <p>注文フォーム画面本体（SC-04）。マウント時に<code>booksApi.listBooks()</code>と<code>cartStore.getItems()</code>を突き合わせ（003の<code>cart/page.tsx</code>と同じ合成ロジック）、販売対象外の項目を除いた表示用データを<code>OrderSummary</code>に渡す。氏名・住所・メールアドレスの入力値と各項目のエラーメッセージを<code>state</code>で保持する。「注文する」押下時の処理は下記フロー参照。</p>
+
+    <h4>処理フロー: 「注文する」押下時（FR-003〜FR-006）</h4>
+    <div class="diagram-box">
+    <svg viewBox="0 0 460 400" width="100%" height="400" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="fa4c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/></marker></defs>
+      <rect x="130" y="8" width="200" height="30" rx="15" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="230" y="27" text-anchor="middle" font-size="10">「注文する」ボタン押下</text>
+      <line x1="230" y1="38" x2="230" y2="52" stroke="#1f2328" marker-end="url(#fa4c)"/>
+
+      <polygon points="230,54 350,90 230,126 110,90" fill="#fff6da" stroke="#a1750a" stroke-width="1.5"/>
+      <text x="230" y="86" text-anchor="middle" font-size="9">氏名/住所/emailが</text>
+      <text x="230" y="98" text-anchor="middle" font-size="9">すべて有効？(FR-003,004)</text>
+
+      <line x1="350" y1="90" x2="410" y2="90" stroke="#1f2328" marker-end="url(#fa4c)"/>
+      <text x="380" y="83" text-anchor="middle" font-size="9" fill="#57606a">No</text>
+      <rect x="330" y="100" width="130" height="40" rx="4" fill="#ffe3e3" stroke="#c62828" stroke-width="1.5"/>
+      <text x="395" y="118" text-anchor="middle" font-size="8.5">該当項目にエラー</text>
+      <text x="395" y="130" text-anchor="middle" font-size="8.5">表示、遷移しない</text>
+
+      <line x1="230" y1="126" x2="230" y2="142" stroke="#1f2328" marker-end="url(#fa4c)"/>
+      <text x="205" y="136" text-anchor="middle" font-size="9" fill="#57606a">Yes</text>
+      <rect x="130" y="144" width="200" height="30" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+      <text x="230" y="163" text-anchor="middle" font-size="9.5">ボタンを非活性化（二重送信防止）</text>
+      <line x1="230" y1="174" x2="230" y2="188" stroke="#1f2328" marker-end="url(#fa4c)"/>
+
+      <rect x="130" y="190" width="200" height="30" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+      <text x="230" y="209" text-anchor="middle" font-size="9.5">ordersApi.createOrder()呼び出し</text>
+      <line x1="230" y1="220" x2="230" y2="234" stroke="#1f2328" marker-end="url(#fa4c)"/>
+
+      <polygon points="230,236 350,272 230,308 110,272" fill="#fff6da" stroke="#a1750a" stroke-width="1.5"/>
+      <text x="230" y="268" text-anchor="middle" font-size="9">結果は？</text>
+
+      <line x1="230" y1="308" x2="230" y2="322" stroke="#1f2328" marker-end="url(#fa4c)"/>
+      <text x="255" y="320" text-anchor="middle" font-size="8" fill="#57606a">成功</text>
+      <rect x="130" y="324" width="200" height="28" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+      <text x="230" y="342" text-anchor="middle" font-size="9">cartStore.clear()</text>
+      <line x1="230" y1="352" x2="230" y2="366" stroke="#1f2328" marker-end="url(#fa4c)"/>
+      <rect x="100" y="368" width="260" height="28" rx="14" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="230" y="386" text-anchor="middle" font-size="9">router.push(/order/complete?orderNumber=...)</text>
+
+      <line x1="350" y1="272" x2="410" y2="272" stroke="#1f2328" marker-end="url(#fa4c)"/>
+      <text x="382" y="265" text-anchor="middle" font-size="8" fill="#57606a">400</text>
+      <rect x="360" y="280" width="100" height="60" rx="4" fill="#ffe3e3" stroke="#c62828" stroke-width="1.5"/>
+      <text x="410" y="296" text-anchor="middle" font-size="7.5">種別に応じた</text>
+      <text x="410" y="308" text-anchor="middle" font-size="7.5">エラー表示、</text>
+      <text x="410" y="320" text-anchor="middle" font-size="7.5">ボタン再活性化</text>
+
+      <line x1="110" y1="272" x2="50" y2="272" stroke="#1f2328" marker-end="url(#fa4c)"/>
+      <text x="80" y="265" text-anchor="middle" font-size="8" fill="#57606a">500/他</text>
+      <rect x="0" y="280" width="100" height="60" rx="4" fill="#ffe3e3" stroke="#c62828" stroke-width="1.5"/>
+      <text x="50" y="296" text-anchor="middle" font-size="7.5">汎用エラー</text>
+      <text x="50" y="308" text-anchor="middle" font-size="7.5">表示、ボタン</text>
+      <text x="50" y="320" text-anchor="middle" font-size="7.5">再活性化</text>
+    </svg>
+    <div class="diagram-caption">図D4: 「注文する」押下時の処理フロー</div>
+    </div>
+
+    <h4>例外処理</h4>
+    <table>
+      <tr><th>例外・エラーケース</th><th>発生条件</th><th>本モジュールでの対応</th></tr>
+      <tr><td>氏名/住所/emailいずれか未入力</td><td>クライアント側バリデーション（正規表現・空文字判定）で検出（FR-003）</td><td>API呼び出し前に該当項目へエラーメッセージを表示し、画面遷移しない</td></tr>
+      <tr><td>メールアドレスの形式不正</td><td>クライアント側バリデーションで検出（FR-004）</td><td>同上</td></tr>
+      <tr><td><code>ordersApi.createOrder()</code>が<code>ValidationError</code>をthrow</td><td>クライアント側チェックを回避した経路でのみ発生しうるサーバー側400</td><td><code>details</code>を該当項目のエラーメッセージにマッピングして表示、ボタンを再活性化</td></tr>
+      <tr><td><code>ordersApi.createOrder()</code>が<code>UnavailableItemsError</code>をthrow</td><td>カート確認から注文確定までの間に対象書籍が販売対象外になった等（research.md #3）</td><td>汎用エラーメッセージとカート画面への導線を表示し、ボタンを再活性化（basic-design.html「8. エラー処理方針」）</td></tr>
+      <tr><td>その他の例外（500・ネットワーク断）</td><td><code>ordersApi.createOrder()</code>が汎用<code>Error</code>をthrow</td><td>汎用エラーメッセージ＋再試行の案内を表示し、ボタンを再活性化</td></tr>
+      <tr><td><code>booksApi.listBooks()</code>の例外</td><td>初期表示時のAPI呼び出し失敗</td><td><code>try/catch</code>で捕捉し、汎用エラーメッセージを表示（002/003の踏襲）</td></tr>
+    </table>
+
+    <h4>パラメータ・In/Out詳細</h4>
+    <table>
+      <tr><th>関数</th><th>パラメータ</th><th>処理概要</th><th>Out</th></tr>
+      <tr><td><code>validate(fields)</code></td><td><code>{"{ customerName, address, email }"}</code></td><td>未入力・メール形式（<code>/^[^\s@]+@[^\s@]+\.[^\s@]+$/</code>相当、research.md #5）をチェック</td><td><code>{"{ isValid: boolean; errors: Record<string, string> }"}</code></td></tr>
+      <tr><td><code>handleSubmit(event)</code></td><td><code>FormEvent</code></td><td>図D4のフロー全体を実行</td><td>なし（void。成功時は画面遷移）</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="file">frontend/src/app/order/complete/page.tsx</span>
+    <span><span class="badge frontend">Frontend</span> <span class="badge new">新規</span></span>
+  </div>
+  <div class="module-body">
+    <h4>処理概要</h4>
+    <p>注文完了画面本体（SC-05）。<code>order/page.tsx</code>が<code>router.push</code>時に付与したクエリパラメータ<code>orderNumber</code>を<code>useSearchParams()</code>で読み取り、注文完了メッセージ・注文番号（I-33, I-34）・「商品一覧へ戻る」リンク（I-35, FR-009）を表示する。backend・MySQLとの通信は行わない（basic-design.html 図6）。</p>
+
+    <h4>例外処理</h4>
+    <table>
+      <tr><th>例外・エラーケース</th><th>発生条件</th><th>本モジュールでの対応</th></tr>
+      <tr><td><code>orderNumber</code>クエリパラメータが存在しない</td><td>本画面への直接アクセス等（spec.md Edge Casesで本feature後続のスコープ外と位置付け）</td><td>注文番号欄を表示しない軽微なガードのみ行う。リダイレクト等の積極的な制御は行わない（spec.mdの前提を踏襲）</td></tr>
+    </table>
+
+    <h4>パラメータ・In/Out詳細</h4>
+    <table>
+      <tr><th>関数</th><th>パラメータ</th><th>処理概要</th><th>Out</th></tr>
+      <tr><td>（コンポーネント本体）</td><td>URLクエリ<code>orderNumber</code>（<code>useSearchParams()</code>経由）</td><td>注文完了メッセージ・注文番号・戻るリンクを表示</td><td>なし（表示のみ）</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="note">
+命名規則: <code>plan.md</code> Structure Decision（002・003を継続）に従い、Reactコンポーネントは PascalCase（例: <code>OrderSummary.tsx</code>）、それ以外の TypeScript ファイルは camelCase とする。エラークラス名（<code>ValidationError</code>, <code>UnavailableItemsError</code>）は<code>ordersApi.ts</code>内に定義し、backend側のレスポンスの<code>error</code>フィールド値（<code>validation_error</code>, <code>unavailable_items</code>）と1対1で対応させる。
+</div>
+
+</div>
+</body>
+</html>
