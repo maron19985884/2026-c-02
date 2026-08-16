@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>テーブル定義書 - 商品一覧・商品詳細（002-book-catalog-detail）</title>
+<style>
+  :root {
+    --ink: #1a1d24; --ink-muted: #5b6472;
+    --paper: #f3f5fa; --surface: #ffffff; --line: #dbe1ea;
+    --blueprint: #2f5fd9; --blueprint-soft: #e8eefc;
+    --pk: #7233c9;
+    --warn-bg: #fff8d6; --warn-fg: #6b5000; --warn-line: #d8b23a;
+    --sheet-bg: #eef3fc; --sheet-line: #cfdcf3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #e7eaf1; --ink-muted: #97a1b3;
+      --paper: #13161c; --surface: #1a1e26; --line: #2b303c;
+      --blueprint: #7fa0ff; --blueprint-soft: rgba(127,160,255,.14);
+      --pk: #cca4ff;
+      --warn-bg: rgba(220,180,50,.14); --warn-fg: #e8c65a; --warn-line: #7c611f;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #e7eaf1; --ink-muted: #97a1b3;
+    --paper: #13161c; --surface: #1a1e26; --line: #2b303c;
+    --blueprint: #7fa0ff; --blueprint-soft: rgba(127,160,255,.14);
+    --pk: #cca4ff;
+    --warn-bg: rgba(220,180,50,.14); --warn-fg: #e8c65a; --warn-line: #7c611f;
+  }
+  :root[data-theme="light"] {
+    --ink: #1a1d24; --ink-muted: #5b6472;
+    --paper: #f3f5fa; --surface: #ffffff; --line: #dbe1ea;
+    --blueprint: #2f5fd9; --blueprint-soft: #e8eefc;
+    --pk: #7233c9;
+    --warn-bg: #fff8d6; --warn-fg: #6b5000; --warn-line: #d8b23a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 14.5px; line-height: 1.7; color: var(--ink); background: var(--paper);
+    padding: 40px 16px 72px;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; }
+  .kicker {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--blueprint); font-weight: 700; margin-bottom: 10px;
+  }
+  h1 { font-size: 25px; font-weight: 800; letter-spacing: -0.01em; text-wrap: balance; margin-bottom: 14px; }
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 8px 18px;
+    color: var(--ink-muted); font-size: 12.5px; margin-bottom: 20px;
+    padding-bottom: 20px; border-bottom: 1px solid var(--line);
+  }
+  h2 {
+    font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em;
+    margin-top: 46px; margin-bottom: 16px;
+    padding: 9px 14px; background: var(--blueprint-soft); color: var(--blueprint);
+    border-left: 3px solid var(--blueprint); border-radius: 0 4px 4px 0;
+  }
+  h3 { font-size: 15px; font-weight: 700; margin-top: 22px; margin-bottom: 8px; color: var(--ink); }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0 20px; font-size: 13px; font-variant-numeric: tabular-nums; }
+  th, td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--surface); font-weight: 700; color: var(--ink-muted); font-size: 11.5px; text-transform: uppercase; letter-spacing: .03em; }
+  td { background: var(--surface); color: var(--ink); }
+  code {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    background: var(--blueprint-soft); border: 1px solid var(--line); border-radius: 4px;
+    padding: 1px 5px; font-size: 12.5px; color: var(--ink);
+  }
+  .pk { color: var(--pk); font-weight: 700; }
+  .idx-box {
+    border: 1px solid var(--line); border-radius: 8px; background: var(--surface);
+    padding: 16px; margin: 12px 0 20px;
+  }
+  .note {
+    background: var(--warn-bg); border: 1px solid var(--warn-line); color: var(--warn-fg);
+    border-radius: 6px; padding: 10px 14px; font-size: 13px; margin: 12px 0;
+  }
+  .diagram-box {
+    border: 1px solid var(--line); border-radius: 8px; background: var(--sheet-bg);
+    padding: 18px; margin: 16px 0 24px; overflow-x: auto;
+    background-image:
+      linear-gradient(var(--sheet-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--sheet-line) 1px, transparent 1px);
+    background-size: 24px 24px; background-position: -1px -1px;
+  }
+  .diagram-box svg { display: block; margin: 0 auto; }
+  .diagram-caption { font-size: 12.5px; color: var(--ink-muted); margin-top: 10px; text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="kicker">テーブル定義書 &middot; Table Definition</div>
+<h1>商品一覧・商品詳細</h1>
+<div class="meta">
+  <span>対象feature: <code>002-book-catalog-detail</code></span>
+  <span>作成日: 2026-08-16</span>
+  <span>対応data-model: <code>specs/002-book-catalog-detail/data-model.md</code></span>
+  <span>DBMS: MySQL 8.0</span>
+</div>
+
+<h2>1. テーブル一覧</h2>
+<table>
+  <tr><th>物理テーブル名</th><th>論理名</th><th>概要</th><th>初期化スクリプト</th></tr>
+  <tr><td><code>books</code></td><td>書籍</td><td>販売対象の書籍マスタ（本機能では読み取り専用）</td><td><code>mysql/init/01_books_seed.sql</code></td></tr>
+</table>
+
+<div class="note">
+「カート追加操作」はサーバー側で永続化しないため、対応するテーブルは存在しない（クライアント側<code>localStorage</code>のみ。<code>data-model.md</code>参照）。
+</div>
+
+<h2>2. books テーブル</h2>
+
+<h3>2.1 カラム定義</h3>
+<table>
+  <tr>
+    <th>物理名</th><th>論理名</th><th>型</th><th>NULL</th><th>デフォルト</th><th>PK/FK</th><th>説明</th>
+  </tr>
+  <tr>
+    <td><code>id</code></td><td>書籍ID</td><td>INT</td><td>NOT NULL</td><td>AUTO_INCREMENT</td><td class="pk">PK</td>
+    <td>書籍を一意に識別するID</td>
+  </tr>
+  <tr>
+    <td><code>title</code></td><td>タイトル</td><td>VARCHAR(255)</td><td>NOT NULL</td><td>-</td><td></td>
+    <td>書籍タイトル</td>
+  </tr>
+  <tr>
+    <td><code>author</code></td><td>著者</td><td>VARCHAR(255)</td><td>NOT NULL</td><td>-</td><td></td>
+    <td>著者名</td>
+  </tr>
+  <tr>
+    <td><code>price</code></td><td>価格</td><td>INT</td><td>NOT NULL</td><td>-</td><td></td>
+    <td>価格（日本円、税込み、0以上の整数）</td>
+  </tr>
+  <tr>
+    <td><code>description</code></td><td>説明文</td><td>TEXT</td><td>NOT NULL</td><td>-</td><td></td>
+    <td>商品詳細画面で表示する説明文</td>
+  </tr>
+  <tr>
+    <td><code>cover_image_url</code></td><td>書影URL</td><td>VARCHAR(500)</td><td>NULL許容</td><td>NULL</td><td></td>
+    <td>書影画像のURL/パス。NULLの場合フロントエンドがプレースホルダー画像を表示</td>
+  </tr>
+  <tr>
+    <td><code>is_for_sale</code></td><td>販売中フラグ</td><td>TINYINT(1)</td><td>NOT NULL</td><td>1</td><td></td>
+    <td>販売中かどうか。<code>false</code>の書籍は一覧・詳細に表示しない</td>
+  </tr>
+  <tr>
+    <td><code>created_at</code></td><td>登録日時</td><td>TIMESTAMP</td><td>NOT NULL</td><td>CURRENT_TIMESTAMP</td><td></td>
+    <td>一覧の並び順（登録順・新しい書籍が先頭）に使用</td>
+  </tr>
+</table>
+
+<h3>2.2 インデックス定義</h3>
+<div class="idx-box">
+<table>
+  <tr><th>インデックス名</th><th>種別</th><th>対象カラム</th><th>目的</th></tr>
+  <tr><td><code>PRIMARY</code></td><td>PRIMARY KEY</td><td><code>id</code></td><td>一意識別</td></tr>
+  <tr>
+    <td><code>idx_books_forsale_created</code></td>
+    <td>INDEX（推奨・新規）</td>
+    <td><code>is_for_sale, created_at DESC</code></td>
+    <td>一覧取得クエリ（<code>WHERE is_for_sale=1 ORDER BY created_at DESC</code>）の絞り込み・並び替えを効率化する</td>
+  </tr>
+</table>
+</div>
+<div class="note">
+本機能のデータ規模（数十件程度、research.md想定）ではインデックスなしでも性能上の問題は生じないと見込まれるが、将来のカタログ規模拡大に備えた推奨インデックスとして記載する。必須の実装事項ではない。
+</div>
+
+<h3>2.3 制約</h3>
+<table>
+  <tr><th>制約</th><th>内容</th></tr>
+  <tr><td>CHECK（アプリケーション側）</td><td><code>price</code> は0以上の整数（DB制約ではなくアプリケーション側バリデーションとする。CHECK制約はMySQL 8.0.16+で利用可能だが本機能では必須としない）</td></tr>
+  <tr><td>一覧・詳細の対象</td><td>常に <code>is_for_sale = 1</code> の行のみを対象とする（アプリケーション側のWHERE句で担保。data-model.md参照）</td></tr>
+</table>
+
+<h3>2.4 ER図</h3>
+<div class="diagram-box">
+<svg viewBox="0 0 420 200" width="100%" height="200" xmlns="http://www.w3.org/2000/svg">
+  <rect x="120" y="20" width="180" height="160" rx="6" fill="#fbefff" stroke="#8250df" stroke-width="1.5"/>
+  <rect x="120" y="20" width="180" height="32" rx="6" fill="#8250df"/>
+  <text x="210" y="41" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">books</text>
+  <g font-size="11.5" font-family="ui-monospace, Menlo, monospace">
+    <text x="130" y="68">PK id</text>
+    <text x="130" y="86">   title</text>
+    <text x="130" y="104">   author</text>
+    <text x="130" y="122">   price</text>
+    <text x="130" y="140">   description</text>
+    <text x="130" y="158">   cover_image_url</text>
+    <text x="130" y="176">   is_for_sale, created_at</text>
+  </g>
+</svg>
+<div class="diagram-caption">図1: booksテーブル単体構成（本機能では他テーブルとの関連なし。カートはクライアント側のみで保持しテーブル化しない）</div>
+</div>
+
+<h2>3. 初期データ（シード）方針</h2>
+<p>
+<code>mysql/init/01_books_seed.sql</code>にて、動作確認用に販売中・非販売（<code>is_for_sale=0</code>）を含む数件のサンプルレコードを<code>INSERT</code>する。<code>CREATE TABLE IF NOT EXISTS</code> + <code>INSERT</code>のみで構成し、<code>DROP</code>・<code>TRUNCATE</code>・<code>DELETE</code>は含めない（CLAUDE.md「破壊的DDLの直接生成禁止」に対応）。
+</p>
+
+<div class="note">
+本ドキュメントの正本（Source of Truth）は <code>specs/002-book-catalog-detail/data-model.md</code> である。齟齬が生じた場合はdata-model.md側を正とし、本ドキュメントを更新する。
+</div>
+
+</div>
+</body>
+</html>

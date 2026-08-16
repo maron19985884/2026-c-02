@@ -1,0 +1,47 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: "http://localhost:4000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "4000:4000"
+    environment:
+      DB_HOST: mysql
+      DB_PORT: "3306"
+      DB_NAME: bookstore
+      DB_USER: bookstore
+      DB_PASSWORD: bookstore
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: bookstore
+      MYSQL_USER: bookstore
+      MYSQL_PASSWORD: bookstore
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d
+
+volumes:
+  mysql_data:

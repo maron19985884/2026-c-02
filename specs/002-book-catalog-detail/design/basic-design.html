@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>基本設計書 - 商品一覧・商品詳細（002-book-catalog-detail）</title>
+<style>
+  :root {
+    --ink: #1a1d24; --ink-muted: #5b6472;
+    --paper: #f3f5fa; --surface: #ffffff; --line: #dbe1ea;
+    --blueprint: #2f5fd9; --blueprint-soft: #e8eefc;
+    --fe-bg: #e6f4ff; --fe-fg: #1462b0;
+    --be-bg: #fff2e0; --be-fg: #a15c00;
+    --db-bg: #f3e8ff; --db-fg: #7233c9;
+    --new-bg: #e3f8ea; --new-fg: #1a7f45;
+    --warn-bg: #fff8d6; --warn-fg: #6b5000; --warn-line: #d8b23a;
+    --sheet-bg: #eef3fc; --sheet-line: #cfdcf3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #e7eaf1; --ink-muted: #97a1b3;
+      --paper: #13161c; --surface: #1a1e26; --line: #2b303c;
+      --blueprint: #7fa0ff; --blueprint-soft: rgba(127,160,255,.14);
+      --fe-bg: rgba(70,150,255,.16); --fe-fg: #8ec1ff;
+      --be-bg: rgba(255,160,60,.16); --be-fg: #ffbd75;
+      --db-bg: rgba(180,120,255,.18); --db-fg: #cca4ff;
+      --new-bg: rgba(60,200,120,.16); --new-fg: #7fe0aa;
+      --warn-bg: rgba(220,180,50,.14); --warn-fg: #e8c65a; --warn-line: #7c611f;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #e7eaf1; --ink-muted: #97a1b3;
+    --paper: #13161c; --surface: #1a1e26; --line: #2b303c;
+    --blueprint: #7fa0ff; --blueprint-soft: rgba(127,160,255,.14);
+    --fe-bg: rgba(70,150,255,.16); --fe-fg: #8ec1ff;
+    --be-bg: rgba(255,160,60,.16); --be-fg: #ffbd75;
+    --db-bg: rgba(180,120,255,.18); --db-fg: #cca4ff;
+    --new-bg: rgba(60,200,120,.16); --new-fg: #7fe0aa;
+    --warn-bg: rgba(220,180,50,.14); --warn-fg: #e8c65a; --warn-line: #7c611f;
+  }
+  :root[data-theme="light"] {
+    --ink: #1a1d24; --ink-muted: #5b6472;
+    --paper: #f3f5fa; --surface: #ffffff; --line: #dbe1ea;
+    --blueprint: #2f5fd9; --blueprint-soft: #e8eefc;
+    --fe-bg: #e6f4ff; --fe-fg: #1462b0;
+    --be-bg: #fff2e0; --be-fg: #a15c00;
+    --db-bg: #f3e8ff; --db-fg: #7233c9;
+    --new-bg: #e3f8ea; --new-fg: #1a7f45;
+    --warn-bg: #fff8d6; --warn-fg: #6b5000; --warn-line: #d8b23a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: var(--ink);
+    background: var(--paper);
+    padding: 40px 16px 72px;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; }
+  .kicker {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--blueprint); font-weight: 700; margin-bottom: 10px;
+  }
+  h1 { font-size: 25px; font-weight: 800; letter-spacing: -0.01em; text-wrap: balance; margin-bottom: 14px; }
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 8px 18px;
+    color: var(--ink-muted); font-size: 12.5px; margin-bottom: 20px;
+    padding-bottom: 20px; border-bottom: 1px solid var(--line);
+  }
+  h2 {
+    font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em;
+    margin-top: 46px; margin-bottom: 16px;
+    padding: 9px 14px; background: var(--blueprint-soft); color: var(--blueprint);
+    border-left: 3px solid var(--blueprint); border-radius: 0 4px 4px 0;
+  }
+  h3 { font-size: 15px; font-weight: 700; margin-top: 26px; margin-bottom: 8px; color: var(--ink); }
+  p { margin-bottom: 10px; color: var(--ink); }
+  ul, ol { margin: 8px 0 12px 22px; }
+  li { margin-bottom: 4px; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0 20px; font-size: 13px; font-variant-numeric: tabular-nums; }
+  th, td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--surface); font-weight: 700; color: var(--ink-muted); font-size: 11.5px; text-transform: uppercase; letter-spacing: .03em; }
+  td { background: var(--surface); }
+  code {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    background: var(--blueprint-soft); border: 1px solid var(--line); border-radius: 4px;
+    padding: 1px 5px; font-size: 12.5px; color: var(--ink);
+  }
+  .diagram-box {
+    border: 1px solid var(--line); border-radius: 8px; background: var(--sheet-bg);
+    padding: 18px; margin: 16px 0 24px; overflow-x: auto;
+    background-image:
+      linear-gradient(var(--sheet-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--sheet-line) 1px, transparent 1px);
+    background-size: 24px 24px; background-position: -1px -1px;
+    background-blend-mode: normal;
+  }
+  .diagram-caption { font-size: 12.5px; color: var(--ink-muted); margin-top: 10px; text-align: center; }
+  .badge {
+    display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px;
+    border-radius: 10px; background: var(--blueprint-soft); color: var(--blueprint); margin-left: 8px;
+  }
+  .note {
+    background: var(--warn-bg); border: 1px solid var(--warn-line); color: var(--warn-fg);
+    border-radius: 6px; padding: 10px 14px; font-size: 13px; margin: 12px 0;
+  }
+  svg text { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; }
+  .diagram-box svg { display: block; margin: 0 auto; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="kicker">基本設計書 &middot; Basic Design</div>
+<h1>商品一覧・商品詳細</h1>
+<div class="meta">
+  <span>対象feature: <code>002-book-catalog-detail</code></span>
+  <span>作成日: 2026-08-16</span>
+  <span>対応spec: <code>specs/002-book-catalog-detail/spec.md</code></span>
+  <span>対応plan: <code>specs/002-book-catalog-detail/plan.md</code></span>
+</div>
+
+<h2>1. システム概要</h2>
+<p>
+販売中の書籍をグリッド形式で一覧表示する「商品一覧画面」と、書影・タイトル・著者・価格・説明文を表示する「商品詳細画面」を提供する。
+詳細画面には「カートに追加」ボタンを設け、押下すると書籍がカートに追加され、追加後も一覧画面に戻って閲覧を継続できる。
+カートの中身確認・数量変更・削除・注文手続きは別機能（カート画面以降）の責務であり、本機能では「カートに追加する」という操作の起点のみを扱う。
+</p>
+<p>対応する要件: <code>requirements.md</code> REQ-001〜REQ-006</p>
+
+<h2>2. アーキテクチャ構成図</h2>
+<div class="diagram-box">
+<svg viewBox="0 0 800 300" width="100%" height="300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/>
+    </marker>
+  </defs>
+
+  <!-- ブラウザ -->
+  <rect x="20" y="110" width="120" height="60" rx="6" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+  <text x="80" y="135" text-anchor="middle" font-size="13" font-weight="700">ブラウザ</text>
+  <text x="80" y="153" text-anchor="middle" font-size="11" fill="#57606a">(利用者)</text>
+
+  <!-- Docker Compose 枠 -->
+  <rect x="190" y="30" width="580" height="240" rx="8" fill="none" stroke="#57606a" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="480" y="50" text-anchor="middle" font-size="12" fill="#57606a" font-weight="700">Docker Compose</text>
+
+  <!-- frontend -->
+  <rect x="220" y="90" width="150" height="80" rx="6" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+  <text x="295" y="118" text-anchor="middle" font-size="13" font-weight="700">frontend</text>
+  <text x="295" y="136" text-anchor="middle" font-size="11">Next.js 14 (App Router)</text>
+  <text x="295" y="152" text-anchor="middle" font-size="11" fill="#57606a">:3000</text>
+
+  <!-- backend -->
+  <rect x="440" y="90" width="150" height="80" rx="6" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+  <text x="515" y="118" text-anchor="middle" font-size="13" font-weight="700">backend</text>
+  <text x="515" y="136" text-anchor="middle" font-size="11">Express 4 + mysql2</text>
+  <text x="515" y="152" text-anchor="middle" font-size="11" fill="#57606a">:4000</text>
+
+  <!-- mysql -->
+  <rect x="660" y="90" width="90" height="80" rx="6" fill="#fff1e5" stroke="#bc4c00" stroke-width="1.5"/>
+  <text x="705" y="122" text-anchor="middle" font-size="13" font-weight="700">mysql</text>
+  <text x="705" y="140" text-anchor="middle" font-size="11">8.0</text>
+  <text x="705" y="156" text-anchor="middle" font-size="11" fill="#57606a">:3306</text>
+
+  <!-- arrows -->
+  <line x1="140" y1="140" x2="215" y2="130" stroke="#1f2328" stroke-width="1.5" marker-end="url(#arrow1)"/>
+  <text x="175" y="122" text-anchor="middle" font-size="10.5">HTTP</text>
+
+  <line x1="370" y1="130" x2="435" y2="130" stroke="#1f2328" stroke-width="1.5" marker-end="url(#arrow1)"/>
+  <text x="402" y="122" text-anchor="middle" font-size="10.5">REST API</text>
+
+  <line x1="590" y1="130" x2="655" y2="130" stroke="#1f2328" stroke-width="1.5" marker-end="url(#arrow1)"/>
+  <text x="622" y="122" text-anchor="middle" font-size="10.5">SQL</text>
+
+  <text x="480" y="245" text-anchor="middle" font-size="11" fill="#57606a">frontendはNext.js Server ComponentsからbackendのREST APIを呼び出す</text>
+</svg>
+<div class="diagram-caption">図1: コンポーネント構成図（frontend / backend / mysql、いずれもDocker Compose上のコンテナ）</div>
+</div>
+
+<h2>3. 外部インターフェース仕様（API一覧）</h2>
+<p>frontendがbackendに対して呼び出すREST APIの一覧。詳細なリクエスト・レスポンスのスキーマは<code>contracts/books-api.md</code>を正本とする。</p>
+
+<table>
+<tr><th>メソッド</th><th>パス</th><th>概要</th><th>認証</th><th>対応画面</th><th>対応FR</th></tr>
+<tr>
+  <td><code>GET</code></td>
+  <td><code>/api/books</code></td>
+  <td>販売中の書籍一覧を取得する</td>
+  <td>なし（匿名アクセス）</td>
+  <td>SC-01 商品一覧画面</td>
+  <td>FR-001, FR-002, FR-008</td>
+</tr>
+<tr>
+  <td><code>GET</code></td>
+  <td><code>/api/books/:id</code></td>
+  <td>指定した書籍の詳細を取得する</td>
+  <td>なし（匿名アクセス）</td>
+  <td>SC-02 商品詳細画面</td>
+  <td>FR-004, FR-009</td>
+</tr>
+</table>
+
+<h3>3.1 共通仕様</h3>
+<table>
+<tr><th>項目</th><th>内容</th></tr>
+<tr><td>ベースURL</td><td><code>http://localhost:4000</code>（Docker Compose上の<code>backend</code>サービス、<code>requirements.md</code>の制約条件に準拠）</td></tr>
+<tr><td>データ形式</td><td>リクエスト・レスポンスともに<code>application/json</code></td></tr>
+<tr><td>認証方式</td><td>なし。本機能・本プロジェクトともに認証・会員管理はスコープ外のため、全エンドポイントが匿名アクセス可能（spec.md FR-007）</td></tr>
+<tr><td>共通エラー形式</td><td><code>{"{error: string}"}</code>。内部エラー詳細（スタックトレース等）は含めない（本書「8. エラー処理方針」参照）</td></tr>
+<tr><td>更新系エンドポイント</td><td>本機能では提供しない（<code>books</code>テーブルへの書き込みAPIはスコープ外。読み取り専用）</td></tr>
+</table>
+
+<p>各エンドポイントのリクエストパラメータ・レスポンスの型定義（フィールドごとの型・必須/任意）は<code>contracts/books-api.md</code>、実装側のパラメータ・In/Out詳細は<code>detail-design.html</code>の<code>booksRoutes.ts</code>を参照。</p>
+
+<h2>4. 画面一覧</h2>
+<table>
+<tr><th>画面ID</th><th>画面名</th><th>パス</th><th>概要</th><th>対応REQ</th></tr>
+<tr><td>SC-01</td><td>商品一覧画面</td><td><code>/</code></td><td>販売中の書籍をグリッド形式で表示</td><td>REQ-001〜003</td></tr>
+<tr><td>SC-02</td><td>商品詳細画面</td><td><code>/books/{id}</code></td><td>書籍の詳細情報表示・カート追加</td><td>REQ-004〜006</td></tr>
+</table>
+
+<h2>5. 画面レイアウト・項目定義</h2>
+
+<h3>5.1 SC-01 商品一覧画面</h3>
+<div class="diagram-box">
+<svg viewBox="0 0 700 400" width="100%" height="400" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="20" width="660" height="360" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+  <rect x="20" y="20" width="660" height="36" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.5"/>
+  <text x="34" y="43" font-size="13" font-weight="700">商品一覧</text>
+
+  <!-- card 1 (annotated) -->
+  <rect x="40" y="76" width="190" height="150" rx="4" fill="#ffffff" stroke="#0969da" stroke-width="1.5"/>
+  <rect x="52" y="88" width="166" height="86" rx="2" fill="#eef3fc" stroke="#8aa8db"/>
+  <text x="135" y="135" text-anchor="middle" font-size="11" fill="#57606a">書影</text>
+  <line x1="228" y1="88" x2="270" y2="88" stroke="#57606a" stroke-width="1"/>
+  <text x="274" y="91" font-size="11" fill="#57606a">I-01 書影（coverImageUrl）</text>
+
+  <rect x="52" y="180" width="166" height="10" rx="2" fill="#dde3ec"/>
+  <line x1="228" y1="185" x2="270" y2="122" stroke="#57606a" stroke-width="1"/>
+  <text x="274" y="125" font-size="11" fill="#57606a">I-02 タイトル（title）</text>
+
+  <rect x="52" y="196" width="120" height="8" rx="2" fill="#dde3ec"/>
+  <line x1="228" y1="200" x2="270" y2="155" stroke="#57606a" stroke-width="1"/>
+  <text x="274" y="158" font-size="11" fill="#57606a">I-03 著者（author）</text>
+
+  <rect x="52" y="210" width="70" height="10" rx="2" fill="#2f5fd9" opacity="0.25"/>
+  <line x1="228" y1="215" x2="270" y2="188" stroke="#57606a" stroke-width="1"/>
+  <text x="274" y="191" font-size="11" fill="#57606a">I-04 価格（price）</text>
+
+  <text x="135" y="242" text-anchor="middle" font-size="10" fill="#57606a">I-05 カード全体がクリック領域</text>
+
+  <!-- other cards (unlabeled, same structure) -->
+  <g opacity="0.9">
+    <rect x="470" y="76" width="190" height="150" rx="4" fill="#ffffff" stroke="#c9d1d9" stroke-width="1.5"/>
+    <rect x="482" y="88" width="166" height="86" rx="2" fill="#eef3fc" stroke="#c9d1d9"/>
+    <rect x="482" y="180" width="166" height="10" rx="2" fill="#e8ebef"/>
+    <rect x="482" y="196" width="120" height="8" rx="2" fill="#e8ebef"/>
+    <rect x="482" y="210" width="70" height="10" rx="2" fill="#e8ebef"/>
+  </g>
+  <text x="360" y="150" text-anchor="middle" font-size="12" fill="#8a94a3">他カードも同一構成で繰り返し表示</text>
+
+  <!-- empty state inset -->
+  <rect x="40" y="280" width="620" height="80" rx="4" fill="#fbfcfd" stroke="#c9d1d9" stroke-dasharray="4 3"/>
+  <text x="350" y="316" text-anchor="middle" font-size="12" fill="#57606a">I-06「現在販売中の書籍はありません」（販売中の書籍が0件のときのみ、グリッドの代わりに表示）</text>
+  <text x="350" y="336" text-anchor="middle" font-size="10" fill="#8a94a3">※ 通常時はこの領域にグリッドが表示され、本メッセージは出ない</text>
+</svg>
+<div class="diagram-caption">図2a: 商品一覧画面ワイヤーフレーム</div>
+</div>
+
+<table>
+<tr><th>項目ID</th><th>項目名</th><th>種別</th><th>データソース</th><th>表示内容・条件</th></tr>
+<tr><td>I-01</td><td>書影</td><td>画像</td><td><code>coverImageUrl</code></td><td>URLがあれば表示。<code>null</code>の場合はプレースホルダー画像</td></tr>
+<tr><td>I-02</td><td>タイトル</td><td>テキスト</td><td><code>title</code></td><td>そのまま表示</td></tr>
+<tr><td>I-03</td><td>著者</td><td>テキスト</td><td><code>author</code></td><td>そのまま表示</td></tr>
+<tr><td>I-04</td><td>価格</td><td>数値（円表記）</td><td><code>price</code></td><td>例: <code>¥1,500</code>（3桁区切り、円マーク付き）</td></tr>
+<tr><td>I-05</td><td>書籍カード</td><td>リンク領域</td><td><code>id</code></td><td>カード全体がクリック可能。押下で<code>/books/{id}</code>へ遷移（FR-003）</td></tr>
+<tr><td>I-06</td><td>空状態メッセージ</td><td>テキスト</td><td>-</td><td>販売中の書籍が0件の場合のみ、グリッドの代わりに表示（FR-008）</td></tr>
+</table>
+
+<h3>5.2 SC-02 商品詳細画面</h3>
+<div class="diagram-box">
+<svg viewBox="0 0 700 400" width="100%" height="400" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="20" width="660" height="360" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+
+  <text x="34" y="42" font-size="12" fill="#0969da" text-decoration="underline">← 一覧へ戻る</text>
+  <text x="150" y="42" font-size="10" fill="#57606a">I-13 一覧へ戻るリンク（常時表示、FR-006）</text>
+
+  <!-- cover -->
+  <rect x="34" y="60" width="220" height="280" rx="4" fill="#eef3fc" stroke="#8aa8db"/>
+  <text x="144" y="204" text-anchor="middle" font-size="12" fill="#57606a">書影</text>
+  <line x1="254" y1="80" x2="290" y2="80" stroke="#57606a"/>
+  <text x="294" y="83" font-size="11" fill="#57606a">I-07 書影（coverImageUrl）</text>
+
+  <!-- text block -->
+  <rect x="280" y="60" width="380" height="20" rx="2" fill="#1a1d24" opacity="0.85"/>
+  <text x="670" y="75" text-anchor="end" font-size="10" fill="#57606a">I-08 タイトル</text>
+
+  <rect x="280" y="92" width="180" height="10" rx="2" fill="#dde3ec"/>
+  <text x="670" y="100" text-anchor="end" font-size="10" fill="#57606a">I-09 著者</text>
+
+  <rect x="280" y="112" width="90" height="14" rx="2" fill="#2f5fd9" opacity="0.3"/>
+  <text x="670" y="123" text-anchor="end" font-size="10" fill="#57606a">I-10 価格</text>
+
+  <rect x="280" y="146" width="380" height="8" rx="2" fill="#eceff3"/>
+  <rect x="280" y="160" width="380" height="8" rx="2" fill="#eceff3"/>
+  <rect x="280" y="174" width="380" height="8" rx="2" fill="#eceff3"/>
+  <rect x="280" y="188" width="220" height="8" rx="2" fill="#eceff3"/>
+  <text x="670" y="200" text-anchor="end" font-size="10" fill="#57606a">I-11 説明文（複数行、可変長）</text>
+
+  <rect x="280" y="230" width="160" height="36" rx="4" fill="#2f5fd9"/>
+  <text x="360" y="253" text-anchor="middle" font-size="12" fill="#ffffff" font-weight="700">カートに追加</text>
+  <line x1="440" y1="248" x2="480" y2="248" stroke="#57606a"/>
+  <text x="484" y="251" font-size="11" fill="#57606a">I-12（押下でFR-005実行）</text>
+
+  <!-- not found variant -->
+  <rect x="34" y="300" width="606" height="60" rx="4" fill="#fbfcfd" stroke="#c9d1d9" stroke-dasharray="4 3"/>
+  <text x="337" y="326" text-anchor="middle" font-size="12" fill="#57606a">I-14「書籍が見つかりません」（存在しない/非販売IDの場合、上記領域全体をこの表示に差し替え）</text>
+  <text x="337" y="344" text-anchor="middle" font-size="10" fill="#8a94a3">※ I-13 一覧へ戻るリンクは変わらず表示（FR-009）</text>
+</svg>
+<div class="diagram-caption">図2b: 商品詳細画面ワイヤーフレーム</div>
+</div>
+
+<table>
+<tr><th>項目ID</th><th>項目名</th><th>種別</th><th>データソース</th><th>表示内容・条件</th></tr>
+<tr><td>I-07</td><td>書影</td><td>画像</td><td><code>coverImageUrl</code></td><td>一覧同様、<code>null</code>時はプレースホルダー</td></tr>
+<tr><td>I-08</td><td>タイトル</td><td>テキスト</td><td><code>title</code></td><td>そのまま表示</td></tr>
+<tr><td>I-09</td><td>著者</td><td>テキスト</td><td><code>author</code></td><td>そのまま表示</td></tr>
+<tr><td>I-10</td><td>価格</td><td>数値（円表記）</td><td><code>price</code></td><td>一覧と同じ表記ルール</td></tr>
+<tr><td>I-11</td><td>説明文</td><td>テキスト（複数行）</td><td><code>description</code></td><td>長文でもレイアウトが崩れないこと（Edge Cases）</td></tr>
+<tr><td>I-12</td><td>「カートに追加」ボタン</td><td>ボタン</td><td>-</td><td>押下で<code>cartStore.addItem()</code>実行。追加成功が視覚的に分かる表示に変化（FR-005）</td></tr>
+<tr><td>I-13</td><td>一覧へ戻るリンク</td><td>リンク</td><td>-</td><td>常時表示。押下で<code>/</code>へ遷移（FR-006）</td></tr>
+<tr><td>I-14</td><td>見つかりませんメッセージ</td><td>テキスト</td><td>-</td><td>存在しない/販売対象外の書籍IDの場合、書影〜ボタン領域をこの表示に差し替え（FR-009）</td></tr>
+</table>
+
+<h2>6. 画面遷移図</h2>
+<div class="diagram-box">
+<svg viewBox="0 0 700 220" width="100%" height="220" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/>
+    </marker>
+  </defs>
+
+  <rect x="40" y="70" width="180" height="70" rx="35" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+  <text x="130" y="100" text-anchor="middle" font-size="13" font-weight="700">商品一覧画面</text>
+  <text x="130" y="118" text-anchor="middle" font-size="11" fill="#57606a">(SC-01)</text>
+
+  <rect x="480" y="70" width="180" height="70" rx="35" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+  <text x="570" y="100" text-anchor="middle" font-size="13" font-weight="700">商品詳細画面</text>
+  <text x="570" y="118" text-anchor="middle" font-size="11" fill="#57606a">(SC-02)</text>
+
+  <line x1="220" y1="90" x2="475" y2="90" stroke="#1f2328" stroke-width="1.5" marker-end="url(#arrow2)"/>
+  <text x="350" y="80" text-anchor="middle" font-size="11.5">書籍をクリック (FR-003)</text>
+
+  <path d="M 480 125 C 350 190, 250 190, 220 125" fill="none" stroke="#1f2328" stroke-width="1.5" marker-end="url(#arrow2)"/>
+  <text x="350" y="200" text-anchor="middle" font-size="11.5">一覧へ戻る / カート追加後も戻れる (FR-006)</text>
+
+  <path d="M 610 70 C 610 30, 610 30, 610 66" fill="none" stroke="#1f2328" stroke-width="1.5" marker-end="url(#arrow2)"/>
+  <text x="640" y="45" text-anchor="middle" font-size="11">カートに追加 (FR-005)</text>
+  <text x="640" y="58" text-anchor="middle" font-size="10" fill="#57606a">※同画面内の状態変化</text>
+</svg>
+<div class="diagram-caption">図3: 画面遷移図</div>
+</div>
+
+<h2>7. シーケンス図</h2>
+
+<h3>7.1 US1: 販売中の書籍を一覧で確認する</h3>
+<div class="diagram-box">
+<svg viewBox="0 0 760 420" width="100%" height="420" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/></marker>
+  </defs>
+  <!-- lifelines -->
+  <g font-size="12" font-weight="700" text-anchor="middle">
+    <rect x="30" y="10" width="120" height="34" rx="4" fill="#f6f8fa" stroke="#1f2328"/>
+    <text x="90" y="31">利用者</text>
+    <rect x="240" y="10" width="140" height="34" rx="4" fill="#ddf4ff" stroke="#0969da"/>
+    <text x="310" y="31">frontend</text>
+    <rect x="470" y="10" width="140" height="34" rx="4" fill="#ddf4ff" stroke="#0969da"/>
+    <text x="540" y="31">backend</text>
+    <rect x="670" y="10" width="80" height="34" rx="4" fill="#fff1e5" stroke="#bc4c00"/>
+    <text x="710" y="31">mysql</text>
+  </g>
+  <line x1="90" y1="44" x2="90" y2="400" stroke="#c9d1d9" stroke-dasharray="4 3"/>
+  <line x1="310" y1="44" x2="310" y2="400" stroke="#c9d1d9" stroke-dasharray="4 3"/>
+  <line x1="540" y1="44" x2="540" y2="400" stroke="#c9d1d9" stroke-dasharray="4 3"/>
+  <line x1="710" y1="44" x2="710" y2="400" stroke="#c9d1d9" stroke-dasharray="4 3"/>
+
+  <g font-size="11.5">
+    <line x1="90" y1="80" x2="305" y2="80" stroke="#1f2328" marker-end="url(#arrowS)"/>
+    <text x="200" y="73" text-anchor="middle">① 商品一覧画面を開く</text>
+
+    <line x1="310" y1="120" x2="535" y2="120" stroke="#1f2328" marker-end="url(#arrowS)"/>
+    <text x="420" y="113" text-anchor="middle">② GET /api/books</text>
+
+    <line x1="540" y1="160" x2="705" y2="160" stroke="#1f2328" marker-end="url(#arrowS)"/>
+    <text x="625" y="153" text-anchor="middle" font-size="10.5">③ SELECT ... WHERE is_for_sale=1 ORDER BY created_at DESC</text>
+
+    <line x1="710" y1="200" x2="545" y2="200" stroke="#57606a" stroke-dasharray="5 3" marker-end="url(#arrowS)"/>
+    <text x="625" y="193" text-anchor="middle">④ 書籍レコード群</text>
+
+    <line x1="540" y1="240" x2="315" y2="240" stroke="#57606a" stroke-dasharray="5 3" marker-end="url(#arrowS)"/>
+    <text x="420" y="233" text-anchor="middle">⑤ 200 {"{books:[...]}"}</text>
+
+    <line x1="310" y1="280" x2="95" y2="280" stroke="#57606a" stroke-dasharray="5 3" marker-end="url(#arrowS)"/>
+    <text x="200" y="273" text-anchor="middle">⑥ グリッド表示（登録順）</text>
+  </g>
+
+  <g font-size="11" fill="#57606a">
+    <text x="90" y="330">分岐: 書籍0件の場合</text>
+    <line x1="30" y1="340" x2="750" y2="340" stroke="#d0d7de"/>
+    <text x="90" y="360">⑤' 200 {"{books:[]}"}</text>
+    <text x="90" y="378">⑥' 「販売中の書籍はありません」の空状態を表示 (FR-008)</text>
+  </g>
+</svg>
+<div class="diagram-caption">図4: 商品一覧表示のシーケンス図</div>
+</div>
+
+<h3>7.2 US2: 気になる書籍の詳しい情報を見る</h3>
+<div class="diagram-box">
+<svg viewBox="0 0 760 380" width="100%" height="380" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowS2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/></marker>
+  </defs>
+  <g font-size="12" font-weight="700" text-anchor="middle">
+    <rect x="30" y="10" width="120" height="34" rx="4" fill="#f6f8fa" stroke="#1f2328"/><text x="90" y="31">利用者</text>
+    <rect x="240" y="10" width="140" height="34" rx="4" fill="#ddf4ff" stroke="#0969da"/><text x="310" y="31">frontend</text>
+    <rect x="470" y="10" width="140" height="34" rx="4" fill="#ddf4ff" stroke="#0969da"/><text x="540" y="31">backend</text>
+    <rect x="670" y="10" width="80" height="34" rx="4" fill="#fff1e5" stroke="#bc4c00"/><text x="710" y="31">mysql</text>
+  </g>
+  <line x1="90" y1="44" x2="90" y2="360" stroke="#c9d1d9" stroke-dasharray="4 3"/>
+  <line x1="310" y1="44" x2="310" y2="360" stroke="#c9d1d9" stroke-dasharray="4 3"/>
+  <line x1="540" y1="44" x2="540" y2="360" stroke="#c9d1d9" stroke-dasharray="4 3"/>
+  <line x1="710" y1="44" x2="710" y2="360" stroke="#c9d1d9" stroke-dasharray="4 3"/>
+
+  <g font-size="11.5">
+    <line x1="90" y1="80" x2="305" y2="80" stroke="#1f2328" marker-end="url(#arrowS2)"/>
+    <text x="200" y="73" text-anchor="middle">① 書籍カードをクリック</text>
+
+    <line x1="310" y1="120" x2="535" y2="120" stroke="#1f2328" marker-end="url(#arrowS2)"/>
+    <text x="420" y="113" text-anchor="middle">② GET /api/books/{"{id}"}</text>
+
+    <line x1="540" y1="160" x2="705" y2="160" stroke="#1f2328" marker-end="url(#arrowS2)"/>
+    <text x="625" y="153" text-anchor="middle" font-size="10.5">③ SELECT ... WHERE id=? AND is_for_sale=1</text>
+
+    <line x1="710" y1="200" x2="545" y2="200" stroke="#57606a" stroke-dasharray="5 3" marker-end="url(#arrowS2)"/>
+    <text x="625" y="193" text-anchor="middle">④ 該当レコード or 0件</text>
+
+    <line x1="540" y1="240" x2="315" y2="240" stroke="#57606a" stroke-dasharray="5 3" marker-end="url(#arrowS2)"/>
+    <text x="420" y="233" text-anchor="middle">⑤ 200 {"{book}"} または 404 {"{error}"}</text>
+
+    <line x1="310" y1="280" x2="95" y2="280" stroke="#57606a" stroke-dasharray="5 3" marker-end="url(#arrowS2)"/>
+    <text x="200" y="273" text-anchor="middle">⑥ 詳細表示 または 「見つかりません」(FR-009)</text>
+  </g>
+</svg>
+<div class="diagram-caption">図5: 商品詳細表示のシーケンス図（存在しない/販売対象外IDの分岐を含む）</div>
+</div>
+
+<h3>7.3 US3: カートに追加して他の書籍も見続ける</h3>
+<div class="diagram-box">
+<svg viewBox="0 0 620 300" width="100%" height="300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowS3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/></marker>
+  </defs>
+  <g font-size="12" font-weight="700" text-anchor="middle">
+    <rect x="30" y="10" width="120" height="34" rx="4" fill="#f6f8fa" stroke="#1f2328"/><text x="90" y="31">利用者</text>
+    <rect x="260" y="10" width="150" height="34" rx="4" fill="#ddf4ff" stroke="#0969da"/><text x="335" y="31">frontend</text>
+    <rect x="480" y="10" width="110" height="34" rx="4" fill="#f6f8fa" stroke="#57606a"/><text x="535" y="31" font-size="11">localStorage</text>
+  </g>
+  <line x1="90" y1="44" x2="90" y2="280" stroke="#c9d1d9" stroke-dasharray="4 3"/>
+  <line x1="335" y1="44" x2="335" y2="280" stroke="#c9d1d9" stroke-dasharray="4 3"/>
+  <line x1="535" y1="44" x2="535" y2="280" stroke="#c9d1d9" stroke-dasharray="4 3"/>
+
+  <g font-size="11.5">
+    <line x1="90" y1="80" x2="330" y2="80" stroke="#1f2328" marker-end="url(#arrowS3)"/>
+    <text x="210" y="73" text-anchor="middle">① 「カートに追加」を押す</text>
+
+    <line x1="335" y1="120" x2="530" y2="120" stroke="#1f2328" marker-end="url(#arrowS3)"/>
+    <text x="430" y="113" text-anchor="middle" font-size="10.5">② addItem(bookId)</text>
+
+    <line x1="535" y1="160" x2="340" y2="160" stroke="#57606a" stroke-dasharray="5 3" marker-end="url(#arrowS3)"/>
+    <text x="430" y="153" text-anchor="middle" font-size="10.5">③ 数量を加算して保存</text>
+
+    <line x1="335" y1="200" x2="95" y2="200" stroke="#57606a" stroke-dasharray="5 3" marker-end="url(#arrowS3)"/>
+    <text x="210" y="193" text-anchor="middle">④ 追加成功を画面に表示</text>
+
+    <line x1="90" y1="240" x2="330" y2="240" stroke="#1f2328" marker-end="url(#arrowS3)"/>
+    <text x="210" y="233" text-anchor="middle">⑤ 一覧へ戻るリンクを押す</text>
+  </g>
+</svg>
+<div class="diagram-caption">図6: カート追加のシーケンス図（backend / mysqlへのアクセスなし、クライアント側completed）</div>
+</div>
+
+<h2>8. エラー処理方針（共通）</h2>
+<p>憲法セクション3（UX一貫性）の「画面遷移・エラー表示・空状態の扱いを全画面で統一する」に対応し、本機能で発生しうる状態を以下のとおり分類する。「空状態」「見つかりません」は業務上の正常な分岐であり、エラーとは区別する。</p>
+
+<table>
+<tr><th>状態</th><th>発生条件</th><th>HTTPステータス</th><th>UI表示</th><th>対象画面・項目</th></tr>
+<tr><td>通常表示</td><td>データ取得成功</td><td>200</td><td>取得したデータを表示</td><td>両画面</td></tr>
+<tr><td>空状態</td><td>販売中の書籍が0件</td><td>200（<code>{"{books:[]}"}</code>）</td><td>「現在販売中の書籍はありません」</td><td>SC-01（I-06）</td></tr>
+<tr><td>見つかりません</td><td>指定書籍が存在しない、または非販売</td><td>404</td><td>「書籍が見つかりません」＋一覧へ戻るリンク</td><td>SC-02（I-14）</td></tr>
+<tr><td>読み込み中</td><td>API応答待ち</td><td>-</td><td>ローディング表示（スピナー等）</td><td>両画面</td></tr>
+<tr><td>予期しないエラー</td><td>サーバー内部エラー・ネットワーク断・タイムアウト等</td><td>500 または fetch例外</td><td>汎用エラーメッセージ＋再読み込みの案内</td><td>両画面（新規）</td></tr>
+</table>
+
+<h3>8.1 方針</h3>
+<ul>
+<li>空状態・見つかりませんは異常系として扱わない。専用の状態としてそれぞれ個別に表示する（spec.md Edge Cases, FR-008, FR-009）</li>
+<li>500・ネットワーク断など「予期しないエラー」は、内部情報（スタックトレース、SQLエラー文言等）をレスポンス・画面のいずれにも露出しない（<code>contracts/books-api.md</code>「共通エラー方針」参照）</li>
+<li><code>apiClient.ts</code>の<code>fetchJson</code>は、404は<code>null</code>を返し、それ以外の異常（5xx・ネットワーク例外）は例外としてスローする。呼び出し元の各ページがこれを捕捉し、汎用エラー表示に倒す（<code>detail-design.html</code>「3. フロントエンド」の<code>apiClient.ts</code>参照）</li>
+<li>サーバー側は例外の詳細をログにのみ出力し、クライアントへは<code>{"{error: string}"}</code>程度の最小限の情報のみ返す</li>
+<li>ローディング表示は、体感遅延が生じうる場合（憲法セクション4の暫定基準を超える場合）に限らず、非同期取得中は常に表示する</li>
+</ul>
+
+<h2>9. 非機能要件との対応</h2>
+<table>
+<tr><th>憲法セクション</th><th>本機能での対応</th></tr>
+<tr><td>3. UX一貫性</td><td>画面遷移・エラー表示・空状態（0件時／見つかりません時／予期しないエラー時）の扱いを2画面で統一する（本書7章、spec.md Edge Cases）</td></tr>
+<tr><td>4. パフォーマンス要件</td><td>数値要件なし。暫定基準（95パーセンタイルで2秒以内）を目安とする</td></tr>
+</table>
+
+<div class="note">
+本ドキュメントは <code>plan.md</code> / <code>data-model.md</code> / <code>contracts/books-api.md</code> の内容をUML形式で可視化したものであり、内容の正本（Source of Truth）は各Markdownファイルである。齟齬が生じた場合はMarkdown側を正とし、本ドキュメントを更新する。
+</div>
+
+</div>
+</body>
+</html>

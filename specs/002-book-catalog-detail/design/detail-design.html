@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>詳細設計書 - 商品一覧・商品詳細（002-book-catalog-detail）</title>
+<style>
+  :root {
+    --ink: #1a1d24; --ink-muted: #5b6472;
+    --paper: #f3f5fa; --surface: #ffffff; --line: #dbe1ea;
+    --blueprint: #2f5fd9; --blueprint-soft: #e8eefc;
+    --fe-bg: #e6f4ff; --fe-fg: #1462b0;
+    --be-bg: #fff2e0; --be-fg: #a15c00;
+    --db-bg: #f3e8ff; --db-fg: #7233c9;
+    --new-bg: #e3f8ea; --new-fg: #1a7f45;
+    --warn-bg: #fff8d6; --warn-fg: #6b5000; --warn-line: #d8b23a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #e7eaf1; --ink-muted: #97a1b3;
+      --paper: #13161c; --surface: #1a1e26; --line: #2b303c;
+      --blueprint: #7fa0ff; --blueprint-soft: rgba(127,160,255,.14);
+      --fe-bg: rgba(70,150,255,.16); --fe-fg: #8ec1ff;
+      --be-bg: rgba(255,160,60,.16); --be-fg: #ffbd75;
+      --db-bg: rgba(180,120,255,.18); --db-fg: #cca4ff;
+      --new-bg: rgba(60,200,120,.16); --new-fg: #7fe0aa;
+      --warn-bg: rgba(220,180,50,.14); --warn-fg: #e8c65a; --warn-line: #7c611f;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #e7eaf1; --ink-muted: #97a1b3;
+    --paper: #13161c; --surface: #1a1e26; --line: #2b303c;
+    --blueprint: #7fa0ff; --blueprint-soft: rgba(127,160,255,.14);
+    --fe-bg: rgba(70,150,255,.16); --fe-fg: #8ec1ff;
+    --be-bg: rgba(255,160,60,.16); --be-fg: #ffbd75;
+    --db-bg: rgba(180,120,255,.18); --db-fg: #cca4ff;
+    --new-bg: rgba(60,200,120,.16); --new-fg: #7fe0aa;
+    --warn-bg: rgba(220,180,50,.14); --warn-fg: #e8c65a; --warn-line: #7c611f;
+  }
+  :root[data-theme="light"] {
+    --ink: #1a1d24; --ink-muted: #5b6472;
+    --paper: #f3f5fa; --surface: #ffffff; --line: #dbe1ea;
+    --blueprint: #2f5fd9; --blueprint-soft: #e8eefc;
+    --fe-bg: #e6f4ff; --fe-fg: #1462b0;
+    --be-bg: #fff2e0; --be-fg: #a15c00;
+    --db-bg: #f3e8ff; --db-fg: #7233c9;
+    --new-bg: #e3f8ea; --new-fg: #1a7f45;
+    --warn-bg: #fff8d6; --warn-fg: #6b5000; --warn-line: #d8b23a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 14.5px; line-height: 1.7; color: var(--ink); background: var(--paper);
+    padding: 40px 16px 72px;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; }
+  .kicker {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--blueprint); font-weight: 700; margin-bottom: 10px;
+  }
+  h1 { font-size: 25px; font-weight: 800; letter-spacing: -0.01em; text-wrap: balance; margin-bottom: 14px; }
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 8px 18px;
+    color: var(--ink-muted); font-size: 12.5px; margin-bottom: 20px;
+    padding-bottom: 20px; border-bottom: 1px solid var(--line);
+  }
+  h2 {
+    font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em;
+    margin-top: 46px; margin-bottom: 16px;
+    padding: 9px 14px; background: var(--blueprint-soft); color: var(--blueprint);
+    border-left: 3px solid var(--blueprint); border-radius: 0 4px 4px 0;
+  }
+  .module {
+    border: 1px solid var(--line); border-radius: 8px; margin: 18px 0; overflow: hidden; background: var(--surface);
+  }
+  .module-header {
+    background: var(--paper); padding: 10px 16px; border-bottom: 1px solid var(--line);
+    display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 6px;
+  }
+  .module-header .file { font-family: ui-monospace, Menlo, monospace; font-weight: 700; font-size: 13.5px; color: var(--ink); }
+  .badge {
+    font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px;
+  }
+  .badge.new { background: var(--new-bg); color: var(--new-fg); }
+  .badge.frontend { background: var(--fe-bg); color: var(--fe-fg); }
+  .badge.backend { background: var(--be-bg); color: var(--be-fg); }
+  .badge.db { background: var(--db-bg); color: var(--db-fg); }
+  .module-body { padding: 12px 16px; }
+  .module-body h4 { font-size: 11.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-muted); margin-top: 12px; margin-bottom: 6px; font-weight: 700; }
+  .module-body h4:first-child { margin-top: 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; margin-bottom: 6px; font-variant-numeric: tabular-nums; }
+  th, td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--paper); font-weight: 700; color: var(--ink-muted); font-size: 11px; text-transform: uppercase; letter-spacing: .03em; }
+  td { color: var(--ink); }
+  code {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    background: var(--blueprint-soft); border: 1px solid var(--line); border-radius: 4px;
+    padding: 1px 5px; font-size: 12.5px; color: var(--ink);
+  }
+  pre {
+    background: var(--paper); border: 1px solid var(--line); border-radius: 6px;
+    padding: 10px 12px; font-size: 12.5px; overflow-x: auto; margin-bottom: 6px;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; color: var(--ink);
+  }
+  .note {
+    background: var(--warn-bg); border: 1px solid var(--warn-line); color: var(--warn-fg);
+    border-radius: 6px; padding: 10px 14px; font-size: 13px; margin: 12px 0;
+  }
+  .diagram-box {
+    border: 1px solid var(--line); border-radius: 8px; background: #eef3fc;
+    padding: 16px; margin: 10px 0 6px; overflow-x: auto;
+    background-image:
+      linear-gradient(#cfdcf3 1px, transparent 1px),
+      linear-gradient(90deg, #cfdcf3 1px, transparent 1px);
+    background-size: 22px 22px; background-position: -1px -1px;
+  }
+  .diagram-box svg { display: block; margin: 0 auto; }
+  .diagram-caption { font-size: 11.5px; color: var(--ink-muted); margin-top: 8px; text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="kicker">詳細設計書 &middot; Detailed Design</div>
+<h1>商品一覧・商品詳細</h1>
+<div class="meta">
+  <span>対象feature: <code>002-book-catalog-detail</code></span>
+  <span>作成日: 2026-08-16</span>
+  <span>対応plan: <code>specs/002-book-catalog-detail/plan.md</code></span>
+  <span>対応API契約: <code>specs/002-book-catalog-detail/contracts/books-api.md</code></span>
+</div>
+
+<p>本ドキュメントは、<code>plan.md</code>のProject Structureで定義した各ファイルについて、修正対象ファイル・処理概要・パラメータ・In/Out詳細をまとめたものである。全て新規作成ファイル。</p>
+
+<h2>0. 呼び出し関係図</h2>
+<p>モジュール間の呼び出し関係（コールツリー）を示す。実線＝関数呼び出し／コンポーネント使用（同一ランタイム内）、破線＝HTTP通信（フロントエンド／バックエンドの境界）。型定義のみの参照（<code>book.ts</code>）は本図から除外する。</p>
+<div class="diagram-box">
+<svg viewBox="0 0 820 400" width="100%" height="400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="fa7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/></marker>
+    <marker id="fa7d" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0969da"/></marker>
+  </defs>
+
+  <text x="200" y="16" text-anchor="middle" font-size="11" font-weight="700" fill="#57606a">frontend/</text>
+  <text x="660" y="16" text-anchor="middle" font-size="11" font-weight="700" fill="#57606a">backend/</text>
+
+  <!-- frontend nodes -->
+  <rect x="30" y="20" width="160" height="40" rx="4" fill="#eef3fc" stroke="#0969da" stroke-width="1.5"/>
+  <text x="110" y="36" text-anchor="middle" font-size="9.5">page.tsx</text>
+  <text x="110" y="50" text-anchor="middle" font-size="9">（商品一覧）</text>
+
+  <rect x="210" y="20" width="170" height="40" rx="4" fill="#eef3fc" stroke="#0969da" stroke-width="1.5"/>
+  <text x="295" y="36" text-anchor="middle" font-size="9.5">books/[id]/page.tsx</text>
+  <text x="295" y="50" text-anchor="middle" font-size="9">（商品詳細）</text>
+
+  <rect x="30" y="100" width="160" height="36" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+  <text x="110" y="122" text-anchor="middle" font-size="9.5">BookGrid.tsx</text>
+
+  <rect x="210" y="100" width="170" height="36" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+  <text x="295" y="122" text-anchor="middle" font-size="9.5">AddToCartButton.tsx</text>
+
+  <rect x="30" y="180" width="160" height="36" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+  <text x="110" y="202" text-anchor="middle" font-size="9.5">BookCard.tsx</text>
+
+  <rect x="210" y="180" width="170" height="36" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+  <text x="295" y="202" text-anchor="middle" font-size="9.5">cartStore.ts</text>
+
+  <rect x="100" y="260" width="170" height="36" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+  <text x="185" y="282" text-anchor="middle" font-size="9.5">booksApi.ts</text>
+
+  <rect x="100" y="340" width="170" height="36" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+  <text x="185" y="362" text-anchor="middle" font-size="9.5">apiClient.ts</text>
+
+  <!-- backend nodes -->
+  <rect x="580" y="20" width="140" height="40" rx="4" fill="#fff2e0" stroke="#a15c00" stroke-width="1.5"/>
+  <text x="650" y="44" text-anchor="middle" font-size="9.5">index.ts</text>
+
+  <rect x="580" y="100" width="160" height="40" rx="4" fill="#fff2e0" stroke="#a15c00" stroke-width="1.5"/>
+  <text x="660" y="124" text-anchor="middle" font-size="9.5">booksRoutes.ts</text>
+
+  <rect x="580" y="200" width="170" height="40" rx="4" fill="#fff2e0" stroke="#a15c00" stroke-width="1.5"/>
+  <text x="665" y="224" text-anchor="middle" font-size="9.5">bookRepository.ts</text>
+
+  <rect x="580" y="290" width="140" height="36" rx="4" fill="#fff2e0" stroke="#a15c00" stroke-width="1.5"/>
+  <text x="650" y="312" text-anchor="middle" font-size="9.5">pool.ts</text>
+
+  <!-- frontend edges -->
+  <line x1="110" y1="60" x2="110" y2="98" stroke="#1f2328" marker-end="url(#fa7)"/>
+  <line x1="110" y1="136" x2="110" y2="178" stroke="#1f2328" marker-end="url(#fa7)"/>
+  <line x1="295" y1="60" x2="295" y2="98" stroke="#1f2328" marker-end="url(#fa7)"/>
+  <line x1="295" y1="136" x2="295" y2="178" stroke="#1f2328" marker-end="url(#fa7)"/>
+  <text x="330" y="160" text-anchor="middle" font-size="8.5">addItem(bookId)</text>
+
+  <path d="M190,40 L400,40 L400,240 L170,240 L170,258" fill="none" stroke="#1f2328" marker-end="url(#fa7)"/>
+  <text x="400" y="150" text-anchor="middle" font-size="8.5" transform="rotate(-90 400 150)">listBooks()</text>
+
+  <path d="M380,40 L460,40 L460,240 L245,240 L245,258" fill="none" stroke="#1f2328" marker-end="url(#fa7)"/>
+  <text x="460" y="150" text-anchor="middle" font-size="8.5" transform="rotate(-90 460 150)">getBook(id)</text>
+
+  <line x1="185" y1="296" x2="185" y2="338" stroke="#1f2328" marker-end="url(#fa7)"/>
+  <text x="230" y="320" text-anchor="middle" font-size="8.5">fetchJson()</text>
+
+  <!-- backend edges -->
+  <line x1="650" y1="60" x2="650" y2="98" stroke="#1f2328" marker-end="url(#fa7)"/>
+  <line x1="660" y1="140" x2="660" y2="198" stroke="#1f2328" marker-end="url(#fa7)"/>
+  <text x="720" y="172" text-anchor="middle" font-size="8.5">listForSale()/</text>
+  <text x="720" y="184" text-anchor="middle" font-size="8.5">getById()</text>
+  <line x1="650" y1="240" x2="650" y2="288" stroke="#1f2328" marker-end="url(#fa7)"/>
+  <text x="720" y="266" text-anchor="middle" font-size="8.5">Pool経由で</text>
+  <text x="720" y="278" text-anchor="middle" font-size="8.5">クエリ実行</text>
+
+  <!-- HTTP cross boundary -->
+  <path d="M270,358 L500,358 L500,120 L575,120" fill="none" stroke="#0969da" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#fa7d)"/>
+  <text x="500" y="245" text-anchor="middle" font-size="9" fill="#0969da">HTTP</text>
+  <text x="500" y="258" text-anchor="middle" font-size="8" fill="#0969da">GET /api/books</text>
+  <text x="500" y="269" text-anchor="middle" font-size="8" fill="#0969da">GET /api/books/:id</text>
+</svg>
+<div class="diagram-caption">図D0: モジュール呼び出し関係図</div>
+</div>
+
+<h2>1. データベース</h2>
+
+<div class="module">
+  <div class="module-header">
+    <span class="file">mysql/init/01_books_seed.sql</span>
+    <span><span class="badge db">DB</span> <span class="badge new">新規</span></span>
+  </div>
+  <div class="module-body">
+    <h4>処理概要</h4>
+    <p><code>books</code>テーブルを作成し（存在しない場合のみ）、動作確認用のサンプルデータを投入する。破壊的操作（DROP/TRUNCATE/DELETE）は含めない（CLAUDE.md禁止事項）。</p>
+    <h4>In/Out詳細</h4>
+    <table>
+      <tr><th>種別</th><th>内容</th></tr>
+      <tr><td>In</td><td>なし（静的SQLスクリプト、コンテナ初回起動時に自動実行）</td></tr>
+      <tr><td>Out</td><td><code>books</code>テーブル（data-model.md参照）+ 販売中/非販売の書籍を含む数件のレコード</td></tr>
+    </table>
+  </div>
+</div>
+
+<h2>2. バックエンド</h2>
+
+<div class="module">
+  <div class="module-header">
+    <span class="file">backend/src/db/pool.ts</span>
+    <span><span class="badge backend">Backend</span> <span class="badge new">新規</span></span>
+  </div>
+  <div class="module-body">
+    <h4>処理概要</h4>
+    <p><code>mysql2/promise</code>のコネクションプールを生成しexportする。環境変数からDB接続情報を取得する。</p>
+    <h4>パラメータ（環境変数）</h4>
+    <table>
+      <tr><th>変数名</th><th>説明</th></tr>
+      <tr><td><code>DB_HOST</code></td><td>MySQLホスト名（Docker Compose上は<code>mysql</code>）</td></tr>
+      <tr><td><code>DB_PORT</code></td><td>MySQLポート（既定 3306）</td></tr>
+      <tr><td><code>DB_NAME</code></td><td>データベース名</td></tr>
+      <tr><td><code>DB_USER</code> / <code>DB_PASSWORD</code></td><td>接続ユーザー・パスワード（<code>.env</code>で管理、コード直書き禁止）</td></tr>
+    </table>
+    <h4>In/Out詳細</h4>
+    <table>
+      <tr><th>種別</th><th>内容</th></tr>
+      <tr><td>Out</td><td><code>Pool</code>インスタンス（<code>bookRepository.ts</code>から利用）</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="file">backend/src/types/book.ts</span>
+    <span><span class="badge backend">Backend</span> <span class="badge new">新規</span></span>
+  </div>
+  <div class="module-body">
+    <h4>処理概要</h4>
+    <p>書籍データの型定義。一覧用（<code>BookSummary</code>）と詳細用（<code>Book</code>）を分ける。</p>
+    <pre>type BookSummary = { id: number; title: string; author: string; price: number; coverImageUrl: string | null };
+type Book = BookSummary & { description: string };</pre>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="file">backend/src/repositories/bookRepository.ts</span>
+    <span><span class="badge backend">Backend</span> <span class="badge new">新規</span></span>
+  </div>
+  <div class="module-body">
+    <h4>処理概要</h4>
+    <p><code>books</code>テーブルへの読み取り専用アクセスを提供する。</p>
+    <h4>パラメータ・In/Out詳細</h4>
+    <table>
+      <tr><th>関数</th><th>パラメータ</th><th>処理概要</th><th>Out</th></tr>
+      <tr>
+        <td><code>listForSale()</code></td>
+        <td>なし</td>
+        <td><code>SELECT id, title, author, price, cover_image_url FROM books WHERE is_for_sale = 1 ORDER BY created_at DESC, id DESC</code></td>
+        <td><code>Promise&lt;BookSummary[]&gt;</code>（0件時は空配列）</td>
+      </tr>
+      <tr>
+        <td><code>getById(id)</code></td>
+        <td><code>id: number</code></td>
+        <td><code>SELECT ... FROM books WHERE id = ? AND is_for_sale = 1</code></td>
+        <td><code>Promise&lt;Book | null&gt;</code>（該当なしは<code>null</code>）</td>
+      </tr>
+    </table>
+
+    <h4>例外処理</h4>
+    <table>
+      <tr><th>例外・エラーケース</th><th>発生条件</th><th>本モジュールでの対応</th></tr>
+      <tr>
+        <td>DB接続・クエリ実行エラー</td>
+        <td><code>pool.query()</code>がスロー（MySQL未起動、SQL構文エラー、タイムアウト等）</td>
+        <td>本モジュールでは<code>try/catch</code>で捕捉しない。呼び出し元（<code>booksRoutes.ts</code>）へそのまま伝播させる</td>
+      </tr>
+      <tr>
+        <td>該当データなし（<code>getById</code>）</td>
+        <td>指定<code>id</code>が存在しない、または<code>is_for_sale=0</code></td>
+        <td>例外ではなく正常系として扱い、<code>null</code>を返す（呼び出し元が404判定に使用）</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="file">backend/src/routes/booksRoutes.ts</span>
+    <span><span class="badge backend">Backend</span> <span class="badge new">新規</span></span>
+  </div>
+  <div class="module-body">
+    <h4>処理概要</h4>
+    <p><code>express.Router()</code>で2つのエンドポイントを実装する。詳細契約は<code>contracts/books-api.md</code>参照。</p>
+
+    <h4>処理フロー: GET /</h4>
+    <div class="diagram-box">
+    <svg viewBox="0 0 460 320" width="100%" height="320" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="fa1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/></marker></defs>
+      <rect x="70" y="10" width="200" height="34" rx="17" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="170" y="31" text-anchor="middle" font-size="12">GET / 受信</text>
+      <line x1="170" y1="44" x2="170" y2="58" stroke="#1f2328" marker-end="url(#fa1)"/>
+
+      <rect x="50" y="60" width="240" height="36" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+      <text x="170" y="82" text-anchor="middle" font-size="11">bookRepository.listForSale() 呼び出し</text>
+      <line x1="170" y1="96" x2="170" y2="116" stroke="#1f2328" marker-end="url(#fa1)"/>
+
+      <polygon points="170,118 260,150 170,182 80,150" fill="#fff6da" stroke="#a1750a" stroke-width="1.5"/>
+      <text x="170" y="154" text-anchor="middle" font-size="10.5">例外発生?</text>
+
+      <line x1="170" y1="182" x2="170" y2="213" stroke="#1f2328" marker-end="url(#fa1)"/>
+      <text x="150" y="204" text-anchor="middle" font-size="10" fill="#57606a">No</text>
+      <rect x="50" y="215" width="240" height="36" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+      <text x="170" y="237" text-anchor="middle" font-size="10.5">200 {"{books: BookSummary[]}"} ※0件でも200</text>
+      <line x1="170" y1="251" x2="170" y2="265" stroke="#1f2328" marker-end="url(#fa1)"/>
+      <rect x="70" y="267" width="200" height="34" rx="17" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="170" y="288" text-anchor="middle" font-size="11">レスポンス返却</text>
+
+      <line x1="260" y1="150" x2="325" y2="150" stroke="#1f2328" marker-end="url(#fa1)"/>
+      <text x="292" y="142" text-anchor="middle" font-size="10" fill="#57606a">Yes</text>
+      <rect x="330" y="133" width="110" height="34" rx="4" fill="#ffe3e3" stroke="#c62828" stroke-width="1.5"/>
+      <text x="385" y="154" text-anchor="middle" font-size="10">500 {"{error}"}</text>
+      <line x1="385" y1="167" x2="385" y2="181" stroke="#1f2328" marker-end="url(#fa1)"/>
+      <rect x="330" y="183" width="110" height="34" rx="17" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="385" y="204" text-anchor="middle" font-size="9.5">レスポンス返却</text>
+    </svg>
+    <div class="diagram-caption">図D1: GET / 処理フロー</div>
+    </div>
+
+    <h4>処理フロー: GET /:id</h4>
+    <div class="diagram-box">
+    <svg viewBox="0 0 520 490" width="100%" height="490" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="fa2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/></marker></defs>
+      <rect x="80" y="10" width="200" height="34" rx="17" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="180" y="31" text-anchor="middle" font-size="12">GET /:id 受信</text>
+      <line x1="180" y1="44" x2="180" y2="60" stroke="#1f2328" marker-end="url(#fa2)"/>
+
+      <polygon points="180,62 280,96 180,130 80,96" fill="#fff6da" stroke="#a1750a" stroke-width="1.5"/>
+      <text x="180" y="93" text-anchor="middle" font-size="9.5">idが数値として</text>
+      <text x="180" y="105" text-anchor="middle" font-size="9.5">妥当?</text>
+
+      <line x1="180" y1="130" x2="180" y2="158" stroke="#1f2328" marker-end="url(#fa2)"/>
+      <text x="160" y="150" text-anchor="middle" font-size="10" fill="#57606a">Yes</text>
+      <rect x="60" y="160" width="240" height="36" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+      <text x="180" y="182" text-anchor="middle" font-size="10.5">bookRepository.getById(id) 呼び出し</text>
+      <line x1="180" y1="196" x2="180" y2="210" stroke="#1f2328" marker-end="url(#fa2)"/>
+
+      <polygon points="180,212 270,248 180,284 90,248" fill="#fff6da" stroke="#a1750a" stroke-width="1.5"/>
+      <text x="180" y="252" text-anchor="middle" font-size="10.5">例外発生?</text>
+
+      <line x1="180" y1="284" x2="180" y2="312" stroke="#1f2328" marker-end="url(#fa2)"/>
+      <text x="160" y="304" text-anchor="middle" font-size="10" fill="#57606a">No</text>
+      <polygon points="180,314 280,348 180,382 80,348" fill="#fff6da" stroke="#a1750a" stroke-width="1.5"/>
+      <text x="180" y="344" text-anchor="middle" font-size="9">該当書籍あり?</text>
+      <text x="180" y="356" text-anchor="middle" font-size="9">(is_for_sale=1)</text>
+
+      <line x1="180" y1="382" x2="180" y2="410" stroke="#1f2328" marker-end="url(#fa2)"/>
+      <text x="160" y="402" text-anchor="middle" font-size="10" fill="#57606a">Yes</text>
+      <rect x="60" y="412" width="240" height="36" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+      <text x="180" y="434" text-anchor="middle" font-size="11">200 {"{...Book}"}</text>
+      <line x1="180" y1="448" x2="180" y2="462" stroke="#1f2328" marker-end="url(#fa2)"/>
+      <rect x="80" y="464" width="200" height="24" rx="12" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="180" y="480" text-anchor="middle" font-size="10">レスポンス返却</text>
+
+      <!-- right branches -->
+      <line x1="280" y1="96" x2="345" y2="96" stroke="#1f2328" marker-end="url(#fa2)"/>
+      <text x="312" y="88" text-anchor="middle" font-size="10" fill="#57606a">No</text>
+      <rect x="350" y="79" width="120" height="34" rx="4" fill="#ffe3e3" stroke="#c62828" stroke-width="1.5"/>
+      <text x="410" y="100" text-anchor="middle" font-size="10">400 {"{error}"}</text>
+      <line x1="410" y1="113" x2="410" y2="127" stroke="#1f2328" marker-end="url(#fa2)"/>
+      <rect x="350" y="129" width="120" height="28" rx="14" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="410" y="147" text-anchor="middle" font-size="9.5">レスポンス返却</text>
+
+      <line x1="270" y1="248" x2="345" y2="248" stroke="#1f2328" marker-end="url(#fa2)"/>
+      <text x="308" y="240" text-anchor="middle" font-size="10" fill="#57606a">Yes</text>
+      <rect x="350" y="231" width="120" height="34" rx="4" fill="#ffe3e3" stroke="#c62828" stroke-width="1.5"/>
+      <text x="410" y="252" text-anchor="middle" font-size="10">500 {"{error}"}</text>
+      <line x1="410" y1="265" x2="410" y2="279" stroke="#1f2328" marker-end="url(#fa2)"/>
+      <rect x="350" y="281" width="120" height="28" rx="14" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="410" y="299" text-anchor="middle" font-size="9.5">レスポンス返却</text>
+
+      <line x1="280" y1="348" x2="345" y2="348" stroke="#1f2328" marker-end="url(#fa2)"/>
+      <text x="312" y="340" text-anchor="middle" font-size="10" fill="#57606a">No</text>
+      <rect x="350" y="325" width="140" height="46" rx="4" fill="#ffe3e3" stroke="#c62828" stroke-width="1.5"/>
+      <text x="420" y="344" text-anchor="middle" font-size="9">404 {"{error:"}</text>
+      <text x="420" y="357" text-anchor="middle" font-size="9">book_not_found}</text>
+      <line x1="420" y1="371" x2="420" y2="385" stroke="#1f2328" marker-end="url(#fa2)"/>
+      <rect x="360" y="387" width="120" height="26" rx="13" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="420" y="404" text-anchor="middle" font-size="9.5">レスポンス返却</text>
+    </svg>
+    <div class="diagram-caption">図D2: GET /:id 処理フロー</div>
+    </div>
+
+    <h4>例外処理</h4>
+    <table>
+      <tr><th>ハンドラ</th><th>例外・エラーケース</th><th>発生条件</th><th>対応</th></tr>
+      <tr>
+        <td><code>GET /</code></td>
+        <td>予期しないエラー</td>
+        <td><code>bookRepository.listForSale()</code>がスロー</td>
+        <td><code>try/catch</code>で捕捉。500 <code>{"{error: 'internal_server_error'}"}</code>を返却。例外詳細（スタックトレース等）はサーバーログにのみ出力し、レスポンスボディには含めない（basic-design.html「8. エラー処理方針」参照）</td>
+      </tr>
+      <tr>
+        <td rowspan="3"><code>GET /:id</code></td>
+        <td>不正な<code>id</code></td>
+        <td>パスパラメータが数値に変換できない（<code>NaN</code>）</td>
+        <td>例外ではなくバリデーション分岐として処理。400 <code>{"{error: 'invalid_id'}"}</code>を返却</td>
+      </tr>
+      <tr>
+        <td>予期しないエラー</td>
+        <td><code>bookRepository.getById()</code>がスロー</td>
+        <td><code>try/catch</code>で捕捉。500 <code>{"{error: 'internal_server_error'}"}</code>を返却、詳細はログのみ</td>
+      </tr>
+      <tr>
+        <td>該当書籍なし</td>
+        <td><code>getById()</code>の結果が<code>null</code></td>
+        <td>例外ではなく正常な分岐。404 <code>{"{error: 'book_not_found'}"}</code>を返却</td>
+      </tr>
+    </table>
+
+    <h4>パラメータ・In/Out詳細</h4>
+    <table>
+      <tr><th>ハンドラ</th><th>In</th><th>処理概要</th><th>Out</th></tr>
+      <tr>
+        <td><code>GET /</code></td>
+        <td>なし</td>
+        <td><code>bookRepository.listForSale()</code>を呼び出す</td>
+        <td>200 <code>{"{books: BookSummary[]}"}</code></td>
+      </tr>
+      <tr>
+        <td><code>GET /:id</code></td>
+        <td>パスパラメータ <code>id</code>（number変換、不正値は400）</td>
+        <td><code>bookRepository.getById(id)</code>を呼び出す</td>
+        <td>200 <code>{"{...Book}"}</code> / 404 <code>{"{error: 'book_not_found'}"}</code></td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="file">backend/src/index.ts</span>
+    <span><span class="badge backend">Backend</span> <span class="badge new">修正</span></span>
+  </div>
+  <div class="module-body">
+    <h4>処理概要</h4>
+    <p>Expressアプリのエントリポイント。<code>app.use("/api/books", booksRouter)</code>でルーターをマウントする。</p>
+  </div>
+</div>
+
+<h2>3. フロントエンド</h2>
+
+<div class="module">
+  <div class="module-header">
+    <span class="file">frontend/src/app/lib/apiClient.ts</span>
+    <span><span class="badge frontend">Frontend</span> <span class="badge new">新規</span></span>
+  </div>
+  <div class="module-body">
+    <h4>処理概要</h4>
+    <p>バックエンドAPI呼び出しの共通ヘルパー。</p>
+
+    <h4>処理フロー: fetchJson&lt;T&gt;(path)</h4>
+    <div class="diagram-box">
+    <svg viewBox="0 0 480 480" width="100%" height="480" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="fa3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/></marker></defs>
+      <rect x="70" y="10" width="200" height="34" rx="17" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="170" y="31" text-anchor="middle" font-size="11">fetchJson(path) 呼び出し</text>
+      <line x1="170" y1="44" x2="170" y2="58" stroke="#1f2328" marker-end="url(#fa3)"/>
+
+      <rect x="50" y="60" width="240" height="36" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+      <text x="170" y="82" text-anchor="middle" font-size="10.5">fetch(baseURL + path) 実行</text>
+      <line x1="170" y1="96" x2="170" y2="116" stroke="#1f2328" marker-end="url(#fa3)"/>
+
+      <polygon points="170,118 260,148 170,178 80,148" fill="#fff6da" stroke="#a1750a" stroke-width="1.5"/>
+      <text x="170" y="145" text-anchor="middle" font-size="9.5">ネットワーク</text>
+      <text x="170" y="157" text-anchor="middle" font-size="9.5">例外?</text>
+
+      <line x1="170" y1="178" x2="170" y2="202" stroke="#1f2328" marker-end="url(#fa3)"/>
+      <text x="150" y="194" text-anchor="middle" font-size="10" fill="#57606a">No</text>
+      <polygon points="170,204 260,234 170,264 80,234" fill="#fff6da" stroke="#a1750a" stroke-width="1.5"/>
+      <text x="170" y="238" text-anchor="middle" font-size="10">status===404?</text>
+
+      <line x1="170" y1="264" x2="170" y2="288" stroke="#1f2328" marker-end="url(#fa3)"/>
+      <text x="150" y="280" text-anchor="middle" font-size="10" fill="#57606a">No</text>
+      <polygon points="170,290 260,320 170,350 80,320" fill="#fff6da" stroke="#a1750a" stroke-width="1.5"/>
+      <text x="170" y="317" text-anchor="middle" font-size="9.5">response.ok?</text>
+      <text x="170" y="329" text-anchor="middle" font-size="9.5">(2xx)</text>
+
+      <line x1="170" y1="350" x2="170" y2="374" stroke="#1f2328" marker-end="url(#fa3)"/>
+      <text x="150" y="366" text-anchor="middle" font-size="10" fill="#57606a">Yes</text>
+      <rect x="50" y="376" width="240" height="36" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+      <text x="170" y="398" text-anchor="middle" font-size="10">JSONをパースして T を返す</text>
+      <line x1="170" y1="412" x2="170" y2="426" stroke="#1f2328" marker-end="url(#fa3)"/>
+      <rect x="70" y="428" width="200" height="34" rx="17" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="170" y="449" text-anchor="middle" font-size="10.5">呼び出し元へ T を返却</text>
+
+      <!-- right branches -->
+      <line x1="260" y1="148" x2="320" y2="148" stroke="#1f2328" marker-end="url(#fa3)"/>
+      <text x="288" y="140" text-anchor="middle" font-size="10" fill="#57606a">Yes</text>
+      <rect x="325" y="131" width="130" height="34" rx="4" fill="#ffe3e3" stroke="#c62828" stroke-width="1.5"/>
+      <text x="390" y="152" text-anchor="middle" font-size="9.5">例外をスロー</text>
+      <line x1="390" y1="165" x2="390" y2="179" stroke="#1f2328" marker-end="url(#fa3)"/>
+      <rect x="325" y="181" width="130" height="30" rx="15" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="390" y="200" text-anchor="middle" font-size="9">呼び出し元がcatch</text>
+
+      <line x1="260" y1="234" x2="320" y2="234" stroke="#1f2328" marker-end="url(#fa3)"/>
+      <text x="288" y="226" text-anchor="middle" font-size="10" fill="#57606a">Yes</text>
+      <rect x="325" y="217" width="130" height="34" rx="4" fill="#eef3fc" stroke="#0969da" stroke-width="1.5"/>
+      <text x="390" y="238" text-anchor="middle" font-size="10">null を返す</text>
+      <line x1="390" y1="251" x2="390" y2="265" stroke="#1f2328" marker-end="url(#fa3)"/>
+      <rect x="325" y="267" width="130" height="30" rx="15" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="390" y="286" text-anchor="middle" font-size="9">呼び出し元が分岐</text>
+
+      <line x1="260" y1="320" x2="320" y2="320" stroke="#1f2328" marker-end="url(#fa3)"/>
+      <text x="288" y="312" text-anchor="middle" font-size="10" fill="#57606a">No</text>
+      <rect x="325" y="303" width="130" height="34" rx="4" fill="#ffe3e3" stroke="#c62828" stroke-width="1.5"/>
+      <text x="390" y="324" text-anchor="middle" font-size="9.5">例外をスロー</text>
+      <line x1="390" y1="337" x2="390" y2="351" stroke="#1f2328" marker-end="url(#fa3)"/>
+      <rect x="325" y="353" width="130" height="30" rx="15" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="390" y="372" text-anchor="middle" font-size="9">呼び出し元がcatch</text>
+    </svg>
+    <div class="diagram-caption">図D3: fetchJson&lt;T&gt; 処理フロー（basic-design.html「8. エラー処理方針」に対応）</div>
+    </div>
+
+    <h4>例外処理</h4>
+    <table>
+      <tr><th>例外・エラーケース</th><th>発生条件</th><th>本モジュールでの対応</th></tr>
+      <tr>
+        <td>ネットワーク例外</td>
+        <td><code>fetch()</code>自体が失敗（オフライン、backend未起動、タイムアウト等）</td>
+        <td>捕捉せず、そのまま呼び出し元へスローする（呼び出し元の各ページが<code>catch</code>し、汎用エラー表示に倒す）</td>
+      </tr>
+      <tr>
+        <td>404レスポンス</td>
+        <td><code>response.status === 404</code></td>
+        <td>例外として扱わず、<code>null</code>を返す（呼び出し元が「見つかりません」等の分岐に使用）</td>
+      </tr>
+      <tr>
+        <td>404以外の異常レスポンス</td>
+        <td><code>response.ok === false</code>（4xx/5xx、404を除く）</td>
+        <td>明示的に例外をスローする（呼び出し元がcatchし、汎用エラー表示に倒す）</td>
+      </tr>
+      <tr>
+        <td>レスポンスボディの解析失敗</td>
+        <td><code>response.json()</code>が不正なJSONでスロー</td>
+        <td>捕捉せず、そのまま呼び出し元へスローする（上記「404以外の異常レスポンス」と同様の扱い）</td>
+      </tr>
+    </table>
+
+    <h4>パラメータ・In/Out詳細</h4>
+    <table>
+      <tr><th>関数</th><th>パラメータ</th><th>Out</th></tr>
+      <tr>
+        <td><code>fetchJson&lt;T&gt;(path)</code></td>
+        <td><code>path: string</code>（<code>NEXT_PUBLIC_API_URL</code>を基点に結合）</td>
+        <td><code>Promise&lt;T | null&gt;</code>。404時は<code>null</code>を返す。5xx・ネットワーク例外時は例外をスローする（呼び出し元ページが捕捉し、汎用エラー表示に倒す。<code>basic-design.html</code>「8. エラー処理方針」参照）</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="file">frontend/src/app/lib/booksApi.ts</span>
+    <span><span class="badge frontend">Frontend</span> <span class="badge new">新規</span></span>
+  </div>
+  <div class="module-body">
+    <h4>処理概要</h4>
+    <p>書籍一覧・詳細取得のAPI呼び出しラッパー。フロントエンド用の<code>BookSummary</code>/<code>Book</code>型（camelCase、<code>contracts/books-api.md</code>準拠）をここでexportする。</p>
+    <h4>パラメータ・In/Out詳細</h4>
+    <table>
+      <tr><th>関数</th><th>パラメータ</th><th>Out</th></tr>
+      <tr><td><code>listBooks()</code></td><td>なし</td><td><code>Promise&lt;BookSummary[]&gt;</code></td></tr>
+      <tr><td><code>getBook(id)</code></td><td><code>id: number</code></td><td><code>Promise&lt;Book | null&gt;</code></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="file">frontend/src/app/lib/cartStore.ts</span>
+    <span><span class="badge frontend">Frontend</span> <span class="badge new">新規</span></span>
+  </div>
+  <div class="module-body">
+    <h4>処理概要</h4>
+    <p><code>localStorage</code>を保存先とするクライアント側カート状態。サーバーAPIは呼び出さない（research.md #3参照）。</p>
+
+    <h4>処理フロー: addItem(bookId)</h4>
+    <div class="diagram-box">
+    <svg viewBox="0 0 480 400" width="100%" height="400" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="fa4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/></marker></defs>
+      <rect x="60" y="10" width="200" height="34" rx="17" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="160" y="31" text-anchor="middle" font-size="10.5">addItem(bookId) 呼び出し</text>
+      <line x1="160" y1="44" x2="160" y2="58" stroke="#1f2328" marker-end="url(#fa4)"/>
+
+      <rect x="40" y="60" width="240" height="36" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+      <text x="160" y="78" text-anchor="middle" font-size="9.5">localStorageから現在の</text>
+      <text x="160" y="90" text-anchor="middle" font-size="9.5">カート配列を読み込み</text>
+      <line x1="160" y1="96" x2="160" y2="116" stroke="#1f2328" marker-end="url(#fa4)"/>
+
+      <polygon points="160,118 260,150 160,182 60,150" fill="#fff6da" stroke="#a1750a" stroke-width="1.5"/>
+      <text x="160" y="146" text-anchor="middle" font-size="9">同一bookIdの</text>
+      <text x="160" y="158" text-anchor="middle" font-size="9">項目が存在?</text>
+
+      <line x1="160" y1="182" x2="160" y2="206" stroke="#1f2328" marker-end="url(#fa4)"/>
+      <text x="140" y="198" text-anchor="middle" font-size="10" fill="#57606a">Yes</text>
+      <rect x="40" y="208" width="240" height="36" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+      <text x="160" y="230" text-anchor="middle" font-size="10">該当項目の quantity を +1</text>
+      <line x1="160" y1="244" x2="160" y2="264" stroke="#1f2328" marker-end="url(#fa4)"/>
+
+      <rect x="40" y="266" width="240" height="36" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+      <text x="160" y="284" text-anchor="middle" font-size="9.5">更新後の配列を</text>
+      <text x="160" y="296" text-anchor="middle" font-size="9.5">localStorageに保存</text>
+      <line x1="160" y1="302" x2="160" y2="326" stroke="#1f2328" marker-end="url(#fa4)"/>
+      <rect x="60" y="328" width="200" height="34" rx="17" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="160" y="349" text-anchor="middle" font-size="10.5">処理完了（void）</text>
+
+      <line x1="260" y1="150" x2="320" y2="150" stroke="#1f2328" marker-end="url(#fa4)"/>
+      <text x="290" y="142" text-anchor="middle" font-size="10" fill="#57606a">No</text>
+      <rect x="325" y="128" width="140" height="44" rx="4" fill="#eef3fc" stroke="#0969da" stroke-width="1.5"/>
+      <text x="395" y="146" text-anchor="middle" font-size="8.5">新規に {"{bookId,"}</text>
+      <text x="395" y="158" text-anchor="middle" font-size="8.5">quantity:1} を追加</text>
+      <line x1="395" y1="172" x2="395" y2="192" stroke="#1f2328" marker-end="url(#fa4)"/>
+      <rect x="325" y="194" width="140" height="36" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+      <text x="395" y="210" text-anchor="middle" font-size="8.5">更新後の配列を</text>
+      <text x="395" y="222" text-anchor="middle" font-size="8.5">localStorageに保存</text>
+      <line x1="395" y1="230" x2="395" y2="248" stroke="#1f2328" marker-end="url(#fa4)"/>
+      <rect x="335" y="250" width="120" height="30" rx="15" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="395" y="269" text-anchor="middle" font-size="9.5">処理完了（void）</text>
+    </svg>
+    <div class="diagram-caption">図D4: addItem(bookId) 処理フロー</div>
+    </div>
+
+    <h4>例外処理</h4>
+    <table>
+      <tr><th>例外・エラーケース</th><th>発生条件</th><th>本モジュールでの対応</th></tr>
+      <tr>
+        <td><code>localStorage</code>書き込み失敗</td>
+        <td>プライベートブラウジングでの容量上限、ブラウザ設定によるストレージ無効化等（<code>QuotaExceededError</code>等）</td>
+        <td><code>try/catch</code>で捕捉し、ページ全体をクラッシュさせない。追加操作は失敗として扱い、<code>AddToCartButton</code>側で「カートに追加できませんでした」等のフィードバックを表示する（新規特定。これまでの設計に記載がなかったケース）</td>
+      </tr>
+      <tr>
+        <td><code>localStorage</code>読み込み失敗・データ破損</td>
+        <td>保存済みJSONが不正な形式（手動編集・ブラウザ拡張機能等による破損）</td>
+        <td><code>getItems()</code>内で<code>try/catch</code>により捕捉し、パース失敗時は空配列として扱う（カートが空の状態から再開）</td>
+      </tr>
+    </table>
+
+    <h4>パラメータ・In/Out詳細</h4>
+    <table>
+      <tr><th>関数</th><th>パラメータ</th><th>処理概要</th><th>Out</th></tr>
+      <tr>
+        <td><code>addItem(bookId)</code></td>
+        <td><code>bookId: number</code></td>
+        <td>既存カート（<code>localStorage</code>）に同一<code>bookId</code>があれば<code>quantity</code>を+1、なければ新規追加して保存</td>
+        <td>なし（void）</td>
+      </tr>
+      <tr>
+        <td><code>getItems()</code></td>
+        <td>なし</td>
+        <td><code>localStorage</code>から読み出す</td>
+        <td><code>{"{bookId: number; quantity: number}"}[]</code></td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="file">frontend/src/app/components/BookCard.tsx</span>
+    <span><span class="badge frontend">Frontend</span> <span class="badge new">新規</span></span>
+  </div>
+  <div class="module-body">
+    <h4>処理概要</h4>
+    <p>一覧の1書籍カード。書影（<code>coverImageUrl</code>が<code>null</code>ならプレースホルダー画像）・タイトル・著者・価格を表示し、<code>/books/{"{id}"}</code>へのリンクにする。</p>
+    <h4>パラメータ（Props）</h4>
+    <table><tr><th>Prop</th><th>型</th></tr><tr><td><code>book</code></td><td><code>BookSummary</code></td></tr></table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="file">frontend/src/app/components/BookGrid.tsx</span>
+    <span><span class="badge frontend">Frontend</span> <span class="badge new">新規</span></span>
+  </div>
+  <div class="module-body">
+    <h4>処理概要</h4>
+    <p>書籍配列をグリッドレイアウトで<code>BookCard</code>を並べて表示。配列が空の場合は空状態メッセージ「現在販売中の書籍はありません」を表示する（FR-008）。</p>
+    <h4>パラメータ（Props）</h4>
+    <table><tr><th>Prop</th><th>型</th></tr><tr><td><code>books</code></td><td><code>BookSummary[]</code></td></tr></table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="file">frontend/src/app/components/AddToCartButton.tsx</span>
+    <span><span class="badge frontend">Frontend</span> <span class="badge new">新規</span></span>
+  </div>
+  <div class="module-body">
+    <h4>処理概要</h4>
+    <p>クリック時に<code>cartStore.addItem(bookId)</code>を呼び出し、追加成功が視覚的に分かる表示（ボタンラベルの一時変化等）を行う。</p>
+    <h4>パラメータ（Props）</h4>
+    <table><tr><th>Prop</th><th>型</th></tr><tr><td><code>bookId</code></td><td><code>number</code></td></tr></table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="file">frontend/src/app/page.tsx</span>
+    <span><span class="badge frontend">Frontend</span> <span class="badge new">修正</span></span>
+  </div>
+  <div class="module-body">
+    <h4>処理概要</h4>
+    <p>商品一覧画面（SC-01）。<code>booksApi.listBooks()</code>でデータ取得し、<code>BookGrid</code>で表示する。</p>
+
+    <h4>処理フロー（表示状態の分岐）</h4>
+    <div class="diagram-box">
+    <svg viewBox="0 0 460 440" width="100%" height="440" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="fa5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/></marker></defs>
+      <rect x="130" y="10" width="200" height="34" rx="17" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="230" y="31" text-anchor="middle" font-size="11">ページ表示</text>
+      <line x1="230" y1="44" x2="230" y2="58" stroke="#1f2328" marker-end="url(#fa5)"/>
+
+      <rect x="90" y="60" width="280" height="36" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+      <text x="230" y="82" text-anchor="middle" font-size="10.5">読み込み中UIを表示</text>
+      <line x1="230" y1="96" x2="230" y2="110" stroke="#1f2328" marker-end="url(#fa5)"/>
+
+      <rect x="90" y="112" width="280" height="36" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+      <text x="230" y="134" text-anchor="middle" font-size="10">booksApi.listBooks() 呼び出し</text>
+      <line x1="230" y1="148" x2="230" y2="166" stroke="#1f2328" marker-end="url(#fa5)"/>
+
+      <polygon points="230,168 330,200 230,232 130,200" fill="#fff6da" stroke="#a1750a" stroke-width="1.5"/>
+      <text x="230" y="197" text-anchor="middle" font-size="9.5">例外がスロー</text>
+      <text x="230" y="209" text-anchor="middle" font-size="9.5">された?</text>
+
+      <line x1="230" y1="232" x2="230" y2="260" stroke="#1f2328" marker-end="url(#fa5)"/>
+      <text x="210" y="252" text-anchor="middle" font-size="10" fill="#57606a">No</text>
+      <polygon points="230,262 320,297 230,332 140,297" fill="#fff6da" stroke="#a1750a" stroke-width="1.5"/>
+      <text x="230" y="301" text-anchor="middle" font-size="10">books.length===0?</text>
+
+      <line x1="230" y1="332" x2="230" y2="356" stroke="#1f2328" marker-end="url(#fa5)"/>
+      <text x="210" y="348" text-anchor="middle" font-size="10" fill="#57606a">No</text>
+      <rect x="90" y="358" width="280" height="36" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+      <text x="230" y="380" text-anchor="middle" font-size="10">BookGridでグリッド表示（登録順）</text>
+      <line x1="230" y1="394" x2="230" y2="408" stroke="#1f2328" marker-end="url(#fa5)"/>
+      <rect x="130" y="410" width="200" height="26" rx="13" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="230" y="427" text-anchor="middle" font-size="10">表示完了</text>
+
+      <line x1="330" y1="200" x2="390" y2="200" stroke="#1f2328" marker-end="url(#fa5)"/>
+      <text x="360" y="192" text-anchor="middle" font-size="10" fill="#57606a">Yes</text>
+      <rect x="345" y="178" width="110" height="44" rx="4" fill="#ffe3e3" stroke="#c62828" stroke-width="1.5"/>
+      <text x="400" y="196" text-anchor="middle" font-size="8.5">汎用エラー表示</text>
+      <text x="400" y="208" text-anchor="middle" font-size="8.5">（予期しないエラー）</text>
+
+      <line x1="320" y1="297" x2="390" y2="297" stroke="#1f2328" marker-end="url(#fa5)"/>
+      <text x="356" y="289" text-anchor="middle" font-size="10" fill="#57606a">Yes</text>
+      <rect x="345" y="275" width="110" height="44" rx="4" fill="#eef3fc" stroke="#0969da" stroke-width="1.5"/>
+      <text x="400" y="293" text-anchor="middle" font-size="8.5">空状態表示</text>
+      <text x="400" y="305" text-anchor="middle" font-size="8.5">（I-06, FR-008）</text>
+    </svg>
+    <div class="diagram-caption">図D5: 商品一覧画面 表示状態フロー（basic-design.html「8. エラー処理方針」に対応）</div>
+    </div>
+
+    <h4>例外処理</h4>
+    <table>
+      <tr><th>例外・エラーケース</th><th>発生条件</th><th>本モジュールでの対応</th></tr>
+      <tr>
+        <td>予期しないエラー</td>
+        <td><code>booksApi.listBooks()</code>がスロー（<code>apiClient.ts</code>の例外処理表参照）</td>
+        <td><code>try/catch</code>で捕捉し、汎用エラーメッセージ＋再読み込みの案内を表示する。内部エラー内容は画面に表示しない</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="file">frontend/src/app/books/[id]/page.tsx</span>
+    <span><span class="badge frontend">Frontend</span> <span class="badge new">新規</span></span>
+  </div>
+  <div class="module-body">
+    <h4>処理概要</h4>
+    <p>商品詳細画面（SC-02）。<code>booksApi.getBook(id)</code>でデータ取得し、書影・タイトル・著者・価格・説明文と<code>AddToCartButton</code>を表示。<code>null</code>の場合は「見つかりません」メッセージと一覧（<code>/</code>）へ戻るリンクを表示する（FR-009）。</p>
+
+    <h4>処理フロー（表示状態の分岐）</h4>
+    <div class="diagram-box">
+    <svg viewBox="0 0 460 440" width="100%" height="440" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="fa6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/></marker></defs>
+      <rect x="110" y="10" width="240" height="34" rx="17" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="230" y="31" text-anchor="middle" font-size="10.5">ページ表示（idを受け取り）</text>
+      <line x1="230" y1="44" x2="230" y2="58" stroke="#1f2328" marker-end="url(#fa6)"/>
+
+      <rect x="90" y="60" width="280" height="36" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+      <text x="230" y="82" text-anchor="middle" font-size="10.5">読み込み中UIを表示</text>
+      <line x1="230" y1="96" x2="230" y2="110" stroke="#1f2328" marker-end="url(#fa6)"/>
+
+      <rect x="90" y="112" width="280" height="36" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+      <text x="230" y="134" text-anchor="middle" font-size="10">booksApi.getBook(id) 呼び出し</text>
+      <line x1="230" y1="148" x2="230" y2="166" stroke="#1f2328" marker-end="url(#fa6)"/>
+
+      <polygon points="230,168 330,200 230,232 130,200" fill="#fff6da" stroke="#a1750a" stroke-width="1.5"/>
+      <text x="230" y="197" text-anchor="middle" font-size="9.5">例外がスロー</text>
+      <text x="230" y="209" text-anchor="middle" font-size="9.5">された?</text>
+
+      <line x1="230" y1="232" x2="230" y2="260" stroke="#1f2328" marker-end="url(#fa6)"/>
+      <text x="210" y="252" text-anchor="middle" font-size="10" fill="#57606a">No</text>
+      <polygon points="230,262 320,297 230,332 140,297" fill="#fff6da" stroke="#a1750a" stroke-width="1.5"/>
+      <text x="230" y="292" text-anchor="middle" font-size="9">結果はnull?</text>
+      <text x="230" y="304" text-anchor="middle" font-size="9">(404相当)</text>
+
+      <line x1="230" y1="332" x2="230" y2="356" stroke="#1f2328" marker-end="url(#fa6)"/>
+      <text x="210" y="348" text-anchor="middle" font-size="10" fill="#57606a">No</text>
+      <rect x="70" y="358" width="320" height="44" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+      <text x="230" y="376" text-anchor="middle" font-size="9.5">書影・タイトル・著者・価格・説明文と</text>
+      <text x="230" y="390" text-anchor="middle" font-size="9.5">AddToCartButtonを表示</text>
+      <line x1="230" y1="402" x2="230" y2="408" stroke="#1f2328" marker-end="url(#fa6)"/>
+      <rect x="130" y="410" width="200" height="26" rx="13" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="230" y="427" text-anchor="middle" font-size="10">表示完了</text>
+
+      <line x1="330" y1="200" x2="390" y2="200" stroke="#1f2328" marker-end="url(#fa6)"/>
+      <text x="360" y="192" text-anchor="middle" font-size="10" fill="#57606a">Yes</text>
+      <rect x="345" y="178" width="110" height="44" rx="4" fill="#ffe3e3" stroke="#c62828" stroke-width="1.5"/>
+      <text x="400" y="196" text-anchor="middle" font-size="8.5">汎用エラー表示</text>
+      <text x="400" y="208" text-anchor="middle" font-size="8.5">（予期しないエラー）</text>
+
+      <line x1="320" y1="297" x2="390" y2="297" stroke="#1f2328" marker-end="url(#fa6)"/>
+      <text x="356" y="289" text-anchor="middle" font-size="10" fill="#57606a">Yes</text>
+      <rect x="345" y="270" width="110" height="54" rx="4" fill="#eef3fc" stroke="#0969da" stroke-width="1.5"/>
+      <text x="400" y="288" text-anchor="middle" font-size="8.5">見つかりません表示</text>
+      <text x="400" y="300" text-anchor="middle" font-size="8.5">＋一覧へ戻るリンク</text>
+      <text x="400" y="312" text-anchor="middle" font-size="8.5">（I-14, FR-009）</text>
+    </svg>
+    <div class="diagram-caption">図D6: 商品詳細画面 表示状態フロー（basic-design.html「8. エラー処理方針」に対応）</div>
+    </div>
+
+    <h4>例外処理</h4>
+    <table>
+      <tr><th>例外・エラーケース</th><th>発生条件</th><th>本モジュールでの対応</th></tr>
+      <tr>
+        <td>予期しないエラー</td>
+        <td><code>booksApi.getBook(id)</code>がスロー（<code>apiClient.ts</code>の例外処理表参照）</td>
+        <td><code>try/catch</code>で捕捉し、汎用エラーメッセージ＋再読み込みの案内を表示する。内部エラー内容は画面に表示しない</td>
+      </tr>
+      <tr>
+        <td>該当書籍なし（例外ではない）</td>
+        <td><code>getBook(id)</code>の結果が<code>null</code>（404相当）</td>
+        <td>「見つかりません」表示＋一覧へ戻るリンクを表示する（FR-009）。エラーとしては扱わない</td>
+      </tr>
+    </table>
+
+    <h4>パラメータ（ルートパラメータ）</h4>
+    <table><tr><th>パラメータ</th><th>説明</th></tr><tr><td><code>params.id</code></td><td>URLパスの<code>{"{id}"}</code>（文字列→number変換）</td></tr></table>
+  </div>
+</div>
+
+<div class="note">
+命名規則: Reactコンポーネントは PascalCase（例: <code>BookGrid.tsx</code>）、それ以外のTypeScriptファイルは camelCase（例: <code>bookRepository.ts</code>）とする（<code>plan.md</code> Structure Decision参照）。プロジェクト全体の命名規則は<code>CLAUDE.md</code>が未記入のため、本featureの慣例として運用する。
+</div>
+
+</div>
+</body>
+</html>
