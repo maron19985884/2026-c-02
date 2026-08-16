@@ -158,12 +158,19 @@ a {
 
 /* ボタン */
 .button {
+  display: inline-block;
   font-size: 14px;
   font-weight: 700;
   padding: 10px 20px;
   border-radius: 6px;
   border: 1px solid transparent;
   cursor: pointer;
+  text-decoration: none;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .button--primary {
@@ -180,4 +187,124 @@ a {
   flex-direction: column;
   align-items: flex-start;
   gap: 8px;
+}
+
+/* ヘッダー（全画面共通） */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.site-header__logo,
+.site-header__cart-link {
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.site-header__logo {
+  color: var(--ink);
+}
+
+/* カート画面 */
+.cart-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cart-item {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  align-items: center;
+}
+
+.cart-item--unavailable {
+  background: var(--surface);
+}
+
+.cart-item__cover {
+  width: 64px;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 4px;
+  background: var(--surface);
+  flex-shrink: 0;
+}
+
+.cart-item__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cart-item__title {
+  font-weight: 700;
+  margin: 0;
+}
+
+.cart-item__price,
+.cart-item__quantity {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 13px;
+}
+
+.cart-item__subtotal {
+  margin: 0;
+  font-weight: 700;
+}
+
+.cart-item__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.qty-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qty-control__button {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--paper);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.qty-control__button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.cart-item__remove {
+  border: none;
+  background: none;
+  color: var(--error);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 0;
+}
+
+.cart-total {
+  text-align: right;
+  font-size: 18px;
+  font-weight: 700;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
 }

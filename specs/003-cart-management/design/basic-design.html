@@ -1,0 +1,426 @@
+<!--
+  [新規 2026-08-16] constitution.md セクション7の改訂に伴い新規作成。
+  002-book-catalog-detail/design/basic-design.html を実際に作りながら判明した
+  必須セクション（1〜9）を、あらかじめ埋め込んだ空テンプレート。
+  背景は docs/design-doc-guide.md を参照。
+-->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>基本設計書 - カート画面（003-cart-management）</title>
+<style>
+  :root {
+    --ink: #1a1d24; --ink-muted: #5b6472;
+    --paper: #f3f5fa; --surface: #ffffff; --line: #dbe1ea;
+    --blueprint: #2f5fd9; --blueprint-soft: #e8eefc;
+    --fe-bg: #e6f4ff; --fe-fg: #1462b0;
+    --be-bg: #fff2e0; --be-fg: #a15c00;
+    --db-bg: #f3e8ff; --db-fg: #7233c9;
+    --new-bg: #e3f8ea; --new-fg: #1a7f45;
+    --warn-bg: #fff8d6; --warn-fg: #6b5000; --warn-line: #d8b23a;
+    --sheet-bg: #eef3fc; --sheet-line: #cfdcf3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #e7eaf1; --ink-muted: #97a1b3;
+      --paper: #13161c; --surface: #1a1e26; --line: #2b303c;
+      --blueprint: #7fa0ff; --blueprint-soft: rgba(127,160,255,.14);
+      --fe-bg: rgba(70,150,255,.16); --fe-fg: #8ec1ff;
+      --be-bg: rgba(255,160,60,.16); --be-fg: #ffbd75;
+      --db-bg: rgba(180,120,255,.18); --db-fg: #cca4ff;
+      --new-bg: rgba(60,200,120,.16); --new-fg: #7fe0aa;
+      --warn-bg: rgba(220,180,50,.14); --warn-fg: #e8c65a; --warn-line: #7c611f;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #e7eaf1; --ink-muted: #97a1b3;
+    --paper: #13161c; --surface: #1a1e26; --line: #2b303c;
+    --blueprint: #7fa0ff; --blueprint-soft: rgba(127,160,255,.14);
+    --fe-bg: rgba(70,150,255,.16); --fe-fg: #8ec1ff;
+    --be-bg: rgba(255,160,60,.16); --be-fg: #ffbd75;
+    --db-bg: rgba(180,120,255,.18); --db-fg: #cca4ff;
+    --new-bg: rgba(60,200,120,.16); --new-fg: #7fe0aa;
+    --warn-bg: rgba(220,180,50,.14); --warn-fg: #e8c65a; --warn-line: #7c611f;
+  }
+  :root[data-theme="light"] {
+    --ink: #1a1d24; --ink-muted: #5b6472;
+    --paper: #f3f5fa; --surface: #ffffff; --line: #dbe1ea;
+    --blueprint: #2f5fd9; --blueprint-soft: #e8eefc;
+    --fe-bg: #e6f4ff; --fe-fg: #1462b0;
+    --be-bg: #fff2e0; --be-fg: #a15c00;
+    --db-bg: #f3e8ff; --db-fg: #7233c9;
+    --new-bg: #e3f8ea; --new-fg: #1a7f45;
+    --warn-bg: #fff8d6; --warn-fg: #6b5000; --warn-line: #d8b23a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 14.5px; line-height: 1.7; color: var(--ink); background: var(--paper);
+    padding: 40px 16px 72px;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; }
+  .kicker {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--blueprint); font-weight: 700; margin-bottom: 10px;
+  }
+  h1 { font-size: 25px; font-weight: 800; letter-spacing: -0.01em; text-wrap: balance; margin-bottom: 14px; }
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 8px 18px;
+    color: var(--ink-muted); font-size: 12.5px; margin-bottom: 20px;
+    padding-bottom: 20px; border-bottom: 1px solid var(--line);
+  }
+  h2 {
+    font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em;
+    margin-top: 46px; margin-bottom: 16px;
+    padding: 9px 14px; background: var(--blueprint-soft); color: var(--blueprint);
+    border-left: 3px solid var(--blueprint); border-radius: 0 4px 4px 0;
+  }
+  h3 { font-size: 15px; font-weight: 700; margin-top: 26px; margin-bottom: 8px; color: var(--ink); }
+  p { margin-bottom: 10px; color: var(--ink); }
+  ul, ol { margin: 8px 0 12px 22px; }
+  li { margin-bottom: 4px; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0 20px; font-size: 13px; font-variant-numeric: tabular-nums; }
+  th, td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--surface); font-weight: 700; color: var(--ink-muted); font-size: 11.5px; text-transform: uppercase; letter-spacing: .03em; }
+  td { background: var(--surface); }
+  code {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    background: var(--blueprint-soft); border: 1px solid var(--line); border-radius: 4px;
+    padding: 1px 5px; font-size: 12.5px; color: var(--ink);
+  }
+  .diagram-box {
+    border: 1px solid var(--line); border-radius: 8px; background: var(--sheet-bg);
+    padding: 18px; margin: 16px 0 24px; overflow-x: auto;
+    background-image:
+      linear-gradient(var(--sheet-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--sheet-line) 1px, transparent 1px);
+    background-size: 24px 24px; background-position: -1px -1px;
+  }
+  .diagram-caption { font-size: 12.5px; color: var(--ink-muted); margin-top: 10px; text-align: center; }
+  .badge {
+    display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px;
+    border-radius: 10px; background: var(--blueprint-soft); color: var(--blueprint); margin-left: 8px;
+  }
+  .note {
+    background: var(--warn-bg); border: 1px solid var(--warn-line); color: var(--warn-fg);
+    border-radius: 6px; padding: 10px 14px; font-size: 13px; margin: 12px 0;
+  }
+  .todo { color: var(--blueprint); font-style: italic; }
+  svg text { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; }
+  .diagram-box svg { display: block; margin: 0 auto; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="kicker">基本設計書 &middot; Basic Design</div>
+<h1>カート画面</h1>
+<div class="meta">
+  <span>対象feature: <code>003-cart-management</code></span>
+  <span>作成日: 2026-08-16</span>
+  <span>対応spec: <code>specs/003-cart-management/spec.md</code></span>
+  <span>対応plan: <code>specs/003-cart-management/plan.md</code></span>
+</div>
+
+<h2>1. システム概要</h2>
+<p>
+カート画面（<code>/cart</code>）を新設する。002-book-catalog-detailで実装済みの<code>cartStore</code>（<code>localStorage</code>）に保持された書籍ID・数量を、既存の<code>GET /api/books</code>から取得した書籍情報と突き合わせ、書名・単価・数量・小計・合計を表示する。数量変更・削除は画面を再読み込みせずに反映する。バックエンドAPI・DBスキーマの追加・変更は行わない（<code>contracts/no-new-api.md</code>参照）。商品一覧・商品詳細画面（002）にカートへの導線を追加する。
+</p>
+<p>対応する要件: <code>requirements.md</code> REQ-007〜REQ-011</p>
+
+<h2>2. アーキテクチャ構成図</h2>
+<p>本機能はbackend・mysqlに変更を加えない。frontend内で完結する構成である点が002との違い。</p>
+<div class="diagram-box">
+<svg viewBox="0 0 800 300" width="100%" height="300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowC1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/>
+    </marker>
+  </defs>
+
+  <rect x="20" y="110" width="120" height="60" rx="6" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+  <text x="80" y="135" text-anchor="middle" font-size="13" font-weight="700">ブラウザ</text>
+  <text x="80" y="153" text-anchor="middle" font-size="11" fill="#57606a">(利用者)</text>
+
+  <rect x="190" y="30" width="580" height="240" rx="8" fill="none" stroke="#57606a" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="480" y="50" text-anchor="middle" font-size="12" fill="#57606a" font-weight="700">Docker Compose（変更なし）</text>
+
+  <rect x="220" y="90" width="150" height="90" rx="6" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+  <text x="295" y="112" text-anchor="middle" font-size="13" font-weight="700">frontend</text>
+  <text x="295" y="129" text-anchor="middle" font-size="10.5">/cart（新規）</text>
+  <text x="295" y="144" text-anchor="middle" font-size="10" fill="#57606a">cartStore = localStorage</text>
+  <text x="295" y="158" text-anchor="middle" font-size="11" fill="#57606a">:3000</text>
+
+  <rect x="440" y="90" width="150" height="80" rx="6" fill="#f6f8fa" stroke="#8a94a3" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <text x="515" y="118" text-anchor="middle" font-size="13" font-weight="700" fill="#57606a">backend</text>
+  <text x="515" y="136" text-anchor="middle" font-size="10" fill="#57606a">変更なし</text>
+  <text x="515" y="152" text-anchor="middle" font-size="11" fill="#57606a">:4000</text>
+
+  <rect x="660" y="90" width="90" height="80" rx="6" fill="#f6f8fa" stroke="#8a94a3" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <text x="705" y="118" text-anchor="middle" font-size="13" font-weight="700" fill="#57606a">mysql</text>
+  <text x="705" y="136" text-anchor="middle" font-size="10" fill="#57606a">変更なし</text>
+  <text x="705" y="152" text-anchor="middle" font-size="11" fill="#57606a">:3306</text>
+
+  <line x1="140" y1="140" x2="215" y2="130" stroke="#1f2328" stroke-width="1.5" marker-end="url(#arrowC1)"/>
+  <text x="175" y="122" text-anchor="middle" font-size="10.5">HTTP</text>
+
+  <line x1="370" y1="130" x2="435" y2="130" stroke="#1f2328" stroke-width="1.5" marker-end="url(#arrowC1)"/>
+  <text x="402" y="122" text-anchor="middle" font-size="10">既存API</text>
+
+  <line x1="590" y1="130" x2="655" y2="130" stroke="#8a94a3" stroke-width="1.5" stroke-dasharray="3 3" marker-end="url(#arrowC1)"/>
+
+  <text x="480" y="245" text-anchor="middle" font-size="11" fill="#57606a">frontendは既存のGET /api/booksとlocalStorageのcartStoreを突き合わせるのみ</text>
+</svg>
+<div class="diagram-caption">図1: コンポーネント構成図（backend・mysqlは002から変更なし）</div>
+</div>
+
+<h2>3. 外部インターフェース仕様（API一覧）</h2>
+<p>本機能は<strong>新規のバックエンドAPIを追加しない</strong>（<code>contracts/no-new-api.md</code>参照）。既存の<code>GET /api/books</code>（<code>specs/002-book-catalog-detail/contracts/books-api.md</code>で定義済み）をそのまま呼び出す。</p>
+<table>
+<tr><th>メソッド</th><th>パス</th><th>概要</th><th>本機能での用途</th><th>対応FR</th></tr>
+<tr><td><code>GET</code></td><td><code>/api/books</code></td><td>販売中の書籍一覧を取得する（002で実装済み）</td><td>カート項目の書名・単価取得、および販売対象外書籍の検出（一覧結果に存在しないbookId）</td><td>FR-001, FR-010</td></tr>
+</table>
+
+<h3>3.1 共通仕様</h3>
+<table>
+<tr><th>項目</th><th>内容</th></tr>
+<tr><td>ベースURL</td><td><code>http://localhost:4000</code>（002と同一）</td></tr>
+<tr><td>データ形式</td><td><code>application/json</code>（002と同一）</td></tr>
+<tr><td>認証方式</td><td>なし。カートの閲覧・編集は匿名の利用者として行える（spec.md Assumptions）</td></tr>
+<tr><td>共通エラー形式</td><td>002と同一（本書「8. エラー処理方針」参照）</td></tr>
+</table>
+
+<h2>4. 画面一覧</h2>
+<table>
+<tr><th>画面ID</th><th>画面名</th><th>パス</th><th>概要</th><th>対応REQ</th></tr>
+<tr><td>SC-03</td><td>カート画面</td><td><code>/cart</code></td><td>カート内容表示・数量変更・削除・注文手続きへの導線</td><td>REQ-007〜011</td></tr>
+</table>
+
+<h2>5. 画面レイアウト・項目定義</h2>
+
+<h3>5.1 SC-03 カート画面</h3>
+<div class="diagram-box">
+<svg viewBox="0 0 700 420" width="100%" height="420" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="20" width="660" height="380" rx="4" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+  <rect x="20" y="20" width="660" height="34" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.5"/>
+  <text x="34" y="42" font-size="12" font-weight="700">オンライン書店</text>
+  <text x="630" y="42" text-anchor="end" font-size="12" fill="#2f5fd9" font-weight="700">カート</text>
+  <line x1="580" y1="20" x2="580" y2="54" stroke="#57606a"/>
+  <text x="595" y="14" font-size="9" fill="#57606a"></text>
+
+  <text x="40" y="80" font-size="15" font-weight="700">カート</text>
+
+  <!-- item row 1 -->
+  <rect x="40" y="96" width="620" height="70" rx="4" fill="#ffffff" stroke="#d0d7de"/>
+  <rect x="52" y="106" width="40" height="50" rx="2" fill="#eef3fc" stroke="#8aa8db"/>
+  <text x="104" y="118" font-size="11" font-weight="700">書名</text>
+  <text x="104" y="133" font-size="10" fill="#57606a">¥1,000</text>
+  <text x="104" y="150" font-size="10">[−] 2 [＋]</text>
+  <text x="560" y="128" text-anchor="end" font-size="12" font-weight="700">¥2,000</text>
+  <text x="620" y="150" text-anchor="end" font-size="10" fill="#c62828">削除</text>
+  <line x1="90" y1="106" x2="130" y2="106" stroke="#57606a"/>
+  <text x="134" y="109" font-size="9" fill="#57606a">I-15〜I-17</text>
+  <line x1="180" y1="150" x2="220" y2="150" stroke="#57606a"/>
+  <text x="224" y="153" font-size="9" fill="#57606a">I-18 数量操作</text>
+  <line x1="560" y1="120" x2="600" y2="105" stroke="#57606a"/>
+  <text x="604" y="108" font-size="9" fill="#57606a">I-19 小計</text>
+  <line x1="600" y1="150" x2="640" y2="165" stroke="#57606a"/>
+  <text x="600" y="180" font-size="9" fill="#57606a">I-20 削除ボタン</text>
+
+  <!-- unavailable row -->
+  <rect x="40" y="176" width="620" height="60" rx="4" fill="#f6f8fa" stroke="#d0d7de"/>
+  <text x="104" y="200" font-size="11" fill="#c62828">この書籍は販売を終了しました</text>
+  <text x="620" y="216" text-anchor="end" font-size="10" fill="#c62828">削除</text>
+  <line x1="180" y1="200" x2="220" y2="216" stroke="#57606a"/>
+  <text x="224" y="230" font-size="9" fill="#57606a">I-24 販売終了表示</text>
+
+  <line x1="40" y1="254" x2="660" y2="254" stroke="#d0d7de"/>
+  <text x="620" y="278" text-anchor="end" font-size="14" font-weight="700">合計: ¥2,000</text>
+  <line x1="560" y1="270" x2="600" y2="290" stroke="#57606a"/>
+  <text x="604" y="300" font-size="9" fill="#57606a">I-21 合計</text>
+
+  <rect x="480" y="300" width="180" height="36" rx="4" fill="#2f5fd9"/>
+  <text x="570" y="323" text-anchor="middle" font-size="12" fill="#ffffff" font-weight="700">注文手続きへ</text>
+  <line x1="480" y1="318" x2="440" y2="330" stroke="#57606a"/>
+  <text x="436" y="344" text-anchor="end" font-size="9" fill="#57606a">I-22（空の場合は無効化）</text>
+
+  <rect x="40" y="350" width="620" height="40" rx="4" fill="#fbfcfd" stroke="#c9d1d9" stroke-dasharray="4 3"/>
+  <text x="350" y="374" text-anchor="middle" font-size="11" fill="#57606a">I-23「カートに書籍がありません」（カートが空のときのみ、上記一覧の代わりに表示）</text>
+</svg>
+<div class="diagram-caption">図2: カート画面ワイヤーフレーム（上段: 通常行、中段: 販売対象外行、下段: 空状態）</div>
+</div>
+
+<table>
+<tr><th>項目ID</th><th>項目名</th><th>種別</th><th>データソース</th><th>表示内容・条件</th></tr>
+<tr><td>I-15</td><td>書影</td><td>画像</td><td><code>BookSummary.coverImageUrl</code></td><td><code>null</code>時はプレースホルダー（002と共通）</td></tr>
+<tr><td>I-16</td><td>書名</td><td>テキスト</td><td><code>BookSummary.title</code></td><td>そのまま表示</td></tr>
+<tr><td>I-17</td><td>単価</td><td>数値（円表記）</td><td><code>BookSummary.price</code></td><td>例: <code>¥1,000</code></td></tr>
+<tr><td>I-18</td><td>数量操作</td><td>ボタン＋数値</td><td><code>CartItem.quantity</code></td><td>「−」「＋」で増減。数量1のとき「−」は無効化（FR-009）</td></tr>
+<tr><td>I-19</td><td>小計</td><td>数値（円表記）</td><td>算出（単価×数量）</td><td>数量変更のたびに再計算</td></tr>
+<tr><td>I-20</td><td>削除ボタン</td><td>ボタン</td><td>-</td><td>押下でその行をカートから削除（FR-005）</td></tr>
+<tr><td>I-21</td><td>合計</td><td>数値（円表記）</td><td>算出（購入可能な小計の総和）</td><td>販売対象外の項目は含めない（FR-002, FR-010）</td></tr>
+<tr><td>I-22</td><td>「注文手続きへ」ボタン</td><td>ボタン/リンク</td><td>-</td><td>購入可能な項目が0件の場合は無効化（FR-011）</td></tr>
+<tr><td>I-23</td><td>空状態メッセージ</td><td>テキスト</td><td>-</td><td>カートに1件も書籍が入っていない場合のみ表示（FR-008）</td></tr>
+<tr><td>I-24</td><td>販売対象外表示</td><td>テキスト</td><td>算出（一覧APIの結果に存在しないbookId）</td><td>数量操作・小計は表示せず、その旨のメッセージのみ表示（FR-010）</td></tr>
+<tr><td>I-25</td><td>ヘッダーのカートリンク</td><td>リンク（全画面共通）</td><td>-</td><td>商品一覧・商品詳細画面からカート画面へ遷移（FR-012）</td></tr>
+</table>
+
+<h2>6. 画面遷移図</h2>
+<div class="diagram-box">
+<svg viewBox="0 0 900 260" width="100%" height="260" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowC2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/>
+    </marker>
+  </defs>
+
+  <rect x="20" y="30" width="150" height="60" rx="30" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+  <text x="95" y="65" text-anchor="middle" font-size="12" font-weight="700">商品一覧</text>
+
+  <rect x="20" y="150" width="150" height="60" rx="30" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+  <text x="95" y="185" text-anchor="middle" font-size="12" font-weight="700">商品詳細</text>
+
+  <rect x="250" y="90" width="150" height="60" rx="30" fill="#fbefff" stroke="#8250df" stroke-width="1.5"/>
+  <text x="325" y="115" text-anchor="middle" font-size="12" font-weight="700">カート</text>
+  <text x="325" y="133" text-anchor="middle" font-size="9" fill="#57606a">(SC-03, 本feature)</text>
+
+  <rect x="480" y="90" width="150" height="60" rx="30" fill="#f6f8fa" stroke="#8a94a3" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="555" y="115" text-anchor="middle" font-size="12" font-weight="700" fill="#57606a">注文フォーム</text>
+  <text x="555" y="133" text-anchor="middle" font-size="9" fill="#57606a">(次feature 004)</text>
+
+  <rect x="710" y="90" width="150" height="60" rx="30" fill="#f6f8fa" stroke="#8a94a3" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="785" y="115" text-anchor="middle" font-size="12" font-weight="700" fill="#57606a">注文完了</text>
+  <text x="785" y="133" text-anchor="middle" font-size="9" fill="#57606a">(次feature 004)</text>
+
+  <line x1="170" y1="60" x2="245" y2="105" stroke="#1f2328" stroke-width="1.5" marker-end="url(#arrowC2)"/>
+  <text x="200" y="75" font-size="10.5">カートリンク (I-25)</text>
+
+  <line x1="170" y1="180" x2="245" y2="135" stroke="#1f2328" stroke-width="1.5" marker-end="url(#arrowC2)"/>
+  <text x="200" y="205" font-size="10.5">カートリンク (I-25)</text>
+
+  <line x1="400" y1="120" x2="475" y2="120" stroke="#1f2328" stroke-width="1.5" marker-end="url(#arrowC2)"/>
+  <text x="437" y="112" text-anchor="middle" font-size="10">注文手続きへ (FR-007)</text>
+
+  <line x1="630" y1="120" x2="705" y2="120" stroke="#8a94a3" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrowC2)"/>
+  <text x="667" y="112" text-anchor="middle" font-size="10" fill="#57606a">注文する (次feature 004)</text>
+</svg>
+<div class="diagram-caption">図3: 画面遷移図（商品詳細からの「カートに追加」自体は画面遷移を伴わない、002 spec.md FR-006参照。注文フォーム・注文完了は次feature 004の対象で本featureでは未実装）</div>
+</div>
+
+<h2>7. シーケンス図</h2>
+
+<h3>7.1 US1: カートに入れた書籍を一覧で確認する</h3>
+<div class="diagram-box">
+<svg viewBox="0 0 620 300" width="100%" height="300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowCS1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/></marker>
+  </defs>
+  <g font-size="12" font-weight="700" text-anchor="middle">
+    <rect x="20" y="10" width="110" height="34" rx="4" fill="#f6f8fa" stroke="#1f2328"/><text x="75" y="31">利用者</text>
+    <rect x="250" y="10" width="150" height="34" rx="4" fill="#ddf4ff" stroke="#0969da"/><text x="325" y="31">cart/page.tsx</text>
+    <rect x="480" y="10" width="120" height="34" rx="4" fill="#fff2e0" stroke="#a15c00"/><text x="540" y="31" font-size="10.5">backend(GET/books)</text>
+  </g>
+  <line x1="75" y1="44" x2="75" y2="280" stroke="#c9d1d9" stroke-dasharray="4 3"/>
+  <line x1="325" y1="44" x2="325" y2="280" stroke="#c9d1d9" stroke-dasharray="4 3"/>
+  <line x1="540" y1="44" x2="540" y2="280" stroke="#c9d1d9" stroke-dasharray="4 3"/>
+
+  <g font-size="11">
+    <line x1="75" y1="70" x2="320" y2="70" stroke="#1f2328" marker-end="url(#arrowCS1)"/>
+    <text x="200" y="63" text-anchor="middle">① カート画面を開く</text>
+
+    <line x1="325" y1="100" x2="535" y2="100" stroke="#1f2328" marker-end="url(#arrowCS1)"/>
+    <text x="430" y="93" text-anchor="middle" font-size="10">② GET /api/books</text>
+
+    <line x1="540" y1="130" x2="330" y2="130" stroke="#57606a" stroke-dasharray="5 3" marker-end="url(#arrowCS1)"/>
+    <text x="430" y="123" text-anchor="middle" font-size="10">③ 200 {"{books:[...]}"}</text>
+
+    <text x="325" y="152" text-anchor="middle" font-size="10" fill="#57606a">④ cartStore.getItems()（localStorage、同期）</text>
+
+    <text x="325" y="172" text-anchor="middle" font-size="10" fill="#57606a">⑤ bookIdで突き合わせ、小計・合計を算出</text>
+    <text x="325" y="188" text-anchor="middle" font-size="9" fill="#57606a">　一覧に無いbookId → 販売対象外（FR-010）</text>
+
+    <line x1="325" y1="205" x2="80" y2="205" stroke="#57606a" stroke-dasharray="5 3" marker-end="url(#arrowCS1)"/>
+    <text x="200" y="198" text-anchor="middle">⑥ 一覧・合計を表示</text>
+  </g>
+
+  <g font-size="10.5" fill="#57606a">
+    <text x="75" y="240">分岐: カートが空の場合</text>
+    <line x1="20" y1="248" x2="600" y2="248" stroke="#d0d7de"/>
+    <text x="75" y="266">⑥' 「カートに書籍がありません」を表示（FR-008）</text>
+  </g>
+</svg>
+<div class="diagram-caption">図4: カート表示のシーケンス図</div>
+</div>
+
+<h3>7.2 US2: 数量を変更する（US3: 削除も同型）</h3>
+<div class="diagram-box">
+<svg viewBox="0 0 560 260" width="100%" height="260" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowCS2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/></marker>
+  </defs>
+  <g font-size="12" font-weight="700" text-anchor="middle">
+    <rect x="20" y="10" width="110" height="34" rx="4" fill="#f6f8fa" stroke="#1f2328"/><text x="75" y="31">利用者</text>
+    <rect x="230" y="10" width="150" height="34" rx="4" fill="#ddf4ff" stroke="#0969da"/><text x="305" y="31">CartItemRow /</text>
+    <text x="305" y="43" text-anchor="middle" font-size="9">cart/page.tsx</text>
+    <rect x="440" y="10" width="100" height="34" rx="4" fill="#f6f8fa" stroke="#57606a"/><text x="490" y="31" font-size="10">localStorage</text>
+  </g>
+  <line x1="75" y1="52" x2="75" y2="240" stroke="#c9d1d9" stroke-dasharray="4 3"/>
+  <line x1="305" y1="52" x2="305" y2="240" stroke="#c9d1d9" stroke-dasharray="4 3"/>
+  <line x1="490" y1="52" x2="490" y2="240" stroke="#c9d1d9" stroke-dasharray="4 3"/>
+
+  <g font-size="11">
+    <line x1="75" y1="80" x2="300" y2="80" stroke="#1f2328" marker-end="url(#arrowCS2)"/>
+    <text x="190" y="73" text-anchor="middle">① 「＋」/「−」/「削除」を押す</text>
+
+    <line x1="305" y1="110" x2="485" y2="110" stroke="#1f2328" marker-end="url(#arrowCS2)"/>
+    <text x="395" y="103" text-anchor="middle" font-size="10">② updateQuantity() / removeItem()</text>
+
+    <line x1="490" y1="140" x2="310" y2="140" stroke="#57606a" stroke-dasharray="5 3" marker-end="url(#arrowCS2)"/>
+    <text x="395" y="133" text-anchor="middle" font-size="10">③ 保存成否（boolean）</text>
+
+    <text x="305" y="162" text-anchor="middle" font-size="10" fill="#57606a">④ 画面の状態（state）をローカルで更新</text>
+    <text x="305" y="178" text-anchor="middle" font-size="9" fill="#57606a">　（backendへの通信は発生しない）</text>
+
+    <line x1="305" y1="195" x2="80" y2="195" stroke="#57606a" stroke-dasharray="5 3" marker-end="url(#arrowCS2)"/>
+    <text x="190" y="188" text-anchor="middle">⑤ 小計・合計を再描画</text>
+  </g>
+</svg>
+<div class="diagram-caption">図5: 数量変更・削除のシーケンス図（backend・mysqlへのアクセスなし）</div>
+</div>
+
+<h2>8. エラー処理方針（共通）</h2>
+<p>002-book-catalog-detailの方針（基本設計書「8. エラー処理方針」）を継続し、本機能固有の状態として「販売対象外」を追加する。</p>
+<table>
+<tr><th>状態</th><th>発生条件</th><th>HTTPステータス</th><th>UI表示</th><th>対象画面・項目</th></tr>
+<tr><td>通常表示</td><td>データ取得成功</td><td>200</td><td>取得したデータを表示</td><td>カート画面</td></tr>
+<tr><td>空状態</td><td>カートに書籍が1件も入っていない</td><td>-（クライアント側判定）</td><td>「カートに書籍がありません」</td><td>カート画面（I-23, FR-008）</td></tr>
+<tr><td>販売対象外</td><td>カート項目のbookIdが<code>GET /api/books</code>結果に存在しない</td><td>-（クライアント側判定）</td><td>「この書籍は販売を終了しました」、合計に含めない</td><td>カート項目（I-24, FR-010）</td></tr>
+<tr><td>読み込み中</td><td><code>GET /api/books</code>応答待ち</td><td>-</td><td>ローディング表示</td><td>カート画面</td></tr>
+<tr><td>予期しないエラー</td><td>サーバー内部エラー・ネットワーク断・タイムアウト等</td><td>500 または fetch例外</td><td>汎用エラーメッセージ＋再読み込みの案内</td><td>カート画面</td></tr>
+</table>
+
+<h3>8.1 方針</h3>
+<ul>
+<li>空状態・販売対象外は異常系として扱わない。002と同様、専用の状態として個別に表示する</li>
+<li>数量変更・削除はクライアント側（<code>localStorage</code>）のみの操作であり、HTTP通信を伴わない。そのため002のような500系エラーは発生しないが、<code>localStorage</code>書き込み失敗（容量超過等）は起こりうるため、<code>updateQuantity</code>/<code>removeItem</code>の戻り値（<code>boolean</code>）が<code>false</code>の場合は画面の状態を更新しない（見た目上は操作前の状態のまま、詳細は<code>detail-design.html</code>参照）</li>
+<li>販売対象外の検出は、既存<code>apiClient.ts</code>のエラー分岐ルール（002「8. エラー処理方針」）をそのまま利用し、<code>GET /api/books</code>自体の失敗は「予期しないエラー」として扱う</li>
+</ul>
+
+<h2>9. 非機能要件との対応</h2>
+<table>
+<tr><th>憲法セクション</th><th>本機能での対応</th></tr>
+<tr><td>3. UX一貫性</td><td>002で確立したデザイントークン・共通クラス（<code>.page</code>・<code>.state-message</code>・<code>.button</code>等）をそのまま再利用し、独自のスタイルを新設しない（<code>docs/tech-stack-template.md</code> 2.1節参照）</td></tr>
+<tr><td>4. パフォーマンス要件</td><td>数値要件なし。002と同じ暫定基準（95パーセンタイルで2秒以内）を適用する</td></tr>
+</table>
+
+<div class="note">
+本ドキュメントは <code>plan.md</code> / <code>data-model.md</code> / <code>contracts/*.md</code> の内容をUML形式で可視化したものであり、内容の正本（Source of Truth）は各Markdownファイルである。齟齬が生じた場合はMarkdown側を正とし、本ドキュメントを更新する。
+</div>
+
+</div>
+</body>
+</html>

@@ -39,3 +39,33 @@ export function addItem(bookId: number): boolean {
     return false;
   }
 }
+
+export function updateQuantity(bookId: number, quantity: number): boolean {
+  if (quantity < 1) {
+    return false;
+  }
+
+  const items = getItems();
+  const updated = items.map((item) =>
+    item.bookId === bookId ? { ...item, quantity } : item
+  );
+
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function removeItem(bookId: number): boolean {
+  const items = getItems();
+  const updated = items.filter((item) => item.bookId !== bookId);
+
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    return true;
+  } catch {
+    return false;
+  }
+}
