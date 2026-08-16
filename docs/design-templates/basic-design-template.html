@@ -1,0 +1,228 @@
+<!--
+  [新規 2026-08-16] constitution.md セクション7の改訂に伴い新規作成。
+  002-book-catalog-detail/design/basic-design.html を実際に作りながら判明した
+  必須セクション（1〜9）を、あらかじめ埋め込んだ空テンプレート。
+  背景は docs/design-doc-guide.md を参照。
+-->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>基本設計書 - [FEATURE NAME]（[###-feature-name]）</title>
+<style>
+  :root {
+    --ink: #1a1d24; --ink-muted: #5b6472;
+    --paper: #f3f5fa; --surface: #ffffff; --line: #dbe1ea;
+    --blueprint: #2f5fd9; --blueprint-soft: #e8eefc;
+    --fe-bg: #e6f4ff; --fe-fg: #1462b0;
+    --be-bg: #fff2e0; --be-fg: #a15c00;
+    --db-bg: #f3e8ff; --db-fg: #7233c9;
+    --new-bg: #e3f8ea; --new-fg: #1a7f45;
+    --warn-bg: #fff8d6; --warn-fg: #6b5000; --warn-line: #d8b23a;
+    --sheet-bg: #eef3fc; --sheet-line: #cfdcf3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #e7eaf1; --ink-muted: #97a1b3;
+      --paper: #13161c; --surface: #1a1e26; --line: #2b303c;
+      --blueprint: #7fa0ff; --blueprint-soft: rgba(127,160,255,.14);
+      --fe-bg: rgba(70,150,255,.16); --fe-fg: #8ec1ff;
+      --be-bg: rgba(255,160,60,.16); --be-fg: #ffbd75;
+      --db-bg: rgba(180,120,255,.18); --db-fg: #cca4ff;
+      --new-bg: rgba(60,200,120,.16); --new-fg: #7fe0aa;
+      --warn-bg: rgba(220,180,50,.14); --warn-fg: #e8c65a; --warn-line: #7c611f;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #e7eaf1; --ink-muted: #97a1b3;
+    --paper: #13161c; --surface: #1a1e26; --line: #2b303c;
+    --blueprint: #7fa0ff; --blueprint-soft: rgba(127,160,255,.14);
+    --fe-bg: rgba(70,150,255,.16); --fe-fg: #8ec1ff;
+    --be-bg: rgba(255,160,60,.16); --be-fg: #ffbd75;
+    --db-bg: rgba(180,120,255,.18); --db-fg: #cca4ff;
+    --new-bg: rgba(60,200,120,.16); --new-fg: #7fe0aa;
+    --warn-bg: rgba(220,180,50,.14); --warn-fg: #e8c65a; --warn-line: #7c611f;
+  }
+  :root[data-theme="light"] {
+    --ink: #1a1d24; --ink-muted: #5b6472;
+    --paper: #f3f5fa; --surface: #ffffff; --line: #dbe1ea;
+    --blueprint: #2f5fd9; --blueprint-soft: #e8eefc;
+    --fe-bg: #e6f4ff; --fe-fg: #1462b0;
+    --be-bg: #fff2e0; --be-fg: #a15c00;
+    --db-bg: #f3e8ff; --db-fg: #7233c9;
+    --new-bg: #e3f8ea; --new-fg: #1a7f45;
+    --warn-bg: #fff8d6; --warn-fg: #6b5000; --warn-line: #d8b23a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 14.5px; line-height: 1.7; color: var(--ink); background: var(--paper);
+    padding: 40px 16px 72px;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; }
+  .kicker {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--blueprint); font-weight: 700; margin-bottom: 10px;
+  }
+  h1 { font-size: 25px; font-weight: 800; letter-spacing: -0.01em; text-wrap: balance; margin-bottom: 14px; }
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 8px 18px;
+    color: var(--ink-muted); font-size: 12.5px; margin-bottom: 20px;
+    padding-bottom: 20px; border-bottom: 1px solid var(--line);
+  }
+  h2 {
+    font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em;
+    margin-top: 46px; margin-bottom: 16px;
+    padding: 9px 14px; background: var(--blueprint-soft); color: var(--blueprint);
+    border-left: 3px solid var(--blueprint); border-radius: 0 4px 4px 0;
+  }
+  h3 { font-size: 15px; font-weight: 700; margin-top: 26px; margin-bottom: 8px; color: var(--ink); }
+  p { margin-bottom: 10px; color: var(--ink); }
+  ul, ol { margin: 8px 0 12px 22px; }
+  li { margin-bottom: 4px; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0 20px; font-size: 13px; font-variant-numeric: tabular-nums; }
+  th, td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--surface); font-weight: 700; color: var(--ink-muted); font-size: 11.5px; text-transform: uppercase; letter-spacing: .03em; }
+  td { background: var(--surface); }
+  code {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    background: var(--blueprint-soft); border: 1px solid var(--line); border-radius: 4px;
+    padding: 1px 5px; font-size: 12.5px; color: var(--ink);
+  }
+  .diagram-box {
+    border: 1px solid var(--line); border-radius: 8px; background: var(--sheet-bg);
+    padding: 18px; margin: 16px 0 24px; overflow-x: auto;
+    background-image:
+      linear-gradient(var(--sheet-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--sheet-line) 1px, transparent 1px);
+    background-size: 24px 24px; background-position: -1px -1px;
+  }
+  .diagram-caption { font-size: 12.5px; color: var(--ink-muted); margin-top: 10px; text-align: center; }
+  .badge {
+    display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px;
+    border-radius: 10px; background: var(--blueprint-soft); color: var(--blueprint); margin-left: 8px;
+  }
+  .note {
+    background: var(--warn-bg); border: 1px solid var(--warn-line); color: var(--warn-fg);
+    border-radius: 6px; padding: 10px 14px; font-size: 13px; margin: 12px 0;
+  }
+  .todo { color: var(--blueprint); font-style: italic; }
+  svg text { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; }
+  .diagram-box svg { display: block; margin: 0 auto; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="kicker">基本設計書 &middot; Basic Design</div>
+<h1>[FEATURE NAME]</h1>
+<div class="meta">
+  <span>対象feature: <code>[###-feature-name]</code></span>
+  <span>作成日: [DATE]</span>
+  <span>対応spec: <code>specs/[###-feature-name]/spec.md</code></span>
+  <span>対応plan: <code>specs/[###-feature-name]/plan.md</code></span>
+</div>
+
+<h2>1. システム概要</h2>
+<p class="todo">[記入: 本機能が何をするものか、spec.mdのSummaryを基に1〜2段落で説明する]</p>
+<p>対応する要件: <code>requirements.md</code> [記入: REQ-XXX〜REQ-YYY]</p>
+
+<h2>2. アーキテクチャ構成図</h2>
+<p class="todo">[記入: frontend/backend/DB等の配置と通信経路をコンポーネント図（UML）で示す。002-book-catalog-detail/design/basic-design.htmlの「図1」を参考にする]</p>
+<div class="diagram-box">
+<svg viewBox="0 0 400 120" width="100%" height="120" xmlns="http://www.w3.org/2000/svg">
+  <text x="200" y="65" text-anchor="middle" font-size="13" fill="#57606a">[ここにSVGでコンポーネント図を作成]</text>
+</svg>
+<div class="diagram-caption">図1: [図のタイトル]</div>
+</div>
+
+<h2>3. 外部インターフェース仕様（API一覧）</h2>
+<p>frontendがbackendに対して呼び出すREST APIの一覧。詳細なリクエスト・レスポンスのスキーマは<code>contracts/*.md</code>を正本とする。</p>
+<table>
+<tr><th>メソッド</th><th>パス</th><th>概要</th><th>認証</th><th>対応画面</th><th>対応FR</th></tr>
+<tr><td class="todo">[記入]</td><td class="todo">[記入]</td><td class="todo">[記入]</td><td class="todo">[記入]</td><td class="todo">[記入]</td><td class="todo">[記入]</td></tr>
+</table>
+
+<h3>3.1 共通仕様</h3>
+<table>
+<tr><th>項目</th><th>内容</th></tr>
+<tr><td>ベースURL</td><td class="todo">[記入]</td></tr>
+<tr><td>データ形式</td><td class="todo">[記入]</td></tr>
+<tr><td>認証方式</td><td class="todo">[記入]</td></tr>
+<tr><td>共通エラー形式</td><td class="todo">[記入。本書「エラー処理方針」と整合させる]</td></tr>
+</table>
+
+<h2>4. 画面一覧</h2>
+<table>
+<tr><th>画面ID</th><th>画面名</th><th>パス</th><th>概要</th><th>対応REQ</th></tr>
+<tr><td class="todo">[記入]</td><td class="todo">[記入]</td><td class="todo">[記入]</td><td class="todo">[記入]</td><td class="todo">[記入]</td></tr>
+</table>
+
+<h2>5. 画面レイアウト・項目定義</h2>
+<p class="todo">[記入: 画面ごとにワイヤーフレーム（SVG）と項目定義表を作成する。002-book-catalog-detail/design/basic-design.htmlの「5.1/5.2」を参考にする]</p>
+
+<h3>5.1 [SC-01 画面名]</h3>
+<div class="diagram-box">
+<svg viewBox="0 0 400 120" width="100%" height="120" xmlns="http://www.w3.org/2000/svg">
+  <text x="200" y="65" text-anchor="middle" font-size="13" fill="#57606a">[ここにSVGでワイヤーフレームを作成]</text>
+</svg>
+<div class="diagram-caption">図: [画面名]ワイヤーフレーム</div>
+</div>
+<table>
+<tr><th>項目ID</th><th>項目名</th><th>種別</th><th>データソース</th><th>表示内容・条件</th></tr>
+<tr><td class="todo">[記入]</td><td class="todo">[記入]</td><td class="todo">[記入]</td><td class="todo">[記入]</td><td class="todo">[記入]</td></tr>
+</table>
+
+<h2>6. 画面遷移図</h2>
+<div class="diagram-box">
+<svg viewBox="0 0 400 120" width="100%" height="120" xmlns="http://www.w3.org/2000/svg">
+  <text x="200" y="65" text-anchor="middle" font-size="13" fill="#57606a">[ここにSVGで画面遷移図を作成]</text>
+</svg>
+<div class="diagram-caption">図: 画面遷移図</div>
+</div>
+
+<h2>7. シーケンス図</h2>
+<p class="todo">[記入: spec.mdの主要User Storyごとに、利用者操作からDBまでの流れをシーケンス図（UML）で示す]</p>
+
+<h3>7.1 [User Story名]</h3>
+<div class="diagram-box">
+<svg viewBox="0 0 400 120" width="100%" height="120" xmlns="http://www.w3.org/2000/svg">
+  <text x="200" y="65" text-anchor="middle" font-size="13" fill="#57606a">[ここにSVGでシーケンス図を作成]</text>
+</svg>
+<div class="diagram-caption">図: [User Story名]のシーケンス図</div>
+</div>
+
+<h2>8. エラー処理方針（共通）</h2>
+<p>憲法セクション3（UX一貫性）の「画面遷移・エラー表示・空状態の扱いを全画面で統一する」に対応し、本機能で発生しうる状態を分類する。</p>
+<table>
+<tr><th>状態</th><th>発生条件</th><th>HTTPステータス</th><th>UI表示</th><th>対象画面・項目</th></tr>
+<tr><td>通常表示</td><td>データ取得成功</td><td>200</td><td>取得したデータを表示</td><td class="todo">[記入]</td></tr>
+<tr><td>空状態</td><td class="todo">[記入]</td><td class="todo">[記入]</td><td class="todo">[記入]</td><td class="todo">[記入]</td></tr>
+<tr><td>読み込み中</td><td>API応答待ち</td><td>-</td><td>ローディング表示</td><td>全画面</td></tr>
+<tr><td>予期しないエラー</td><td>サーバー内部エラー・ネットワーク断・タイムアウト等</td><td>500 または fetch例外</td><td>汎用エラーメッセージ＋再読み込みの案内</td><td>全画面</td></tr>
+</table>
+
+<h3>8.1 方針</h3>
+<ul>
+<li class="todo">[記入: 空状態・見つかりません等を異常系として扱わない、という原則を明記する]</li>
+<li class="todo">[記入: 予期しないエラーの内部情報を露出しないという原則を明記する]</li>
+<li class="todo">[記入: apiClient等の共通クライアントのエラー分岐ルールを明記する]</li>
+</ul>
+
+<h2>9. 非機能要件との対応</h2>
+<table>
+<tr><th>憲法セクション</th><th>本機能での対応</th></tr>
+<tr><td>3. UX一貫性</td><td class="todo">[記入]</td></tr>
+<tr><td>4. パフォーマンス要件</td><td class="todo">[記入]</td></tr>
+</table>
+
+<div class="note">
+本ドキュメントは <code>plan.md</code> / <code>data-model.md</code> / <code>contracts/*.md</code> の内容をUML形式で可視化したものであり、内容の正本（Source of Truth）は各Markdownファイルである。齟齬が生じた場合はMarkdown側を正とし、本ドキュメントを更新する。
+</div>
+
+</div>
+</body>
+</html>

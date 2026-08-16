@@ -1,0 +1,189 @@
+<!--
+  [新規 2026-08-16] constitution.md セクション7の改訂に伴い新規作成。
+  002-book-catalog-detail/design/detail-design.html で後から追加した
+  「呼び出し関係図」「処理フロー図」「例外処理」を、最初から書ける形であらかじめ組み込んだ空テンプレート。
+  背景は docs/design-doc-guide.md を参照。
+-->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>詳細設計書 - [FEATURE NAME]（[###-feature-name]）</title>
+<style>
+  :root {
+    --ink: #1a1d24; --ink-muted: #5b6472;
+    --paper: #f3f5fa; --surface: #ffffff; --line: #dbe1ea;
+    --blueprint: #2f5fd9; --blueprint-soft: #e8eefc;
+    --fe-bg: #e6f4ff; --fe-fg: #1462b0;
+    --be-bg: #fff2e0; --be-fg: #a15c00;
+    --db-bg: #f3e8ff; --db-fg: #7233c9;
+    --new-bg: #e3f8ea; --new-fg: #1a7f45;
+    --warn-bg: #fff8d6; --warn-fg: #6b5000; --warn-line: #d8b23a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #e7eaf1; --ink-muted: #97a1b3;
+      --paper: #13161c; --surface: #1a1e26; --line: #2b303c;
+      --blueprint: #7fa0ff; --blueprint-soft: rgba(127,160,255,.14);
+      --fe-bg: rgba(70,150,255,.16); --fe-fg: #8ec1ff;
+      --be-bg: rgba(255,160,60,.16); --be-fg: #ffbd75;
+      --db-bg: rgba(180,120,255,.18); --db-fg: #cca4ff;
+      --new-bg: rgba(60,200,120,.16); --new-fg: #7fe0aa;
+      --warn-bg: rgba(220,180,50,.14); --warn-fg: #e8c65a; --warn-line: #7c611f;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #e7eaf1; --ink-muted: #97a1b3;
+    --paper: #13161c; --surface: #1a1e26; --line: #2b303c;
+    --blueprint: #7fa0ff; --blueprint-soft: rgba(127,160,255,.14);
+    --fe-bg: rgba(70,150,255,.16); --fe-fg: #8ec1ff;
+    --be-bg: rgba(255,160,60,.16); --be-fg: #ffbd75;
+    --db-bg: rgba(180,120,255,.18); --db-fg: #cca4ff;
+    --new-bg: rgba(60,200,120,.16); --new-fg: #7fe0aa;
+    --warn-bg: rgba(220,180,50,.14); --warn-fg: #e8c65a; --warn-line: #7c611f;
+  }
+  :root[data-theme="light"] {
+    --ink: #1a1d24; --ink-muted: #5b6472;
+    --paper: #f3f5fa; --surface: #ffffff; --line: #dbe1ea;
+    --blueprint: #2f5fd9; --blueprint-soft: #e8eefc;
+    --fe-bg: #e6f4ff; --fe-fg: #1462b0;
+    --be-bg: #fff2e0; --be-fg: #a15c00;
+    --db-bg: #f3e8ff; --db-fg: #7233c9;
+    --new-bg: #e3f8ea; --new-fg: #1a7f45;
+    --warn-bg: #fff8d6; --warn-fg: #6b5000; --warn-line: #d8b23a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 14.5px; line-height: 1.7; color: var(--ink); background: var(--paper);
+    padding: 40px 16px 72px;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; }
+  .kicker {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--blueprint); font-weight: 700; margin-bottom: 10px;
+  }
+  h1 { font-size: 25px; font-weight: 800; letter-spacing: -0.01em; text-wrap: balance; margin-bottom: 14px; }
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 8px 18px;
+    color: var(--ink-muted); font-size: 12.5px; margin-bottom: 20px;
+    padding-bottom: 20px; border-bottom: 1px solid var(--line);
+  }
+  h2 {
+    font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em;
+    margin-top: 46px; margin-bottom: 16px;
+    padding: 9px 14px; background: var(--blueprint-soft); color: var(--blueprint);
+    border-left: 3px solid var(--blueprint); border-radius: 0 4px 4px 0;
+  }
+  .module {
+    border: 1px solid var(--line); border-radius: 8px; margin: 18px 0; overflow: hidden; background: var(--surface);
+  }
+  .module-header {
+    background: var(--paper); padding: 10px 16px; border-bottom: 1px solid var(--line);
+    display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 6px;
+  }
+  .module-header .file { font-family: ui-monospace, Menlo, monospace; font-weight: 700; font-size: 13.5px; color: var(--ink); }
+  .badge {
+    font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px;
+  }
+  .badge.new { background: var(--new-bg); color: var(--new-fg); }
+  .badge.frontend { background: var(--fe-bg); color: var(--fe-fg); }
+  .badge.backend { background: var(--be-bg); color: var(--be-fg); }
+  .badge.db { background: var(--db-bg); color: var(--db-fg); }
+  .module-body { padding: 12px 16px; }
+  .module-body h4 { font-size: 11.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-muted); margin-top: 12px; margin-bottom: 6px; font-weight: 700; }
+  .module-body h4:first-child { margin-top: 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; margin-bottom: 6px; font-variant-numeric: tabular-nums; }
+  th, td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--paper); font-weight: 700; color: var(--ink-muted); font-size: 11px; text-transform: uppercase; letter-spacing: .03em; }
+  td { color: var(--ink); }
+  code {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    background: var(--blueprint-soft); border: 1px solid var(--line); border-radius: 4px;
+    padding: 1px 5px; font-size: 12.5px; color: var(--ink);
+  }
+  .note {
+    background: var(--warn-bg); border: 1px solid var(--warn-line); color: var(--warn-fg);
+    border-radius: 6px; padding: 10px 14px; font-size: 13px; margin: 12px 0;
+  }
+  .diagram-box {
+    border: 1px solid var(--line); border-radius: 8px; background: #eef3fc;
+    padding: 16px; margin: 10px 0 6px; overflow-x: auto;
+    background-image:
+      linear-gradient(#cfdcf3 1px, transparent 1px),
+      linear-gradient(90deg, #cfdcf3 1px, transparent 1px);
+    background-size: 22px 22px; background-position: -1px -1px;
+  }
+  .diagram-box svg { display: block; margin: 0 auto; }
+  .diagram-caption { font-size: 11.5px; color: var(--ink-muted); margin-top: 8px; text-align: center; }
+  .todo { color: var(--blueprint); font-style: italic; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="kicker">詳細設計書 &middot; Detailed Design</div>
+<h1>[FEATURE NAME]</h1>
+<div class="meta">
+  <span>対象feature: <code>[###-feature-name]</code></span>
+  <span>作成日: [DATE]</span>
+  <span>対応plan: <code>specs/[###-feature-name]/plan.md</code></span>
+  <span>対応API契約: <code>specs/[###-feature-name]/contracts/*.md</code></span>
+</div>
+
+<p>本ドキュメントは、<code>plan.md</code>のProject Structureで定義した各ファイルについて、修正対象ファイル・処理概要・パラメータ・In/Out詳細をまとめたものである。</p>
+
+<h2>0. 呼び出し関係図</h2>
+<p class="todo">[記入: モジュール間の呼び出し関係（コールツリー）を1枚の図で示す。実線＝関数呼び出し／コンポーネント使用、破線＝HTTP通信等ランタイム境界をまたぐもの。002-book-catalog-detail/design/detail-design.htmlの「図D0」を参考にする]</p>
+<div class="diagram-box">
+<svg viewBox="0 0 400 120" width="100%" height="120" xmlns="http://www.w3.org/2000/svg">
+  <text x="200" y="65" text-anchor="middle" font-size="13" fill="#57606a">[ここにSVGで呼び出し関係図を作成]</text>
+</svg>
+<div class="diagram-caption">図D0: モジュール呼び出し関係図</div>
+</div>
+
+<h2>1. [レイヤー名（例: データベース）]</h2>
+
+<!-- モジュール1件分のひな形。ファイルごとにこの.moduleブロックをコピーして使う -->
+<div class="module">
+  <div class="module-header">
+    <span class="file">[記入: ファイルパス]</span>
+    <span><span class="badge backend">[Backend/Frontend/DB]</span> <span class="badge new">[新規/修正]</span></span>
+  </div>
+  <div class="module-body">
+    <h4>処理概要</h4>
+    <p class="todo">[記入: このファイルが何をするか]</p>
+
+    <!-- 分岐がある場合のみ、処理フロー図を追加する -->
+    <h4>処理フロー（分岐がある場合のみ）</h4>
+    <div class="diagram-box">
+      <svg viewBox="0 0 400 100" width="100%" height="100" xmlns="http://www.w3.org/2000/svg">
+        <text x="200" y="55" text-anchor="middle" font-size="12" fill="#57606a">[ここにSVGでフローチャートを作成。開始/終了=角丸、処理=四角、分岐=ひし形]</text>
+      </svg>
+      <div class="diagram-caption">図: [関数名] 処理フロー</div>
+    </div>
+
+    <h4>例外処理</h4>
+    <table>
+      <tr><th>例外・エラーケース</th><th>発生条件</th><th>本モジュールでの対応</th></tr>
+      <tr><td class="todo">[記入]</td><td class="todo">[記入]</td><td class="todo">[記入。基本設計書「エラー処理方針」との整合を取る]</td></tr>
+    </table>
+
+    <h4>パラメータ・In/Out詳細</h4>
+    <table>
+      <tr><th>関数</th><th>パラメータ</th><th>処理概要</th><th>Out</th></tr>
+      <tr><td class="todo">[記入]</td><td class="todo">[記入]</td><td class="todo">[記入]</td><td class="todo">[記入]</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="note">
+命名規則: [記入。CLAUDE.mdのプロジェクト共通命名規則が定義済みならそれに従う。未定義の場合はfeature単位の慣例を明記する]
+</div>
+
+</div>
+</body>
+</html>
