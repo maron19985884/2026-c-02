@@ -49,6 +49,7 @@
 - `customerName` / `customerAddress` / `customerEmail` のいずれかが未入力または空文字列（FR-003）
 - `customerEmail` の形式が不正（FR-004）
 - `items` が空配列（カートが空の状態での注文確定、FR-010）
+- `items` のいずれかの要素で `bookId` が整数でない、または `quantity` が1未満・整数でない（本APIは匿名で直接呼び出せるため、フロントエンドのカート側制約に依存せずバックエンド側でも検証する）
 
 **Response 400**（注文不可な書籍を含む）:
 ```json

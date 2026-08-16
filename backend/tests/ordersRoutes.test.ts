@@ -86,6 +86,32 @@ describe("POST /api/orders", () => {
     expect(res.body.details).toContain("items must not be empty");
   });
 
+  it("returns 400 validation_error when an item quantity is negative, zero, or non-integer", async () => {
+    for (const quantity of [-3, 0, 2.5]) {
+      const res = await request(app)
+        .post("/api/orders")
+        .send({ ...validBody, items: [{ bookId: 1, quantity }] });
+
+      expect(res.status).toBe(400);
+      expect(res.body.details).toContain(
+        "items must have an integer bookId and a quantity of 1 or more"
+      );
+      expect(createOrderMock).not.toHaveBeenCalled();
+    }
+  });
+
+  it("returns 400 validation_error when an item bookId is not an integer", async () => {
+    const res = await request(app)
+      .post("/api/orders")
+      .send({ ...validBody, items: [{ bookId: "not-a-number", quantity: 1 }] });
+
+    expect(res.status).toBe(400);
+    expect(res.body.details).toContain(
+      "items must have an integer bookId and a quantity of 1 or more"
+    );
+    expect(createOrderMock).not.toHaveBeenCalled();
+  });
+
   it("returns 400 unavailable_items when the repository throws UnavailableItemsError", async () => {
     createOrderMock.mockRejectedValue(new UnavailableItemsError([3, 7]));
 

@@ -34,7 +34,7 @@ MySQLの`order_items`テーブルとして永続化する。`Order`に対して1
 | `quantity` | INT | ○ | 数量（1以上） |
 
 **バリデーション/制約**:
-- `quantity` は1以上の整数（003 spec.md FR-009のカート側制約を踏襲。カート内の数量が1未満になることはない）。
+- `quantity` は1以上の整数。カート側（003 spec.md FR-009）は数量を1未満にできないが、`POST /api/orders`は匿名で直接呼び出せる公開APIであり（spec.mdの前提）カート側の制約に依存できないため、`ordersRoutes.ts`の`validate()`でバックエンド側でも検証する（実装時に判明。修正済み）。
 - 1件の注文に紐づく`order_items`は1件以上（空の注文は作成できない、spec.md FR-010）。
 - 小計（`price * quantity`の合計）が`orders.total_amount`と一致する。
 

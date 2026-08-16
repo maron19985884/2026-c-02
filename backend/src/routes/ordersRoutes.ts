@@ -23,6 +23,12 @@ function validate(body: Partial<OrderRequest>): string[] {
   }
   if (!Array.isArray(body.items) || body.items.length === 0) {
     details.push("items must not be empty");
+  } else if (
+    body.items.some(
+      (item) => !Number.isInteger(item?.bookId) || !Number.isInteger(item?.quantity) || item.quantity < 1
+    )
+  ) {
+    details.push("items must have an integer bookId and a quantity of 1 or more");
   }
 
   return details;

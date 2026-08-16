@@ -90,9 +90,13 @@ frontend/
 │       │   └── OrderSummary.tsx        # 新規: 注文フォーム画面での注文商品一覧・合計金額の読み取り専用表示
 │       └── lib/
 │           ├── ordersApi.ts            # 新規: POST /api/ordersを呼ぶクライアント
+│           ├── orderValidation.ts      # 新規: 氏名・住所・メールアドレスのクライアント側バリデーション
+│           │                           #        (実装時に追加。page.tsxはNext.js App Routerの既定エクスポート
+│           │                           #        フィールドしか公開できず、検証関数を同ファイル内でexportすると
+│           │                           #        next buildの型チェックに失敗するため分離した)
 │           └── cartStore.ts            # 修正: clear()を追加（注文確定後のカートクリア用）
 └── tests/
-    ├── OrderPage.test.tsx              # 新規
+    ├── OrderPage.test.tsx              # 新規（バリデーション/送信フローのテストを含む）
     ├── OrderCompletePage.test.tsx      # 新規
     ├── ordersApi.test.ts               # 新規
     └── cartStore.test.ts               # 修正: clear()のテストを追記

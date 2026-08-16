@@ -382,6 +382,7 @@ type OrderResult = { orderNumber: string; totalAmount: number; items: OrderRespo
       <tr><td>入力値の未入力・空文字</td><td><code>customerName</code>/<code>customerAddress</code>/<code>customerEmail</code>のいずれかが未指定または空文字列（FR-003）</td><td><code>orderRepository.createOrder()</code>を呼ばず、400 <code>validation_error</code>＋<code>details</code>配列（該当項目名）を返す</td></tr>
       <tr><td>メールアドレスの形式不正</td><td><code>/^[^\s@]+@[^\s@]+\.[^\s@]+$/</code>相当を満たさない（FR-004、research.md #5）</td><td>同上、<code>details</code>に含める</td></tr>
       <tr><td>カートが空</td><td><code>items</code>が空配列（FR-010）</td><td>同上、<code>details</code>に含める</td></tr>
+      <tr><td>不正な注文明細</td><td><code>items</code>のいずれかの要素で<code>bookId</code>が整数でない、または<code>quantity</code>が1未満・整数でない。本APIは匿名で直接呼び出せるため（spec.mdの前提）、003のカート側制約（数量は1未満にならない）に依存せずバックエンド側でも検証する</td><td>同上、<code>details</code>に含める（実装時に発覚し追加。当初<code>data-model.md</code>はカート側制約への依存を前提にしていたが、本APIが認証なしで直接呼び出せる以上、信頼境界での検証が必要と判断した）</td></tr>
       <tr><td>注文不可な書籍を含む</td><td><code>orderRepository.createOrder()</code>が<code>UnavailableItemsError</code>をthrow</td><td>400 <code>unavailable_items</code>＋<code>bookIds</code>を返す（<code>contracts/orders-api.md</code>）</td></tr>
       <tr><td>予期しないエラー</td><td>DB接続断等、上記以外の例外</td><td><code>console.error</code>でログのみ出力し、500 <code>internal_server_error</code>を返す（スタックトレース等はレスポンスに含めない、basic-design.html「8. エラー処理方針」）</td></tr>
     </table>
