@@ -33,9 +33,17 @@ curl -i http://localhost:4000/api/books/99999   # 404を確認
 ## テスト実行
 
 ```bash
-# バックエンド
+# バックエンド（単体・契約テスト）
 cd backend && npm run test
 
-# フロントエンド
+# フロントエンド（単体・コンポーネントテスト）
 cd frontend && npm run test
+
+# E2E（要: docker compose up -d が起動中であること）
+cd e2e && npm install && npx playwright install --with-deps chromium && npm run test
 ```
+
+E2Eテスト（`e2e/tests/book-catalog.spec.ts`）は上記シナリオ1・2・3・4・5と、キーボード操作のみでの
+「カートに追加」実行（WCAG 2.1 AA、憲法セクション3）を自動化している。シナリオ6（空状態）は
+シードデータの変更が必要なためE2E化しておらず、`frontend/tests/HomePage.test.tsx`のモックテストで
+代替している。

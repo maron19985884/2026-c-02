@@ -22,6 +22,7 @@
 | テスト | Vitest | ^4.x | フロントエンド・バックエンド共通のテストランナーとして設定を統一するため |
 | テスト（API） | Supertest | ^7.x | ExpressのAPIエンドポイントに対する統合テスト用 |
 | テスト（UI） | React Testing Library | ^16.x | Reactコンポーネントのテスト用 |
+| テスト（E2E） | Playwright（`@playwright/test`） | ^1.62.x | Vitest/RTLはモックを介した単体・コンポーネントテストのため、実際にDocker Compose上で起動したfrontend/backend/mysqlを通しで（ブラウザ操作として）検証する手段として`e2e/`ディレクトリに追加。再実行可能なE2Eテストとして要望されたため導入（キーボード操作のみでの操作確認も含む） |
 | フロントエンド（スタイリング） | プレーンCSS（`frontend/src/app/globals.css`をNext.jsのグローバルスタイルシートとして読み込み） | - | CSSフレームワーク未導入。本プロジェクトの規模（画面数枚）に対してTailwind等の導入コストが見合わないため、素のCSSに共通デザイントークン（CSSカスタムプロパティ）を定義する方式を採用 |
 
 ### 2.1 デザイントークン（`globals.css`で定義済み）
