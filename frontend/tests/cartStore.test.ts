@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { addItem, getItems, updateQuantity, removeItem } from "../src/app/lib/cartStore";
+import { addItem, getItems, updateQuantity, removeItem, clear } from "../src/app/lib/cartStore";
 
 describe("cartStore", () => {
   beforeEach(() => {
@@ -93,6 +93,27 @@ describe("cartStore", () => {
 
       expect(() => removeItem(1)).not.toThrow();
       expect(removeItem(1)).toBe(false);
+    });
+  });
+
+  describe("clear", () => {
+    it("empties the cart", () => {
+      addItem(1);
+      addItem(2);
+
+      const result = clear();
+
+      expect(result).toBe(true);
+      expect(getItems()).toEqual([]);
+    });
+
+    it("does not throw when localStorage.setItem fails", () => {
+      vi.spyOn(window.localStorage.__proto__, "setItem").mockImplementation(() => {
+        throw new Error("QuotaExceededError");
+      });
+
+      expect(() => clear()).not.toThrow();
+      expect(clear()).toBe(false);
     });
   });
 });

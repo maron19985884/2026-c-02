@@ -69,3 +69,12 @@ export function removeItem(bookId: number): boolean {
     return false;
   }
 }
+
+export function clear(): boolean {
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+    return true;
+  } catch {
+    return false;
+  }
+}

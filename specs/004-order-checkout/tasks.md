@@ -53,13 +53,13 @@ Setupフェーズの作業は発生しない。また、本機能の新規モジ
 
 ### Tests for User Story 1
 
-- [ ] T001 [P] [US1] Component test for `frontend/src/app/components/OrderSummary.tsx` in `frontend/tests/OrderSummary.test.tsx`（React Testing Library）: `items`・`totalAmount`を渡した場合の書名・単価・数量・小計・合計金額の表示を検証
-- [ ] T002 [P] [US1] Component test for `frontend/src/app/order/page.tsx` in `frontend/tests/OrderPage.test.tsx`（React Testing Library）: カート内容（`booksApi.listBooks`・`cartStore.getItems`をモック）の表示、氏名・住所・メールアドレス入力欄の表示を検証
+- [x] T001 [P] [US1] Component test for `frontend/src/app/components/OrderSummary.tsx` in `frontend/tests/OrderSummary.test.tsx`（React Testing Library）: `items`・`totalAmount`を渡した場合の書名・単価・数量・小計・合計金額の表示を検証
+- [x] T002 [P] [US1] Component test for `frontend/src/app/order/page.tsx` in `frontend/tests/OrderPage.test.tsx`（React Testing Library）: カート内容（`booksApi.listBooks`・`cartStore.getItems`をモック）の表示、氏名・住所・メールアドレス入力欄の表示を検証
 
 ### Implementation for User Story 1
 
-- [ ] T003 [US1] Create `frontend/src/app/components/OrderSummary.tsx`: `items`（`bookId`・`title`・`price`・`quantity`）と`totalAmount`をpropsで受け取り、読み取り専用で一覧・合計金額を表示する（FR-001。003の`CartItemRow.tsx`と異なり編集操作は持たない。detail-design.html参照）
-- [ ] T004 [US1] Create `frontend/src/app/order/page.tsx`: 003の`cart/page.tsx`と同じ合成ロジックで`booksApi.listBooks()`と`cartStore.getItems()`を突き合わせ、販売対象外の項目を除いた表示データを`OrderSummary`（T003）に渡す。氏名・住所・メールアドレスの入力欄（この時点では`state`保持のみ、バリデーション・送信なし）を表示する（FR-001, FR-002）。T003完了後に着手する
+- [x] T003 [US1] Create `frontend/src/app/components/OrderSummary.tsx`: `items`（`bookId`・`title`・`price`・`quantity`）と`totalAmount`をpropsで受け取り、読み取り専用で一覧・合計金額を表示する（FR-001。003の`CartItemRow.tsx`と異なり編集操作は持たない。detail-design.html参照）
+- [x] T004 [US1] Create `frontend/src/app/order/page.tsx`: 003の`cart/page.tsx`と同じ合成ロジックで`booksApi.listBooks()`と`cartStore.getItems()`を突き合わせ、販売対象外の項目を除いた表示データを`OrderSummary`（T003）に渡す。氏名・住所・メールアドレスの入力欄（この時点では`state`保持のみ、バリデーション・送信なし）を表示する（FR-001, FR-002）。T003完了後に着手する
 
 **Checkpoint**: この時点で注文フォーム画面の閲覧（US1）は単独で完結し、デモ・検証が可能（003で作成済みの「注文手続きへ」リンクがはじめて到達可能になる）
 
@@ -77,22 +77,22 @@ Setupフェーズの作業は発生しない。また、本機能の新規モジ
 
 ### Tests for User Story 2
 
-- [ ] T005 [P] [US2] Contract test for `POST /api/orders` in `backend/tests/ordersRoutes.test.ts`（Supertest、`orderRepository`をモック）: 正常系（201、スナップショットを含むレスポンス形状）・未入力/空文字（400 `validation_error`、`details`）・メール形式不正（400）・`items`が空配列（400）・`orderRepository`が`UnavailableItemsError`をthrowした場合（400 `unavailable_items`、`bookIds`）・予期しない例外（500）を検証（`contracts/orders-api.md`準拠）
-- [ ] T006 [P] [US2] Unit test for `createOrder()` in `backend/tests/orderRepository.test.ts`（`pool.getConnection()`をモック）: `books`存在・販売可否確認クエリ、`orders`→`order_items`への順序だてたINSERT、注文番号のフォーマット（`ORD-`+6桁ゼロ埋め、research.md #1）、存在しない/`is_for_sale=0`の`bookId`がある場合に`rollback()`し`UnavailableItemsError`をthrowすることを検証
-- [ ] T007 [P] [US2] Unit test for `createOrder()` in `frontend/tests/ordersApi.test.ts`（`fetch`をモック）: 201時の戻り値（`OrderResult`）、400（`validation_error`/`unavailable_items`）時に対応する専用エラークラスをthrowすること、500・ネットワーク例外時に汎用`Error`をthrowすることを検証
-- [ ] T008 [P] [US2] Unit test for `clear()` in `frontend/tests/cartStore.test.ts`（追記）: `clear()`実行後に`getItems()`が空配列を返すことを検証
-- [ ] T009 [US2] Component test for `order/page.tsx` validation/submit flow in `frontend/tests/OrderPage.test.tsx`（追記、`ordersApi.createOrder`をモック。T002と同一ファイルのため、T002完了後に着手する）: (a) 氏名・住所・メールアドレスのいずれかが未入力の状態で「注文する」を押すと該当項目にエラーが表示され`createOrder`が呼ばれないこと（FR-003）、(b) メールアドレスの形式が不正な場合も同様にエラーが表示されること（FR-004）、(c) `createOrder`が`ValidationError`をthrowした場合に該当項目へエラーメッセージが反映されること、(d) `UnavailableItemsError`をthrowした場合に汎用エラーメッセージが表示されること、(e) 成功時に`cartStore.clear()`が呼ばれ、`router.push`で`/order/complete?orderNumber=...`へ遷移することを検証する
+- [x] T005 [P] [US2] Contract test for `POST /api/orders` in `backend/tests/ordersRoutes.test.ts`（Supertest、`orderRepository`をモック）: 正常系（201、スナップショットを含むレスポンス形状）・未入力/空文字（400 `validation_error`、`details`）・メール形式不正（400）・`items`が空配列（400）・`orderRepository`が`UnavailableItemsError`をthrowした場合（400 `unavailable_items`、`bookIds`）・予期しない例外（500）を検証（`contracts/orders-api.md`準拠）
+- [x] T006 [P] [US2] Unit test for `createOrder()` in `backend/tests/orderRepository.test.ts`（`pool.getConnection()`をモック）: `books`存在・販売可否確認クエリ、`orders`→`order_items`への順序だてたINSERT、注文番号のフォーマット（`ORD-`+6桁ゼロ埋め、research.md #1）、存在しない/`is_for_sale=0`の`bookId`がある場合に`rollback()`し`UnavailableItemsError`をthrowすることを検証
+- [x] T007 [P] [US2] Unit test for `createOrder()` in `frontend/tests/ordersApi.test.ts`（`fetch`をモック）: 201時の戻り値（`OrderResult`）、400（`validation_error`/`unavailable_items`）時に対応する専用エラークラスをthrowすること、500・ネットワーク例外時に汎用`Error`をthrowすることを検証
+- [x] T008 [P] [US2] Unit test for `clear()` in `frontend/tests/cartStore.test.ts`（追記）: `clear()`実行後に`getItems()`が空配列を返すことを検証
+- [x] T009 [US2] Component test for `order/page.tsx` validation/submit flow in `frontend/tests/OrderPage.test.tsx`（追記、`ordersApi.createOrder`をモック。T002と同一ファイルのため、T002完了後に着手する）: (a) 氏名・住所・メールアドレスのいずれかが未入力の状態で「注文する」を押すと該当項目にエラーが表示され`createOrder`が呼ばれないこと（FR-003）、(b) メールアドレスの形式が不正な場合も同様にエラーが表示されること（FR-004）、(c) `createOrder`が`ValidationError`をthrowした場合に該当項目へエラーメッセージが反映されること、(d) `UnavailableItemsError`をthrowした場合に汎用エラーメッセージが表示されること、(e) 成功時に`cartStore.clear()`が呼ばれ、`router.push`で`/order/complete?orderNumber=...`へ遷移することを検証する
 
 ### Implementation for User Story 2
 
-- [ ] T010 [P] [US2] Create `mysql/init/02_orders_seed.sql`: `orders`・`order_items`テーブルを`CREATE TABLE IF NOT EXISTS`で作成する（`table-definition.html`準拠。外部キー・インデックスを含む。初期データは投入しない。`DROP`/`TRUNCATE`/`DELETE`は含めない、CLAUDE.md禁止事項）
-- [ ] T011 [P] [US2] Create `backend/src/types/order.ts`: `OrderItemRequest`, `OrderRequest`, `CreateOrderInput`, `OrderResponseItem`, `OrderResult`の型定義（detail-design.html参照）
-- [ ] T012 [US2] Implement `createOrder(input: CreateOrderInput): Promise<OrderResult>` in `backend/src/repositories/orderRepository.ts`: 単一トランザクション上で`books`の存在・販売可否（`is_for_sale=1`）を確認し、いずれか不足があれば`rollback()`して`UnavailableItemsError`（`bookIds`保持）をthrow。問題なければ書名・単価のスナップショットで`total_amount`を算出して`orders`にINSERT、続けて`order_items`に複数INSERTし、`commit()`後に採番済み`id`から注文番号（`ORD-`+6桁ゼロ埋め）を生成して返す（research.md #1, #2, #3, #4、detail-design.html図D1）。T011完了後に着手する
-- [ ] T013 [US2] Implement `POST /` handler in `backend/src/routes/ordersRoutes.ts`: `customerName`/`customerAddress`/`customerEmail`の未入力・空文字、メール形式（`/^[^\s@]+@[^\s@]+\.[^\s@]+$/`相当）、`items`が空配列であることを検証し、問題があれば`orderRepository.createOrder()`を呼ばず400 `validation_error`（`details`配列）を返す。問題なければT012の`createOrder()`を呼び出し、`UnavailableItemsError`は400 `unavailable_items`、その他の例外は`console.error`でログ出力の上500 `internal_server_error`、成功時は201で`OrderResult`を返す（detail-design.html図D2、`contracts/orders-api.md`準拠）。T012完了後に着手する
-- [ ] T014 [US2] Modify `backend/src/index.ts`: `ordersRouter`（T013）をimportし`app.use("/api/orders", ordersRouter)`を追加する。T013完了後に着手する
-- [ ] T015 [P] [US2] Implement `createOrder(input: OrderRequest): Promise<OrderResult>` in `frontend/src/app/lib/ordersApi.ts`: `POST /api/orders`を呼び出し、201は`OrderResult`を返す。400 `validation_error`は`ValidationError`（`details`保持）、400 `unavailable_items`は`UnavailableItemsError`（`bookIds`保持）をthrowし、500・ネットワーク例外は汎用`Error`をthrowする（`apiClient.ts`の`fetchJson`は再利用しない。detail-design.html図D3）
-- [ ] T016 [P] [US2] Add `clear(): boolean` to `frontend/src/app/lib/cartStore.ts`: `localStorage`の`STORAGE_KEY`を空配列で上書きする。既存関数と同様に書き込み失敗時は`try/catch`で捕捉し`false`を返す
-- [ ] T017 [US2] `frontend/src/app/order/page.tsx`（T004）に、氏名・住所・メールアドレスのクライアント側バリデーション（未入力・メール形式、FR-003, FR-004）と、該当項目へのエラーメッセージ表示を実装する。「注文する」押下時はバリデーション通過後にボタンを非活性化し、T015の`ordersApi.createOrder()`を呼び出す。成功時はT016の`cartStore.clear()`を呼んでから、`router.push` で `/order/complete?orderNumber=${orderNumber}` へ遷移する（FR-005, FR-006, research.md #6）。`ValidationError`/`UnavailableItemsError`/その他の例外はそれぞれ対応するエラー表示を行い、ボタンを再活性化する（detail-design.html図D4）。T004・T015・T016完了後に着手する
+- [x] T010 [P] [US2] Create `mysql/init/02_orders_seed.sql`: `orders`・`order_items`テーブルを`CREATE TABLE IF NOT EXISTS`で作成する（`table-definition.html`準拠。外部キー・インデックスを含む。初期データは投入しない。`DROP`/`TRUNCATE`/`DELETE`は含めない、CLAUDE.md禁止事項）
+- [x] T011 [P] [US2] Create `backend/src/types/order.ts`: `OrderItemRequest`, `OrderRequest`, `CreateOrderInput`, `OrderResponseItem`, `OrderResult`の型定義（detail-design.html参照）
+- [x] T012 [US2] Implement `createOrder(input: CreateOrderInput): Promise<OrderResult>` in `backend/src/repositories/orderRepository.ts`: 単一トランザクション上で`books`の存在・販売可否（`is_for_sale=1`）を確認し、いずれか不足があれば`rollback()`して`UnavailableItemsError`（`bookIds`保持）をthrow。問題なければ書名・単価のスナップショットで`total_amount`を算出して`orders`にINSERT、続けて`order_items`に複数INSERTし、`commit()`後に採番済み`id`から注文番号（`ORD-`+6桁ゼロ埋め）を生成して返す（research.md #1, #2, #3, #4、detail-design.html図D1）。T011完了後に着手する
+- [x] T013 [US2] Implement `POST /` handler in `backend/src/routes/ordersRoutes.ts`: `customerName`/`customerAddress`/`customerEmail`の未入力・空文字、メール形式（`/^[^\s@]+@[^\s@]+\.[^\s@]+$/`相当）、`items`が空配列であることを検証し、問題があれば`orderRepository.createOrder()`を呼ばず400 `validation_error`（`details`配列）を返す。問題なければT012の`createOrder()`を呼び出し、`UnavailableItemsError`は400 `unavailable_items`、その他の例外は`console.error`でログ出力の上500 `internal_server_error`、成功時は201で`OrderResult`を返す（detail-design.html図D2、`contracts/orders-api.md`準拠）。T012完了後に着手する
+- [x] T014 [US2] Modify `backend/src/index.ts`: `ordersRouter`（T013）をimportし`app.use("/api/orders", ordersRouter)`を追加する。T013完了後に着手する
+- [x] T015 [P] [US2] Implement `createOrder(input: OrderRequest): Promise<OrderResult>` in `frontend/src/app/lib/ordersApi.ts`: `POST /api/orders`を呼び出し、201は`OrderResult`を返す。400 `validation_error`は`ValidationError`（`details`保持）、400 `unavailable_items`は`UnavailableItemsError`（`bookIds`保持）をthrowし、500・ネットワーク例外は汎用`Error`をthrowする（`apiClient.ts`の`fetchJson`は再利用しない。detail-design.html図D3）
+- [x] T016 [P] [US2] Add `clear(): boolean` to `frontend/src/app/lib/cartStore.ts`: `localStorage`の`STORAGE_KEY`を空配列で上書きする。既存関数と同様に書き込み失敗時は`try/catch`で捕捉し`false`を返す
+- [x] T017 [US2] `frontend/src/app/order/page.tsx`（T004）に、氏名・住所・メールアドレスのクライアント側バリデーション（未入力・メール形式、FR-003, FR-004）と、該当項目へのエラーメッセージ表示を実装する。「注文する」押下時はバリデーション通過後にボタンを非活性化し、T015の`ordersApi.createOrder()`を呼び出す。成功時はT016の`cartStore.clear()`を呼んでから、`router.push` で `/order/complete?orderNumber=${orderNumber}` へ遷移する（FR-005, FR-006, research.md #6）。`ValidationError`/`UnavailableItemsError`/その他の例外はそれぞれ対応するエラー表示を行い、ボタンを再活性化する（detail-design.html図D4）。T004・T015・T016完了後に着手する。バリデーション関数`validate(fields)`は、`page.tsx`からの名前付きexportがNext.jsの型チェックに抵触するため、新規`frontend/src/app/lib/orderValidation.ts`に切り出してimportする（plan.md Project Structureにはなかったファイルの追加。detail-design.html参照）
 
 **Checkpoint**: US1とUS2が独立して動作する（注文内容確認＋顧客情報入力＋注文確定）
 
@@ -107,11 +107,11 @@ Setupフェーズの作業は発生しない。また、本機能の新規モジ
 
 ### Tests for User Story 3
 
-- [ ] T018 [P] [US3] Component test for `frontend/src/app/order/complete/page.tsx` in `frontend/tests/OrderCompletePage.test.tsx`（React Testing Library）: `orderNumber`クエリパラメータがある場合の完了メッセージ・注文番号の表示、「商品一覧へ戻る」リンクの遷移先（`/`）、`orderNumber`が無い場合に注文番号欄を表示しないことを検証
+- [x] T018 [P] [US3] Component test for `frontend/src/app/order/complete/page.tsx` in `frontend/tests/OrderCompletePage.test.tsx`（React Testing Library）: `orderNumber`クエリパラメータがある場合の完了メッセージ・注文番号の表示、「商品一覧へ戻る」リンクの遷移先（`/`）、`orderNumber`が無い場合に注文番号欄を表示しないことを検証
 
 ### Implementation for User Story 3
 
-- [ ] T019 [US3] Create `frontend/src/app/order/complete/page.tsx`: `useSearchParams()`で`orderNumber`クエリパラメータを読み取り、注文完了メッセージ（I-33, FR-007）・注文番号（I-34, FR-008）・「商品一覧へ戻る」リンク（I-35, FR-009）を表示する。backend・MySQLとの通信は行わない（basic-design.html 図6）。`orderNumber`が取得できない場合は注文番号欄を表示しない軽微なガードのみ行う（spec.md Edge Casesの前提を踏襲、detail-design.html参照）
+- [x] T019 [US3] Create `frontend/src/app/order/complete/page.tsx`: `useSearchParams()`で`orderNumber`クエリパラメータを読み取り、注文完了メッセージ（I-33, FR-007）・注文番号（I-34, FR-008）・「商品一覧へ戻る」リンク（I-35, FR-009）を表示する。backend・MySQLとの通信は行わない（basic-design.html 図6）。`orderNumber`が取得できない場合は注文番号欄を表示しない軽微なガードのみ行う（spec.md Edge Casesの前提を踏襲、detail-design.html参照）
 
 **Checkpoint**: 全ユーザーストーリー（US1・US2・US3）が独立に動作する（注文フォーム画面から注文完了画面までの購買フロー全体が完成）
 
@@ -121,12 +121,12 @@ Setupフェーズの作業は発生しない。また、本機能の新規モジ
 
 **Purpose**: 複数ストーリーにまたがる仕上げ作業
 
-- [ ] T020 [P] Create `e2e/tests/order-checkout.spec.ts`: `quickstart.md`の動作確認シナリオ（1〜7）を、カートに書籍を追加するところから通しでPlaywrightで自動化する
-- [ ] T021 [P] `quickstart.md`「API動作確認」の`curl`コマンドで`POST /api/orders`の正常系・異常系を確認する
-- [ ] T022 [P] `npm run build`（型チェック）を`backend/`と`frontend/`の両方で実行し、型エラーがないことを確認する
-- [ ] T023 [P] `npm run lint`を`backend/`と`frontend/`の両方で実行し、Lintエラー0件を確認する（憲法セクション1）
-- [ ] T024 [P] `vitest run --coverage`を`backend/`と`frontend/`の両方で実行し、カバレッジ80%以上（憲法セクション2の暫定基準）であることを確認する
-- [ ] T025 [P] 注文フォーム・注文完了画面の入力欄・ボタン・リンクがキーボード操作のみで実行できることを確認する（WCAG 2.1 AA、憲法セクション3）
+- [x] T020 [P] Create `e2e/tests/order-checkout.spec.ts`: `quickstart.md`の動作確認シナリオ（1〜7）を、カートに書籍を追加するところから通しでPlaywrightで自動化する
+- [x] T021 [P] `quickstart.md`「API動作確認」の`curl`コマンドで`POST /api/orders`の正常系・異常系を確認する
+- [x] T022 [P] `npm run build`（型チェック）を`backend/`と`frontend/`の両方で実行し、型エラーがないことを確認する
+- [x] T023 [P] `npm run lint`を`backend/`と`frontend/`の両方で実行し、Lintエラー0件を確認する（憲法セクション1）
+- [x] T024 [P] `vitest run --coverage`を`backend/`と`frontend/`の両方で実行し、カバレッジ80%以上（憲法セクション2の暫定基準）であることを確認する
+- [x] T025 [P] 注文フォーム・注文完了画面の入力欄・ボタン・リンクがキーボード操作のみで実行できることを確認する（WCAG 2.1 AA、憲法セクション3）。`e2e/tests/order-checkout.spec.ts`にキーボード操作のみで入力〜送信〜戻るリンクまで到達できることを検証するE2Eテストを追加して確認した
 
 ---
 

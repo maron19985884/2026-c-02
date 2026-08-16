@@ -308,3 +308,102 @@ a {
   padding-top: 12px;
   border-top: 1px solid var(--line);
 }
+
+/* 注文フォーム画面: 注文内容サマリー */
+.order-summary {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.order-summary__list {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.order-summary__item {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+}
+
+.order-summary__title {
+  font-weight: 700;
+  flex: 1 1 100%;
+}
+
+.order-summary__price,
+.order-summary__quantity {
+  color: var(--ink-muted);
+}
+
+.order-summary__subtotal {
+  margin-left: auto;
+  font-weight: 700;
+}
+
+.order-summary__total {
+  text-align: right;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* 注文フォーム画面: 顧客情報入力 */
+.order-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 480px;
+}
+
+.order-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.order-form__field label {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.order-form__field input {
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.order-form__error {
+  color: var(--error);
+  font-size: 12.5px;
+  margin: 0;
+}
+
+/* 注文完了画面 */
+.order-complete {
+  text-align: center;
+  padding: 48px 0;
+}
+
+.order-complete__message {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 16px;
+}
+
+.order-complete__order-number {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0 0 24px;
+}

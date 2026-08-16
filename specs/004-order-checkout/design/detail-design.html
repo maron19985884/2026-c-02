@@ -223,6 +223,7 @@
 </svg>
 <div class="diagram-caption">図D0: モジュール呼び出し関係図</div>
 </div>
+<p class="todo">※ 実装時に<code>frontend/src/app/lib/orderValidation.ts</code>（新規、<code>order/page.tsx</code>から呼び出す純粋関数）を追加した（後述モジュール参照）。型定義のみの参照に準じ、単純な同期呼び出しのため本図には反映していない。</p>
 
 <h2>1. Backend</h2>
 
@@ -527,7 +528,7 @@ type OrderResult = { orderNumber: string; totalAmount: number; items: OrderRespo
   </div>
   <div class="module-body">
     <h4>処理概要</h4>
-    <p>注文フォーム画面本体（SC-04）。マウント時に<code>booksApi.listBooks()</code>と<code>cartStore.getItems()</code>を突き合わせ（003の<code>cart/page.tsx</code>と同じ合成ロジック）、販売対象外の項目を除いた表示用データを<code>OrderSummary</code>に渡す。氏名・住所・メールアドレスの入力値と各項目のエラーメッセージを<code>state</code>で保持する。「注文する」押下時の処理は下記フロー参照。バリデーション関数<code>validate(fields)</code>はページコンポーネント内に閉じず、テスト容易性のため同ファイル内でexportする（コンポーネント外部からの直接呼び出しは想定しないが、コンポーネントをレンダリングせず関数単体でテストできるようにするため）。</p>
+    <p>注文フォーム画面本体（SC-04）。マウント時に<code>booksApi.listBooks()</code>と<code>cartStore.getItems()</code>を突き合わせ（003の<code>cart/page.tsx</code>と同じ合成ロジック）、販売対象外の項目を除いた表示用データを<code>OrderSummary</code>に渡す。氏名・住所・メールアドレスの入力値と各項目のエラーメッセージを<code>state</code>で保持する。「注文する」押下時の処理は下記フロー参照。バリデーション関数<code>validate(fields)</code>は、テスト容易性のためページコンポーネントに閉じず<code>frontend/src/app/lib/orderValidation.ts</code>（新規、後述）に切り出し、そこからimportして使う。Next.jsのApp Routerは<code>page.tsx</code>からの名前付きexportを`default`・`metadata`等の既定フィールドに制限しており、<code>validate</code>をpage.tsx側でexportすると型チェック（<code>next build</code>）に失敗するため（実装時に判明。plan.md Project Structureにはなかったファイルの追加）。</p>
 
     <h4>処理フロー: 「注文する」押下時（FR-003〜FR-006）</h4>
     <div class="diagram-box">
@@ -599,8 +600,31 @@ type OrderResult = { orderNumber: string; totalAmount: number; items: OrderRespo
     <h4>パラメータ・In/Out詳細</h4>
     <table>
       <tr><th>関数</th><th>パラメータ</th><th>処理概要</th><th>Out</th></tr>
-      <tr><td><code>validate(fields)</code></td><td><code>{"{ customerName, customerAddress, customerEmail }"}</code></td><td>未入力・メール形式（<code>/^[^\s@]+@[^\s@]+\.[^\s@]+$/</code>相当、research.md #5）をチェック</td><td><code>{"{ isValid: boolean; errors: Record<string, string> }"}</code></td></tr>
+      <tr><td><code>validate(fields)</code></td><td><code>{"{ customerName, customerAddress, customerEmail }"}</code></td><td><code>frontend/src/app/lib/orderValidation.ts</code>からimport（後述のモジュール参照）。未入力・メール形式（<code>/^[^\s@]+@[^\s@]+\.[^\s@]+$/</code>相当、research.md #5）をチェック</td><td><code>{"{ isValid: boolean; errors: Record<string, string> }"}</code></td></tr>
       <tr><td><code>handleSubmit(event)</code></td><td><code>FormEvent</code></td><td>図D4のフロー全体を実行</td><td>なし（void。成功時は画面遷移）</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="file">frontend/src/app/lib/orderValidation.ts</span>
+    <span><span class="badge frontend">Frontend</span> <span class="badge new">新規</span></span>
+  </div>
+  <div class="module-body">
+    <h4>処理概要</h4>
+    <p>氏名・住所・メールアドレスのクライアント側バリデーション関数<code>validate(fields)</code>を提供する。<code>order/page.tsx</code>（Next.js App Routerのページコンポーネント）からexportすると<code>next build</code>の型チェックに失敗するため、独立したlibファイルとして切り出した（plan.md Project Structureには当初なかったファイル。実装時に判明した技術的制約への対応）。分岐処理はガード節のみで、フロー図は割愛する。</p>
+
+    <h4>例外処理</h4>
+    <table>
+      <tr><th>例外・エラーケース</th><th>発生条件</th><th>本モジュールでの対応</th></tr>
+      <tr><td>該当なし</td><td>-</td><td>純粋な同期関数であり、例外を発生させうる処理（非同期処理・外部I/O）を持たない</td></tr>
+    </table>
+
+    <h4>パラメータ・In/Out詳細</h4>
+    <table>
+      <tr><th>関数</th><th>パラメータ</th><th>処理概要</th><th>Out</th></tr>
+      <tr><td><code>validate(fields)</code></td><td><code>fields: FormFields</code>（<code>{"{ customerName, customerAddress, customerEmail }"}</code>）</td><td>未入力・メール形式（<code>/^[^\s@]+@[^\s@]+\.[^\s@]+$/</code>相当、research.md #5）をチェック</td><td><code>{"{ isValid: boolean; errors: FormErrors }"}</code></td></tr>
     </table>
   </div>
 </div>
