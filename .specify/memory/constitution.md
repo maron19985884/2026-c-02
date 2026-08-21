@@ -31,6 +31,7 @@
 ## 5. 技術的意思決定ルール（Technical Decision Rules）
 - 使用技術・アーキテクチャは `/speckit.plan` の前に **技術選定書（`docs/tech-stack-template.md`）** で人間が確定させる。`plan` フェーズで技術を選び直さない。
 - 新規依存ライブラリを技術選定書に追加する際は、選定理由を明記する。
+- **技術選定書（`docs/tech-stack-template.md`）への記入・変更は人間のみが実施する。AIによる記入・変更は不可。** 不用意なライブラリ・依存関係の混入を防ぐため、AIエージェントは技術選定書を参照するのみとし、内容を追加・変更・削除してはならない。
 
 ## 6. 開発方法論の運用ルール（Waterfall / Brownfield）
 - 本プロジェクトを **ウォーターフォールで運用する場合**: 各フェーズ（要件定義／設計／実装／テスト／リリース）ごとに承認ゲートを設け、`docs/waterfall-preset-guide.md` の対応表に従って `/speckit.specify` → `/speckit.plan` → `/speckit.tasks` → `/speckit.implement` の各出力を正式ドキュメントとして承認フローに乗せる。
