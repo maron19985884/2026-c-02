@@ -1,6 +1,6 @@
 # Spec Kit テンプレート — 変更ログ
 
-> AI as a Judge 評価（`docs/ai-review.md` 参照）に基づき、CRITICAL→HIGH→MEDIUM の優先順で対処した記録。
+> AI as a Judge 評価（`ai-review.md` 参照）に基づき、CRITICAL→HIGH→MEDIUM の優先順で対処した記録。
 > 対処8以降は、その後の利用過程で見つかった個別の指摘への対応。
 
 ---
@@ -19,6 +19,8 @@
 | 6 | 2026-07-13 | `docs/waterfall-preset-guide.md` | 修正 | 各フェーズの DoD・ドキュメント一覧を追加 |
 | 7 | 2026-07-13 | `.claude/commands/speckit.implement.md` | 修正 | gitignore 検証を言語動的判定に変更 |
 | 8 | 2026-08-26 | `tech-stack.md`（新規）ほか15ファイル | 新規／修正 | tech-stack-template.md の命名・配置矛盾を解消（詳細は後述） |
+| 9 | 2026-08-26 | `.claude/commands/speckit.plan.md` | 修正 | Key Rules の技術参照先を `tech-stack.md` に修正 |
+| 10 | 2026-08-26 | `_meta/`（新規） | 新規／移動／削除 | 雛形自身の開発履歴を docs/ から分離（詳細は後述） |
 
 ---
 
@@ -183,6 +185,19 @@
 | 6 | `.claude/commands/speckit.testplan.md` / `speckit.change.md` / `speckit.design.md` | 参照パスを `tech-stack.md` に変更 |
 | 7 | `docs/how-to-use.md` | §5「技術選定書の書き方」に雛形コピー手順を追加（従来「コピーは不要」としていた記述を修正）。他11箇所の参照パスを `tech-stack.md` に変更 |
 | 8 | `docs/waterfall-preset-guide.md` / `review-gate-template.md` / `change-request-template.md` / `testing-strategy-guide.md` / `requirements-template.md` / `basic-design-template.md` / `overview.md` | 参照パスを `tech-stack.md` に変更（雛形への言及が必要な箇所のみ `docs/tech-stack-template.md` を残す） |
-| 9 | `.claude/commands/speckit.plan.md` | Key Rules の「Do NOT select technology — technology is defined in `requirements.md` and `constitution.md`」を「`tech-stack.md`」参照に修正。前回のAI判定（`docs/ai-review.md` C-3）で指摘された、`speckit.plan.md`と`plan-template.md`の矛盾のうち、`plan-template.md`側のヘッダーのみ直っていた分の未対応部分 |
+| 9 | `.claude/commands/speckit.plan.md` | Key Rules の「Do NOT select technology — technology is defined in `requirements.md` and `constitution.md`」を「`tech-stack.md`」参照に修正。前回のAI判定（`ai-review.md` C-3）で指摘された、`speckit.plan.md`と`plan-template.md`の矛盾のうち、`plan-template.md`側のヘッダーのみ直っていた分の未対応部分 |
 
-**修正しなかった箇所**: `IBM Bob/changelog.md`・`docs/changelog.md`（本ファイル自身の対処1〜7の記述）・`docs/changelog-speckit-ai-driven-guide.md`・`docs/request-speckit-guide-2026-08-25-issue16.md` — いずれも過去の意思決定を記録した履歴であり、当時は `docs/tech-stack-template.md` が正しいパスだったため書き換えない。
+**修正しなかった箇所**: `IBM Bob/changelog.md`・本ファイル自身の対処1〜7の記述・`changelog-speckit-ai-driven-guide.md`・`request-speckit-guide-2026-08-25-issue16.md` — いずれも過去の意思決定を記録した履歴であり、当時は `docs/tech-stack-template.md` が正しいパスだったため書き換えない。
+
+---
+
+## 対処10（2026-08-26）：雛形自身の開発履歴を docs/ から分離
+
+**背景**: `docs/ai-review.md`・`changelog.md`・`changelog-speckit-ai-driven-guide.md`・`request-speckit-guide-2026-08-25-issue16.md` は、この雛形自体をどう直してきたかという制作過程の記録であり、雛形の使い方そのものではない。`how-to-use.md`§3①は「このリポジトリをそのままコピーして新規プロジェクトを始める」運用を案内しているため、このままでは無関係な新規案件にも本プロジェクト（書籍販売アプリ）の改修履歴がまるごと複製されてしまう。また `IBM Bob/ai-review.md`・`IBM Bob/changelog.md` は `docs/` 側と内容が完全に重複していた。
+
+**対処**:
+- `docs/ai-review.md`・`changelog.md`・`changelog-speckit-ai-driven-guide.md`・`request-speckit-guide-2026-08-25-issue16.md` を、リポジトリ直下の新規フォルダ `_meta/` へ移動
+- `IBM Bob/spec-kit-ai-as-a-judge.html`（`ai-review.md`のHTML版）を `_meta/ai-review.html` として移動
+- `docs/`側と完全重複していた `IBM Bob/ai-review.md`・`IBM Bob/changelog.md` は削除（`IBM Bob/`フォルダ自体も消滅）
+- `_meta/README.md` を新設し、このフォルダの位置づけ（雛形の使用には不要）を明記
+- `docs/`配下からこれらのファイルへの参照は元々存在しなかったため、`how-to-use.md`等の修正は不要だった

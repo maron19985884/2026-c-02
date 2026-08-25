@@ -134,4 +134,4 @@ Spec Kit ベースの開発雛形について、初めて触る開発者向け�
 
 今回のファイルの変更点を md ファイルに出力し、適切なファイル名で /doc の下に保管してください。
 
-→ 対応結果: `docs/changelog-speckit-ai-driven-guide.md` として保管済み。
+→ 対応結果: `changelog-speckit-ai-driven-guide.md` として保管済み（現在は `_meta/` 配下）。
