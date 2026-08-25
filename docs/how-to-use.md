@@ -137,10 +137,11 @@ git remote set-url origin <新リポジトリのURL>
 
 ### 記入の手順
 
-1. `docs/inputs/requirements-template.md` を参考に `requirements.md` を記入する
-2. `user_requirements.md` を画面・機能単位で記入する
-3. 記入例（`docs/inputs/requirements-example.md`）を参照しながら埋める
-4. `/speckit.specify` を実行して `spec.md` を生成する（→ §6）
+1. ルートに `requirements.md` がまだ無い場合は、`docs/inputs/requirements-template.md` をコピーしてルート直下に `requirements.md` として配置する（この雛形をそのまま新規プロジェクトとして使い始めた場合は配置済み）
+2. `requirements.md` を直接開いて記入する（`docs/inputs/requirements-template.md` 本体は次の案件用のコピー元なので編集しない）
+3. `user_requirements.md` を画面・機能単位で記入する
+4. 記入例（`docs/inputs/requirements-example.md`）を参照しながら埋める
+5. `/speckit.specify` を実行して `spec.md` を生成する（→ §6）
 
 ### 良い例と悪い例
 
@@ -218,7 +219,7 @@ AI は推測で埋めてしまい、意図と異なる spec.md が出てくる�
 ### 記入の手順
 
 1. ルートに `tech-stack.md` がまだ無い場合は、`docs/inputs/tech-stack-template.md` をコピーしてルート直下に `tech-stack.md` として配置する（この雛形をそのまま新規プロジェクトとして使い始めた場合は配置済み）
-2. `tech-stack.md` を直接開いて記入する
+2. `tech-stack.md` を直接開いて記入する（`docs/inputs/tech-stack-template.md` 本体は次の案件用のコピー元なので編集しない）
 3. 「全体構成」「使用技術スタック」「Lint・品質ツール」の各セクションを埋める
 4. 記入が完了したら `/speckit.plan` を実行する（→ §6）
 
