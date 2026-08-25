@@ -36,7 +36,7 @@ You **MUST** consider the user input before proceeding (if not empty).
    - `FEATURE_DIR/plan.md`: current design (if exists)
    - `FEATURE_DIR/tasks.md`: current task list (if exists)
 
-3. **Generate change request** using `docs/change-request-template.md` as the output structure:
+3. **Generate change request** using `.specify/templates/change-request-template.md` as the output structure:
    - Section 1 (基本情報): Auto-assign next CR number by scanning `docs/changes/CR-*.md`; fill date, FEATURE_DIR
    - Section 2 (変更の概要): Fill from `$ARGUMENTS`
    - Section 3 (変更前後の比較): Quote relevant sections from current artifacts; show proposed after-state
@@ -57,6 +57,6 @@ You **MUST** consider the user input before proceeding (if not empty).
 ## Key Rules
 
 - Do NOT apply any changes to `spec.md`, `plan.md`, `tasks.md` or any other artifact. This command only generates the change request document.
-- Do NOT modify `docs/change-request-template.md` itself.
+- Do NOT modify `.specify/templates/change-request-template.md` itself.
 - 技術選定書（`tech-stack.md`）への記入・変更は人間のみが実施する（憲法§5参照）。
 - 影響分析の工数見積もりは参考値として明示し、`<!-- 参考値: 実際の見積もりは人間が確認すること -->` を付ける。

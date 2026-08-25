@@ -718,7 +718,7 @@ Lint ルールを変更したい場合は `docs/guides/lint-preset-guide.md` を
 
 ### Q. 既存システムに改修を加える場合はどうするか？
 
-**A.** `docs/guides/brownfield-guide.md` を参照してください。システム全体を仕様化せず、**改修範囲だけ**を対象に `/speckit.specify` を実行します。改修用のテンプレートは `docs/change-spec-template.md` です。
+**A.** `docs/guides/brownfield-guide.md` を参照してください。システム全体を仕様化せず、**改修範囲だけ**を対象に `/speckit.specify` を実行します。改修用のテンプレートは `.specify/templates/change-spec-template.md` です。
 
 ---
 
@@ -741,6 +741,6 @@ Lint ルールを変更したい場合は `docs/guides/lint-preset-guide.md` を
 | `docs/guides/brownfield-guide.md` | 既存システム改修ガイド |
 | `docs/guides/testing-strategy-guide.md` | テスト戦略ガイド（Javaフレームワーク選定含む） |
 | `docs/guides/lint-preset-guide.md` | Lint のpreset化手順 |
-| `docs/change-spec-template.md` | 改修用の狭いspecテンプレート |
+| `.specify/templates/change-spec-template.md` | 改修用の狭いspecテンプレート |
 | `.specify/memory/constitution.md` | 憲法（組織共通ルール） |
 | `.github/workflows/quality-gate.yml` | Lint 自動チェックCI |

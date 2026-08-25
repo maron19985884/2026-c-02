@@ -35,7 +35,7 @@
 
 ## 6. 開発方法論の運用ルール（Waterfall / Brownfield）
 - 本プロジェクトを **ウォーターフォールで運用する場合**: 各フェーズ（要件定義／設計／実装／テスト／リリース）ごとに承認ゲートを設け、`docs/guides/waterfall-preset-guide.md` の対応表に従って `/speckit.specify` → `/speckit.plan` → `/speckit.tasks` → `/speckit.implement` の各出力を正式ドキュメントとして承認フローに乗せる。
-- 本プロジェクトが **既存システムの改修（Brownfield）である場合**: システム全体をspec化せず、`docs/guides/brownfield-guide.md` に従い、改修範囲のみを対象とした狭いspec（`docs/change-spec-template.md`参照）を作成する。既存の設計書・規約は本憲法に転記せず、参照リンクのみを記載する。
+- 本プロジェクトが **既存システムの改修（Brownfield）である場合**: システム全体をspec化せず、`docs/guides/brownfield-guide.md` に従い、改修範囲のみを対象とした狭いspec（`.specify/templates/change-spec-template.md`参照）を作成する。既存の設計書・規約は本憲法に転記せず、参照リンクのみを記載する。
 
 ## 7. 設計ルール
 - 基本設計書について、HTMLベースでUMLに準拠して作成する。

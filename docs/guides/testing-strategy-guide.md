@@ -282,6 +282,6 @@ SpecKit のコア（specify → plan → tasks → implement）には手を入�
 |---|---|
 | `.specify/memory/constitution.md` | テスト基準（§2）・技術的意思決定ルール（§5） |
 | `waterfall-preset-guide.md` | テストフェーズ DoD・承認ゲート |
-| `docs/test-plan-template.md` | テスト計画書テンプレート |
+| `.specify/templates/test-plan-template.md` | テスト計画書テンプレート |
 | `tech-stack.md` | テストフレームワークの記入先 |
 | `.github/workflows/quality-gate.yml` | Lint・テスト自動実行の定義 |

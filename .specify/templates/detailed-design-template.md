@@ -4,7 +4,7 @@
 > 生成後、人間がレビューし内容を承認してください。
 > 本ファイルを直接編集する必要はありません。
 >
-> 関連: [憲法 §7](../.specify/memory/constitution.md) / [利用指南書 §10](how-to-use.md)
+> 関連: [憲法 §7](../memory/constitution.md) / [利用指南書 §10](../../docs/how-to-use.md)
 
 ---
 
@@ -121,7 +121,7 @@
 
 ## 4. DB 操作詳細
 
-> テーブル定義は `docs/table-definition-template.md` 生成物を参照。ここでは SQL / クエリの設計方針のみ示す。
+> テーブル定義は `table-definition-template.md` 生成物を参照。ここでは SQL / クエリの設計方針のみ示す。
 
 | 操作 | 対象テーブル | SQL概要 | トランザクション |
 |---|---|---|---|

@@ -36,7 +36,7 @@ Spec Kit公式は、presetによって「Agile、Kanban、Waterfallなど、利�
 - [ ] `data-model.md` にエンティティ・フィールド・関係が定義されていること
 - [ ] `contracts/` にAPI仕様（エンドポイント・リクエスト・レスポンス）が定義されていること
 - [ ] `constitution.md` の Constitution Check をパスしていること
-- [ ] フェーズゲート承認記録（`docs/review-gate-template.md`）の設計フェーズ欄が承認済みであること
+- [ ] フェーズゲート承認記録（`.specify/templates/review-gate-template.md`）の設計フェーズ欄が承認済みであること
 
 ### 実装計画フェーズ DoD
 - [ ] `/speckit.tasks` により `tasks.md` が生成されていること
@@ -52,7 +52,7 @@ Spec Kit公式は、presetによって「Agile、Kanban、Waterfallなど、利�
 - [ ] フェーズゲート承認記録の実装欄が承認済みであること
 
 ### テストフェーズ DoD
-- [ ] `docs/test-plan-template.md` の Exit Criteria を全て満たしていること
+- [ ] `.specify/templates/test-plan-template.md` の Exit Criteria を全て満たしていること
 - [ ] 重大バグ（Critical / High）が 0 件であること
 - [ ] テスト結果が記録・保管されていること
 - [ ] フェーズゲート承認記録のテスト欄が承認済みであること
@@ -68,7 +68,7 @@ Spec Kit公式は、presetによって「Agile、Kanban、Waterfallなど、利�
    ```
    specify preset add <company-waterfall-preset>
    ```
-2. **フェーズを後退させない運用ルール**: ウォーターフォールでは前フェーズへの後戻りを最小化する前提のため、`/speckit.clarify` を `/speckit.plan` 前に必ず実行し、計画確定後の要件変更は変更管理プロセス（`docs/change-request-template.md`）を経由させる。
+2. **フェーズを後退させない運用ルール**: ウォーターフォールでは前フェーズへの後戻りを最小化する前提のため、`/speckit.clarify` を `/speckit.plan` 前に必ず実行し、計画確定後の要件変更は変更管理プロセス（`.specify/templates/change-request-template.md`）を経由させる。
 3. **ドキュメント成果物の正式化**: 人間が用意した「要件定義書」「技術選定書」を入力とし、そこから生成された `specs/<feature>/spec.md`（詳細仕様）・`plan.md`（設計）・`tasks.md`（作業計画）を正式承認フローに乗せる（Markdownのままでも、必要であればWord/PDFへ変換）。入力ドキュメントと生成物の両方を版管理し、承認の証跡とする。
 
 ## ドキュメント一覧

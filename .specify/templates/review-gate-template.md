@@ -65,7 +65,7 @@
 
 ### テストフェーズ
 
-- [ ] `docs/test-plan-template.md` の Exit Criteria を全て満たしていること
+- [ ] `test-plan-template.md` の Exit Criteria を全て満たしていること
 - [ ] 重大バグ（Critical / High）が 0 件であること
 - [ ] テスト結果が記録されていること
 

@@ -4,7 +4,7 @@
 > 生成後、人間がレビューし内容を承認してください。
 > 本ファイルを直接編集する必要はありません。
 >
-> 関連: [憲法 §7](../.specify/memory/constitution.md) / [利用指南書 §10](how-to-use.md)
+> 関連: [憲法 §7](../memory/constitution.md) / [利用指南書 §10](../../docs/how-to-use.md)
 
 ---
 

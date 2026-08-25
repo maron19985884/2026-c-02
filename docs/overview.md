@@ -34,18 +34,19 @@ AI駆動開発は、進め方や品質基準を各作業者・AIエージェン�
 ```
 ├── .specify/
 │   ├── memory/constitution.md        … 憲法（組織で一度確定→そのまま再利用）
-│   └── templates/overrides/          … 会社固有ルールの上書き先（空）
+│   └── templates/
+│       ├── change-spec-template.md   … 改修用の狭いspecテンプレ（AIが生成）
+│       └── overrides/                … 会社固有ルールの上書き先（空）
 ├── .github/workflows/quality-gate.yml … Lint自動チェック（GitHubへの変更で発火）
 └── docs/
     ├── overview.md                   … 本ファイル（説明用サマリ）
     ├── inputs/
     │   ├── requirements-template.md  … 要件定義書テンプレ（人間が記入）
     │   └── tech-stack-template.md    … 技術選定書テンプレ（コピー元。記入は不可）
-    ├── guides/
-    │   ├── lint-preset-guide.md      … 会社固有Lintルールのpreset化手順
-    │   ├── waterfall-preset-guide.md … ウォーターフォール運用ガイド
-    │   └── brownfield-guide.md       … 既存システム改修ガイド
-    └── change-spec-template.md       … 改修用の狭いspecテンプレ
+    └── guides/
+        ├── lint-preset-guide.md      … 会社固有Lintルールのpreset化手順
+        ├── waterfall-preset-guide.md … ウォーターフォール運用ガイド
+        └── brownfield-guide.md       … 既存システム改修ガイド
 ```
 | 区分 | ファイル | 誰が用意 |
 |---|---|---|

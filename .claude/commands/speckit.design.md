@@ -32,9 +32,9 @@ If `$ARGUMENTS` is empty or invalid, ask: "どの設計書を生成しますか�
 
 | `$ARGUMENTS` | テンプレート | 出力先 |
 |---|---|---|
-| `basic` | `docs/basic-design-template.md` | `FEATURE_DIR/basic-design.md` |
-| `detail` | `docs/detailed-design-template.md` | `FEATURE_DIR/detailed-design.md` |
-| `table` | `docs/table-definition-template.md` | `FEATURE_DIR/table-definition.md` |
+| `basic` | `.specify/templates/basic-design-template.md` | `FEATURE_DIR/basic-design.md` |
+| `detail` | `.specify/templates/detailed-design-template.md` | `FEATURE_DIR/detailed-design.md` |
+| `table` | `.specify/templates/table-definition-template.md` | `FEATURE_DIR/table-definition.md` |
 
 ## Outline
 
@@ -46,7 +46,7 @@ If `$ARGUMENTS` is empty or invalid, ask: "どの設計書を生成しますか�
    - **If exists**: `FEATURE_DIR/data-model.md` — entity overview
    - **If exists**: `FEATURE_DIR/contracts/` — API endpoint summary
 
-2. **Generate basic design document** using `docs/basic-design-template.md`:
+2. **Generate basic design document** using `.specify/templates/basic-design-template.md`:
    - メタ情報: Fill from FEATURE_DIR context
    - システム概要: From spec.md overview and scope
    - アーキテクチャ概要: From plan.md; generate SVG-based component diagram (inline HTML+SVG)
@@ -68,7 +68,7 @@ If `$ARGUMENTS` is empty or invalid, ask: "どの設計書を生成しますか�
    - **If exists**: `FEATURE_DIR/contracts/` — API request/response schemas
    - **If exists**: `FEATURE_DIR/data-model.md` — entity field definitions
 
-2. **Generate detailed design document** using `docs/detailed-design-template.md`:
+2. **Generate detailed design document** using `.specify/templates/detailed-design-template.md`:
    - メタ情報: Fill from FEATURE_DIR context
    - 修正対象ファイル一覧: From tasks.md file paths; list all new/modified files
    - モジュール詳細: For each major file — processing summary, class/function list, sequence diagram (HTML+SVG), parameter definitions (Input/Output), error handling
@@ -85,7 +85,7 @@ If `$ARGUMENTS` is empty or invalid, ask: "どの設計書を生成しますか�
    - **Required**: `FEATURE_DIR/plan.md` — database tech stack (DB type, version)
    - **If exists**: `FEATURE_DIR/contracts/` — data schema references
 
-2. **Generate table definition document** using `docs/table-definition-template.md`:
+2. **Generate table definition document** using `.specify/templates/table-definition-template.md`:
    - メタ情報: Fill from FEATURE_DIR context
    - テーブル一覧: One row per entity from data-model.md
    - テーブル定義詳細: For each table — column definitions (name, type, length, NOT NULL, default, remarks), indexes, constraints/foreign keys

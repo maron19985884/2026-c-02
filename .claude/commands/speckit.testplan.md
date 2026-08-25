@@ -31,7 +31,7 @@ You **MUST** consider the user input before proceeding (if not empty).
    - **Required**: `FEATURE_DIR/plan.md` — tech stack (testing framework, environment)
    - **If exists**: `tech-stack.md` — test tool decisions
 
-2. **Generate test plan** using `docs/test-plan-template.md` as the output structure:
+2. **Generate test plan** using `.specify/templates/test-plan-template.md` as the output structure:
    - Section 1 (テスト対象): Fill from spec.md and FEATURE_DIR context
    - Section 2 (テスト種別): Determine test types based on constitution §2 and spec.md priorities
      - Mark unit tests as "実施する" if there is any business logic (mandatory per constitution §2)
@@ -53,5 +53,5 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 - Do NOT start testing. This command only generates the plan document.
 - Mark any section that cannot be determined from available artifacts as `<!-- 要確認: [理由] -->`.
-- Do NOT modify `docs/test-plan-template.md` itself — only write to `FEATURE_DIR/test-plan.md`.
+- Do NOT modify `.specify/templates/test-plan-template.md` itself — only write to `FEATURE_DIR/test-plan.md`.
 - テストフレームワークは `tech-stack.md` の記載に従う。未記載の場合は `<!-- 要確認: 技術選定書にテストフレームワークが記載されていません -->` を付ける。

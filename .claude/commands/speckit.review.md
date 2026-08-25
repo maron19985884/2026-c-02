@@ -34,7 +34,7 @@ If empty, detect the current phase from available artifacts (see step 2).
    - `FEATURE_DIR/tasks.md`, `/speckit.analyze` output if available (実装計画フェーズ)
    - `FEATURE_DIR/test-plan.md` (テストフェーズ)
 
-3. **Generate review gate record** using `docs/review-gate-template.md` as the output structure:
+3. **Generate review gate record** using `.specify/templates/review-gate-template.md` as the output structure:
    - Section 1 (基本情報): Fill from FEATURE_DIR context and detected phase
    - Section 2 (成果物確認チェックリスト): For the detected phase only — check each item against AVAILABLE_DOCS
      - If artifact exists → `- [x]`
@@ -52,6 +52,6 @@ If empty, detect the current phase from available artifacts (see step 2).
 ## Key Rules
 
 - Do NOT proceed to the next phase automatically. This command only generates the record.
-- Do NOT modify `docs/review-gate-template.md` itself.
+- Do NOT modify `.specify/templates/review-gate-template.md` itself.
 - 承認署名欄は必ず空欄のまま出力する（人間が記入する）。
 - 指摘事項は確認できた範囲のみ記載し、不明な部分は `<!-- 要確認: [理由] -->` を付ける。

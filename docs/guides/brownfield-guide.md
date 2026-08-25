@@ -21,7 +21,7 @@ Spec Kit公式READMEは「既存プロジェクトについては、Spec Kit本�
 - `constitution.md`に記載できない詳細な既存設計書・コーディング規約（`.cursor/rules/`等の既存ドキュメント）がある場合は、`constitution.md`から参照する形にし、内容を丸ごと転記しない。
 
 ### 3. 改修specのテンプレート（`.specify/templates/overrides/`に配置）
-`docs/change-spec-template.md` を参照。改修前後の差分・影響範囲・既存テストへの影響を明記する欄を追加している。
+`.specify/templates/change-spec-template.md` を参照。改修前後の差分・影響範囲・既存テストへの影響を明記する欄を追加している。
 
 ### 4. 段階的にspec化範囲を広げる
 - 1回の改修ごとにspecを積み重ねることで、頻繁に改修されるモジュールは自然とspecのカバレッジが高まっていく（インクリメンタルなspec化）。

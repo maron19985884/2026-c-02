@@ -24,6 +24,7 @@
 | 11 | 2026-08-26 | `docs/inputs/`（新規） | 移動 | 案件開始時に人間が記入する3ファイルを docs/inputs/ へ分離（詳細は後述） |
 | 12 | 2026-08-26 | `docs/inputs/tech-stack-example.md`（新規） | 新規 | requirements-example.md と対になる技術選定書の記入例を新規作成（詳細は後述） |
 | 13 | 2026-08-26 | `docs/guides/`（新規） | 移動 | 状況依存の運用ガイド4本を docs/guides/ へ分離（詳細は後述） |
+| 14 | 2026-08-26 | `.specify/templates/`配下7ファイル | 移動 | AI生成テンプレートを .specify/templates/ へ統合（詳細は後述） |
 
 ---
 
@@ -241,3 +242,20 @@
 - 参照元8ファイル（`docs/change-request-template.md`・`docs/review-gate-template.md`・`docs/test-plan-template.md`・`.specify/memory/constitution.md`・`.github/workflows/quality-gate.yml`・`.claude/commands/speckit.change.md`・`docs/how-to-use.md`・`docs/overview.md`）のパスを `docs/guides/...` に更新
 
 これで `docs/` 直下は「エントリポイント」（`overview.md`・`how-to-use.md`）と、まだ未整理の「AIが読んで成果物を生成するテンプレート」7ファイルのみになった。残る③（`.specify/templates/`への統合）は参照箇所が最も多く（約54箇所）、既存の`.specify/templates/`側のファイル命名・構造との整合も検討が必要なため、着手には改めて合意を取ること。
+
+---
+
+## 対処14（2026-08-26）：AI生成テンプレート7本を .specify/templates/ へ統合
+
+**背景**: `basic-design-template.md`・`detailed-design-template.md`・`table-definition-template.md`・`test-plan-template.md`・`review-gate-template.md`・`change-request-template.md`・`change-spec-template.md`は、いずれも「AIがコマンド経由で読み込み、`specs/`や`docs/reviews/`・`docs/changes/`に成果物を生成する」という役割を持つ。`.specify/templates/`には既に`spec-template.md`・`plan-template.md`・`tasks-template.md`・`checklist-template.md`という全く同じ役割のファイルが置かれており、この7ファイルがIssue #16追加時に`docs/`へ置かれたのは、Spec Kit自身が既に持つ置き場所の規約からの逸脱だった。
+
+**対処**:
+- 上記7ファイルを `.specify/templates/` へ移動
+- `basic-design-template.md`・`detailed-design-template.md`・`table-definition-template.md`内の相対リンク（`../.specify/memory/constitution.md`→`../memory/constitution.md`、`how-to-use.md`→`../../docs/how-to-use.md`）と、`detailed-design-template.md`→`table-definition-template.md`・`review-gate-template.md`→`test-plan-template.md`の兄弟参照を修正
+- `docs/inputs/requirements-template.md`内の2つのリンク（変更要求書・フェーズゲート承認記録）を新しい参照先に修正。このうち1つ（フェーズゲート承認記録）は対処11（docs/inputs/移動）の際に見落として壊れたままになっていたバグで、今回あわせて修正した
+- 参照元7ファイル（`.claude/commands/speckit.design.md`・`speckit.testplan.md`・`speckit.review.md`・`speckit.change.md`・`.specify/memory/constitution.md`・`docs/guides/waterfall-preset-guide.md`・`docs/guides/brownfield-guide.md`・`docs/guides/testing-strategy-guide.md`・`docs/how-to-use.md`）のパスを更新
+- `docs/overview.md`の構成図を更新（`change-spec-template.md`は`.specify/templates/`側へ移設として反映）
+
+**言語方針の明確化**: `.specify/templates/`には元々英語で書かれた`spec-template.md`等（Spec Kit公式）と、日本語で書かれた本プロジェクト追加分（今回移動した7ファイル）が混在することになる。翻訳は行わず、**Spec Kit公式テンプレートは英語のまま、本プロジェクトが追加したテンプレートは日本語で統一する**方針とする。これは前回のAI判定（`ai-review.md` M-4）が指摘していた「テンプレート言語の統一方針が未決定」への回答でもある。
+
+これで `docs/` 直下は `overview.md`・`how-to-use.md`・`guides/`・`inputs/` の4項目のみとなり、②③④すべてが完了した。
