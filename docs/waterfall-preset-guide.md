@@ -14,7 +14,7 @@ Spec Kit公式は、presetによって「Agile、Kanban、Waterfallなど、利�
 | ウォーターフォールフェーズ | Spec Kitコマンド | 主な成果物 | 承認ゲート |
 |---|---|---|---|
 | 要件定義 | 要件定義書（人間）→ `/speckit.specify` → `/speckit.clarify` → `/speckit.review` | `requirements.md`、`spec.md`、`docs/reviews/phase1-*.md` | AI生成の承認記録に人間が署名 |
-| 基本設計・詳細設計 | 技術選定書（人間）→ `/speckit.plan` → `/speckit.design basic` → `/speckit.design detail` → `/speckit.design table` → `/speckit.review` | `tech-stack-template.md`、`plan.md`、`basic-design.md`、`detailed-design.md`、`table-definition.md`、`docs/reviews/phase2-*.md` | AI生成設計書に人間が承認署名 |
+| 基本設計・詳細設計 | 技術選定書（人間）→ `/speckit.plan` → `/speckit.design basic` → `/speckit.design detail` → `/speckit.design table` → `/speckit.review` | `tech-stack.md`、`plan.md`、`basic-design.md`、`detailed-design.md`、`table-definition.md`、`docs/reviews/phase2-*.md` | AI生成設計書に人間が承認署名 |
 | 実装計画 | `/speckit.tasks` → `/speckit.analyze` → `/speckit.review` | `tasks.md`、`docs/reviews/phase3-*.md` | AI生成の承認記録に人間が署名 |
 | 実装 | `/speckit.implement` | ソースコード | コードレビュー＋Lint品質ゲート（`.github/workflows/quality-gate.yml`） |
 | テスト | `/speckit.testplan` → 単体・結合・受け入れテスト実施 → `/speckit.review` | `test-plan.md`（AI生成）、テスト結果、`docs/reviews/phase5-*.md` | AI生成テスト計画を承認 → テスト結果に人間が署名 |
@@ -31,7 +31,7 @@ Spec Kit公式は、presetによって「Agile、Kanban、Waterfallなど、利�
 - [ ] `requirements.md` の承認欄に PM / 顧客代表の承認が記録されていること
 
 ### 設計フェーズ DoD
-- [ ] `docs/tech-stack-template.md` が全セクション記入済みであること
+- [ ] `tech-stack.md` が全セクション記入済みであること
 - [ ] `/speckit.plan` により `plan.md` が生成されていること
 - [ ] `data-model.md` にエンティティ・フィールド・関係が定義されていること
 - [ ] `contracts/` にAPI仕様（エンドポイント・リクエスト・レスポンス）が定義されていること
@@ -77,7 +77,7 @@ Spec Kit公式は、presetによって「Agile、Kanban、Waterfallなど、利�
 |---|---|---|---|
 | `requirements.md` | **人間** | 手作業で記入 | 要件定義 |
 | `user_requirements.md` | **人間** | 手作業で記入 | 要件定義 |
-| `docs/tech-stack-template.md` | **人間** | 手作業で記入（AI編集禁止） | 設計 |
+| `tech-stack.md` | **人間** | 手作業で記入（AI編集禁止。雛形は `docs/tech-stack-template.md`） | 設計 |
 | `specs/[###]/spec.md` | AI | `/speckit.specify` | 要件定義 |
 | `specs/[###]/plan.md` | AI | `/speckit.plan` | 設計 |
 | `specs/[###]/basic-design.md` | AI | `/speckit.design basic` | 設計 |

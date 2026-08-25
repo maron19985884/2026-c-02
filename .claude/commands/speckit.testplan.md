@@ -29,7 +29,7 @@ You **MUST** consider the user input before proceeding (if not empty).
    - **Required**: `FEATURE_DIR/spec.md` — Acceptance Criteria, User Stories
    - **Required**: `FEATURE_DIR/tasks.md` — implemented tasks and phases
    - **Required**: `FEATURE_DIR/plan.md` — tech stack (testing framework, environment)
-   - **If exists**: `docs/tech-stack-template.md` — test tool decisions
+   - **If exists**: `tech-stack.md` — test tool decisions
 
 2. **Generate test plan** using `docs/test-plan-template.md` as the output structure:
    - Section 1 (テスト対象): Fill from spec.md and FEATURE_DIR context
@@ -54,4 +54,4 @@ You **MUST** consider the user input before proceeding (if not empty).
 - Do NOT start testing. This command only generates the plan document.
 - Mark any section that cannot be determined from available artifacts as `<!-- 要確認: [理由] -->`.
 - Do NOT modify `docs/test-plan-template.md` itself — only write to `FEATURE_DIR/test-plan.md`.
-- テストフレームワークは `docs/tech-stack-template.md` の記載に従う。未記載の場合は `<!-- 要確認: 技術選定書にテストフレームワークが記載されていません -->` を付ける。
+- テストフレームワークは `tech-stack.md` の記載に従う。未記載の場合は `<!-- 要確認: 技術選定書にテストフレームワークが記載されていません -->` を付ける。

@@ -1,6 +1,7 @@
 # Spec Kit テンプレート — 変更ログ
 
 > AI as a Judge 評価（`docs/ai-review.md` 参照）に基づき、CRITICAL→HIGH→MEDIUM の優先順で対処した記録。
+> 対処8以降は、その後の利用過程で見つかった個別の指摘への対応。
 
 ---
 
@@ -17,6 +18,7 @@
 | 5 | 2026-07-13 | `docs/requirements-template.md` | 修正 | 変更履歴・承認欄を追加 |
 | 6 | 2026-07-13 | `docs/waterfall-preset-guide.md` | 修正 | 各フェーズの DoD・ドキュメント一覧を追加 |
 | 7 | 2026-07-13 | `.claude/commands/speckit.implement.md` | 修正 | gitignore 検証を言語動的判定に変更 |
+| 8 | 2026-08-26 | `tech-stack.md`（新規）ほか15ファイル | 新規／修正 | tech-stack-template.md の命名・配置矛盾を解消（詳細は後述） |
 
 ---
 
@@ -155,3 +157,32 @@
 | Go | `.gitignore` (*.exe, vendor/, *.out) |
 | Rust | `.gitignore` (target/, debug/) |
 | その他 | `.gitignore` 最低限 (.env*, *.log, .DS_Store, Thumbs.db) |
+
+---
+
+## 対処8（2026-08-26）：tech-stack-template.md の命名・配置矛盾を解消
+
+**背景**: `docs/tech-stack-template.md` は、ファイル名が `-template` サフィックス付きで `docs/` 配下にある一方、実際の運用は「コピーせず本ファイルを直接編集する」というものだった。これは `requirements.md`（ルート・実物）と `docs/requirements-template.md`（`docs/`・コピー元の空雛形）という他の全ドキュメントの命名規則と矛盾しており、さらにファイル自身のヘッダーが「本ファイルをコピーして…配置する」と書いていたのに対し、`docs/how-to-use.md`§5は「コピーは不要」と正反対の指示をしていた（矛盾が二重になっていた）。
+
+**対処方針**: `requirements.md` と同じ構造に統一する。
+
+| ファイル | 役割 |
+|---|---|
+| `tech-stack.md`（新設・ルート直下） | この案件の技術選定書の実物。人間が記入。AI編集禁止 |
+| `docs/tech-stack-template.md`（維持） | 空の雛形。次の案件用のコピー元として内容を書き換えず保管する |
+
+### 変更点
+
+| # | 対象 | 変更内容 |
+|---|---|---|
+| 1 | `tech-stack.md`（新規） | `docs/tech-stack-template.md` の本文（セクション1〜6）をそのまま複製し、ヘッダーを「実物」向けに書き換え |
+| 2 | `docs/tech-stack-template.md` | ヘッダーを「空の雛形・コピー元」向けに書き換え。自己矛盾していた「コピーして配置」の指示を維持しつつ、`../tech-stack.md`への参照リンクを追加 |
+| 3 | `CLAUDE.md` | `@docs/tech-stack-template.md` → `@tech-stack.md` に変更（他の2つの人間記入ドキュメントと同じ形式に統一） |
+| 4 | `.specify/memory/constitution.md`§5 | 参照パスを `tech-stack.md` に変更 |
+| 5 | `.specify/templates/plan-template.md` | Tech Stack欄・Technical Context欄の参照パスを `tech-stack.md` に変更 |
+| 6 | `.claude/commands/speckit.testplan.md` / `speckit.change.md` / `speckit.design.md` | 参照パスを `tech-stack.md` に変更 |
+| 7 | `docs/how-to-use.md` | §5「技術選定書の書き方」に雛形コピー手順を追加（従来「コピーは不要」としていた記述を修正）。他11箇所の参照パスを `tech-stack.md` に変更 |
+| 8 | `docs/waterfall-preset-guide.md` / `review-gate-template.md` / `change-request-template.md` / `testing-strategy-guide.md` / `requirements-template.md` / `basic-design-template.md` / `overview.md` | 参照パスを `tech-stack.md` に変更（雛形への言及が必要な箇所のみ `docs/tech-stack-template.md` を残す） |
+| 9 | `.claude/commands/speckit.plan.md` | Key Rules の「Do NOT select technology — technology is defined in `requirements.md` and `constitution.md`」を「`tech-stack.md`」参照に修正。前回のAI判定（`docs/ai-review.md` C-3）で指摘された、`speckit.plan.md`と`plan-template.md`の矛盾のうち、`plan-template.md`側のヘッダーのみ直っていた分の未対応部分 |
+
+**修正しなかった箇所**: `IBM Bob/changelog.md`・`docs/changelog.md`（本ファイル自身の対処1〜7の記述）・`docs/changelog-speckit-ai-driven-guide.md`・`docs/request-speckit-guide-2026-08-25-issue16.md` — いずれも過去の意思決定を記録した履歴であり、当時は `docs/tech-stack-template.md` が正しいパスだったため書き換えない。

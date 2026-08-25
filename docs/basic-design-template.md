@@ -50,7 +50,7 @@
 
 ### 2.2 採用アーキテクチャパターン
 
-（`docs/tech-stack-template.md` の「全体構成」から引用する）
+（`tech-stack.md` の「全体構成」から引用する）
 
 ---
 

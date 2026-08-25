@@ -37,7 +37,7 @@ AI（Claude Code）に「仕様→設計→タスク→実装」という順序�
 | ドキュメント | ファイル | タイミング | なぜ人間が作るか |
 |---|---|---|---|
 | 要件定義書 | `requirements.md` + `user_requirements.md` | `/speckit.specify` の前 | 「何を作るか」はビジネス判断。AI に委ねると意図がずれる |
-| 技術選定書 | `docs/tech-stack-template.md` | `/speckit.plan` の前 | 「何で作るか」はアーキテクチャ判断。不用意な依存混入を防ぐため AI 編集禁止 |
+| 技術選定書 | `tech-stack.md` | `/speckit.plan` の前 | 「何で作るか」はアーキテクチャ判断。不用意な依存混入を防ぐため AI 編集禁止 |
 
 ### AI が生成するもの
 
@@ -207,7 +207,7 @@ AI は推測で埋めてしまい、意図と異なる spec.md が出てくる�
 
 ### ファイルの場所
 
-`docs/tech-stack-template.md`
+`tech-stack.md`（リポジトリのルート直下。空の雛形は `docs/tech-stack-template.md`）
 
 ### ⚠️ 重要ルール：AI は編集禁止
 
@@ -217,9 +217,10 @@ AI は推測で埋めてしまい、意図と異なる spec.md が出てくる�
 
 ### 記入の手順
 
-1. `docs/tech-stack-template.md` を直接開いて記入する（コピーは不要。このファイルが案件の技術選定書になる）
-2. 「全体構成」「使用技術スタック」「Lint・品質ツール」の各セクションを埋める
-3. 記入が完了したら `/speckit.plan` を実行する（→ §6）
+1. ルートに `tech-stack.md` がまだ無い場合は、`docs/tech-stack-template.md` をコピーしてルート直下に `tech-stack.md` として配置する（この雛形をそのまま新規プロジェクトとして使い始めた場合は配置済み）
+2. `tech-stack.md` を直接開いて記入する
+3. 「全体構成」「使用技術スタック」「Lint・品質ツール」の各セクションを埋める
+4. 記入が完了したら `/speckit.plan` を実行する（→ §6）
 
 ### 良い例と悪い例
 
@@ -252,12 +253,12 @@ AI は推測で埋めてしまい、意図と異なる spec.md が出てくる�
 
 ### 「AI は編集禁止」の具体的な意味
 
-Claude Code がチャット内で「この依存を追加します」「バージョンを変更します」と言っても、`docs/tech-stack-template.md` への書き込みを指示してはいけません。
+Claude Code がチャット内で「この依存を追加します」「バージョンを変更します」と言っても、`tech-stack.md` への書き込みを指示してはいけません。
 技術スタックを変更したい場合は、担当者がファイルを直接編集してから、再度 `/speckit.plan` を実行してください。
 
 ### 完了条件
 
-`docs/tech-stack-template.md` の「使用技術スタック」テーブルが全レイヤー記入済みで、「Lint・品質ツール」セクションも埋まっていること。
+`tech-stack.md` の「使用技術スタック」テーブルが全レイヤー記入済みで、「Lint・品質ツール」セクションも埋まっていること。
 
 ---
 
@@ -317,9 +318,9 @@ Claude Code がチャット内で「この依存を追加します」「バー�
 
 ### コマンド③: `/speckit.plan`
 
-**何をするか**: `spec.md` と `docs/tech-stack-template.md` をもとに設計書（`plan.md`）・データモデル（`data-model.md`）・API仕様（`contracts/`）を生成する。
+**何をするか**: `spec.md` と `tech-stack.md` をもとに設計書（`plan.md`）・データモデル（`data-model.md`）・API仕様（`contracts/`）を生成する。
 
-**事前確認**: `docs/tech-stack-template.md` が記入済みであること（未記入だと `NEEDS CLARIFICATION` になる）。
+**事前確認**: `tech-stack.md` が記入済みであること（未記入だと `NEEDS CLARIFICATION` になる）。
 
 **実行方法**:
 ```
@@ -448,7 +449,7 @@ Claude Code がチャット内で「この依存を追加します」「バー�
 
 **人間は何を確認するか**:
 - テストケースが `spec.md` の受け入れシナリオをカバーしているか
-- テストフレームワークが `docs/tech-stack-template.md` の記載と一致しているか
+- テストフレームワークが `tech-stack.md` の記載と一致しているか
 - `<!-- 要確認: -->` マーカーが残っていれば、該当箇所を補記してから承認する
 - 承認したら `test-plan.md` の「承認」セクションに署名を記入する
 
@@ -523,7 +524,7 @@ mvn test
   ─────────────────────── フェーズゲート ──────────
 
 設計フェーズ
-  人間: docs/tech-stack-template.md 記入
+  人間: tech-stack.md 記入
   AI:   /speckit.plan → plan.md, data-model.md, contracts/
   AI:   /speckit.design basic → basic-design.md
   AI:   /speckit.design detail → detailed-design.md
@@ -589,7 +590,7 @@ mvn test
 
 **完了条件**: 変更要求書が `docs/changes/` に保管され、承認欄に署名が入っていること。
 
-> ⚠️ **技術選定書（`docs/tech-stack-template.md`）への変更は人間のみが実施します**（AI は変更しません）。技術変更が必要な場合は、変更要求書を承認してから担当者が `docs/tech-stack-template.md` を直接編集し、その後 `/speckit.plan` を再実行してください。
+> ⚠️ **技術選定書（`tech-stack.md`）への変更は人間のみが実施します**（AI は変更しません）。技術変更が必要な場合は、変更要求書を承認してから担当者が `tech-stack.md` を直接編集し、その後 `/speckit.plan` を再実行してください。
 
 ---
 
@@ -663,14 +664,14 @@ mvn test
 
 ### Q. `/speckit.plan` を実行したら `NEEDS CLARIFICATION` が大量に出た
 
-**A.** `docs/tech-stack-template.md` の記入が不足しています。特に「使用技術スタック」テーブルを全レイヤー埋めてください。
+**A.** `tech-stack.md` の記入が不足しています。特に「使用技術スタック」テーブルを全レイヤー埋めてください。
 
 ---
 
 ### Q. `/speckit.plan` を実行したら `Constitution Check: ERROR` が出た
 
 **A.** 生成された `plan.md` の `Constitution Check` セクションを確認し、どの憲法原則と矛盾しているかを確認してください。
-技術選定書の記述が憲法と食い違っている場合は、`docs/tech-stack-template.md` を修正（人間が記入）してから再実行します。
+技術選定書の記述が憲法と食い違っている場合は、`tech-stack.md` を修正（人間が記入）してから再実行します。
 
 ---
 
@@ -730,7 +731,7 @@ Lint ルールを変更したい場合は `docs/lint-preset-guide.md` を参照�
 | `docs/overview.md` | 雛形のサマリー（1ページ概要） |
 | `docs/requirements-template.md` | 要件定義書の空欄テンプレート |
 | `docs/requirements-example.md` | 要件定義書の記入例（オンライン書店） |
-| `docs/tech-stack-template.md` | 技術選定書（**人間が記入するファイル本体**） |
+| `tech-stack.md` | 技術選定書本体（**人間が記入**。空の雛形は `docs/tech-stack-template.md`） |
 | `docs/waterfall-preset-guide.md` | ウォーターフォール運用ガイド・DoD定義 |
 | `docs/brownfield-guide.md` | 既存システム改修ガイド |
 | `docs/testing-strategy-guide.md` | テスト戦略ガイド（Javaフレームワーク選定含む） |

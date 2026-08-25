@@ -43,7 +43,7 @@ You **MUST** consider the user input before proceeding (if not empty).
    - Section 4 (影響分析):
      - Scope impact: compare change against `requirements.md` scope
      - Effort: estimate based on changed tasks (from `tasks.md`)
-     - Technical impact: check if `docs/tech-stack-template.md` change is required
+     - Technical impact: check if `tech-stack.md` change is required
      - Risk: identify risks from the change
    - Section 5 (対応方針): Leave checkboxes blank for human decision
    - Section 6 (承認): Leave blank for human to sign
@@ -58,5 +58,5 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 - Do NOT apply any changes to `spec.md`, `plan.md`, `tasks.md` or any other artifact. This command only generates the change request document.
 - Do NOT modify `docs/change-request-template.md` itself.
-- 技術選定書（`docs/tech-stack-template.md`）への記入・変更は人間のみが実施する（憲法§5参照）。
+- 技術選定書（`tech-stack.md`）への記入・変更は人間のみが実施する（憲法§5参照）。
 - 影響分析の工数見積もりは参考値として明示し、`<!-- 参考値: 実際の見積もりは人間が確認すること -->` を付ける。

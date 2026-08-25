@@ -2,7 +2,7 @@
 
 **Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
 **Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
-**Tech Stack**: Defined in `docs/tech-stack-template.md` (do NOT re-select here)
+**Tech Stack**: Defined in `tech-stack.md` (do NOT re-select here)
 
 **Note**: This template is filled in by the `/speckit.plan` command.
 
@@ -12,13 +12,13 @@
 
 ## Technical Context
 
-> Read `docs/tech-stack-template.md` and fill each field from it. Mark as NEEDS CLARIFICATION only if the field is genuinely absent from that document.
+> Read `tech-stack.md` and fill each field from it. Mark as NEEDS CLARIFICATION only if the field is genuinely absent from that document.
 
-**Language/Version**: [from tech-stack-template.md]
-**Primary Dependencies**: [from tech-stack-template.md]
-**Storage**: [from tech-stack-template.md, or N/A]
-**Testing**: [from tech-stack-template.md]
-**Target Platform**: [from tech-stack-template.md]
+**Language/Version**: [from tech-stack.md]
+**Primary Dependencies**: [from tech-stack.md]
+**Storage**: [from tech-stack.md, or N/A]
+**Testing**: [from tech-stack.md]
+**Target Platform**: [from tech-stack.md]
 **Project Type**: [e.g., web-service / cli / library / mobile-app]
 **Performance Goals**: [from requirements doc, or N/A]
 **Constraints**: [from requirements doc, or N/A]
@@ -47,7 +47,7 @@ specs/[###-feature]/
 ### Source Code (repository root)
 
 <!--
-  Choose ONE option below based on tech-stack-template.md. Delete unused options.
+  Choose ONE option below based on tech-stack.md. Delete unused options.
   Replace example paths with real paths for this project.
 -->
 

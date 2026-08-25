@@ -269,7 +269,7 @@ SpecKit のコア（specify → plan → tasks → implement）には手を入�
 
 ## 7. 技術選定書の管理ルール
 
-**技術選定書（`docs/tech-stack-template.md`）への記入・変更は人間のみが実施する。AIによる記入・変更は不可。**
+**技術選定書（`tech-stack.md`）への記入・変更は人間のみが実施する。AIによる記入・変更は不可。**
 
 不用意なライブラリ・依存関係の混入を防ぐため、AIエージェントは技術選定書を参照するのみとし、
 内容を追加・変更・削除してはならない。（`constitution.md` §5 参照）
@@ -283,5 +283,5 @@ SpecKit のコア（specify → plan → tasks → implement）には手を入�
 | `.specify/memory/constitution.md` | テスト基準（§2）・技術的意思決定ルール（§5） |
 | `docs/waterfall-preset-guide.md` | テストフェーズ DoD・承認ゲート |
 | `docs/test-plan-template.md` | テスト計画書テンプレート |
-| `docs/tech-stack-template.md` | テストフレームワークの記入先 |
+| `tech-stack.md` | テストフレームワークの記入先 |
 | `.github/workflows/quality-gate.yml` | Lint・テスト自動実行の定義 |

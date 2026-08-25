@@ -44,7 +44,7 @@
 
 ### 設計フェーズ
 
-- [ ] `docs/tech-stack-template.md` が記入済みであること
+- [ ] `tech-stack.md` が記入済みであること
 - [ ] `/speckit.plan` により `plan.md` が生成されていること
 - [ ] `data-model.md` が生成されていること
 - [ ] `contracts/` 配下にAPI仕様が定義されていること

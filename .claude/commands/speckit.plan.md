@@ -63,4 +63,4 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 - Use absolute paths
 - ERROR on gate failures or unresolved clarifications
-- Do NOT select technology — technology is defined in `requirements.md` and `constitution.md`
+- Do NOT select technology — technology is defined in `tech-stack.md`

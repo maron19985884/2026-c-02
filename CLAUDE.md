@@ -26,7 +26,7 @@
 
 ## 技術選定書
 
-@docs/tech-stack-template.md
+@tech-stack.md
 
 ---
 
@@ -46,7 +46,7 @@
 | 仕様化 | `specs/[###]/spec.md` | `/speckit.specify` |
 | 設計 | `specs/[###]/plan.md` | `/speckit.plan` |
 | タスク分解 | `specs/[###]/tasks.md` | `/speckit.tasks` |
-| 実装 | ソースコード（tech-stack-template.md 参照） | `/speckit.implement` |
+| 実装 | ソースコード（tech-stack.md 参照） | `/speckit.implement` |
 | 整合性確認 | 分析レポート | `/speckit.analyze` |
 
 ### コマンド使用手順
@@ -75,7 +75,7 @@
 
 ## 共通コーディング規約
 
-> **プロジェクト開始時に記入する。** 技術選定書（`docs/tech-stack-template.md`）の
+> **プロジェクト開始時に記入する。** 技術選定書（`tech-stack.md`）の
 > 技術スタックが確定してから以下を埋めること。
 
 ### 命名規則

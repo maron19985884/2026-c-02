@@ -68,7 +68,7 @@
 
 ### 技術への影響
 
-- [ ] 技術選定書（`docs/tech-stack-template.md`）の変更が必要
+- [ ] 技術選定書（`tech-stack.md`）の変更が必要
 - [ ] 憲法（`constitution.md`）の変更が必要
 - [ ] 既存実装への後方互換性への影響：
 
