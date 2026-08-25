@@ -13,12 +13,12 @@ Spec Kit公式は、presetによって「Agile、Kanban、Waterfallなど、利�
 
 | ウォーターフォールフェーズ | Spec Kitコマンド | 主な成果物 | 承認ゲート |
 |---|---|---|---|
-| 要件定義 | 要件定義書（人間）→ `/speckit.specify` → `/speckit.clarify` | `requirements.md`、`spec.md` | 要件定義書レビュー・承認（顧客/PM）|
-| 基本設計・詳細設計 | 技術選定書（人間）→ `/speckit.plan` | `tech-stack-template.md`、`plan.md`、`data-model.md`、`contracts/` | 設計レビュー・承認（アーキテクト/リーダー） |
-| 実装計画 | `/speckit.tasks` → `/speckit.analyze` | `tasks.md` | タスク一覧レビュー（PM/リーダー） |
+| 要件定義 | 要件定義書（人間）→ `/speckit.specify` → `/speckit.clarify` → `/speckit.review` | `requirements.md`、`spec.md`、`docs/reviews/phase1-*.md` | AI生成の承認記録に人間が署名 |
+| 基本設計・詳細設計 | 技術選定書（人間）→ `/speckit.plan` → `/speckit.design basic` → `/speckit.design detail` → `/speckit.design table` → `/speckit.review` | `tech-stack-template.md`、`plan.md`、`basic-design.md`、`detailed-design.md`、`table-definition.md`、`docs/reviews/phase2-*.md` | AI生成設計書に人間が承認署名 |
+| 実装計画 | `/speckit.tasks` → `/speckit.analyze` → `/speckit.review` | `tasks.md`、`docs/reviews/phase3-*.md` | AI生成の承認記録に人間が署名 |
 | 実装 | `/speckit.implement` | ソースコード | コードレビュー＋Lint品質ゲート（`.github/workflows/quality-gate.yml`） |
-| テスト | テスト計画書（人間）→ 単体・結合・受け入れテスト実施 | `test-plan-template.md`、テスト結果 | テスト結果レビュー・承認 |
-| リリース | デプロイ | — | リリース承認 |
+| テスト | `/speckit.testplan` → 単体・結合・受け入れテスト実施 → `/speckit.review` | `test-plan.md`（AI生成）、テスト結果、`docs/reviews/phase5-*.md` | AI生成テスト計画を承認 → テスト結果に人間が署名 |
+| リリース | デプロイ → `/speckit.review` | `docs/reviews/phase6-*.md` | リリース承認 |
 
 ## 各フェーズの完了定義（Definition of Done）
 
@@ -73,16 +73,20 @@ Spec Kit公式は、presetによって「Agile、Kanban、Waterfallなど、利�
 
 ## ドキュメント一覧
 
-| ドキュメント | 誰が作るか | フェーズ |
-|---|---|---|
-| `requirements.md` | 人間 | 要件定義 |
-| `docs/tech-stack-template.md` | 人間 | 設計 |
-| `docs/test-plan-template.md` | 人間 | テスト |
-| `docs/review-gate-template.md` | 人間（フェーズごと） | 全フェーズ |
-| `docs/change-request-template.md` | 人間（変更発生時） | 全フェーズ |
-| `specs/[###]/spec.md` | `/speckit.specify` | 要件定義 |
-| `specs/[###]/plan.md` | `/speckit.plan` | 設計 |
-| `specs/[###]/tasks.md` | `/speckit.tasks` | 実装計画 |
+| ドキュメント | 誰が作るか | コマンド / 担当 | フェーズ |
+|---|---|---|---|
+| `requirements.md` | **人間** | 手作業で記入 | 要件定義 |
+| `user_requirements.md` | **人間** | 手作業で記入 | 要件定義 |
+| `docs/tech-stack-template.md` | **人間** | 手作業で記入（AI編集禁止） | 設計 |
+| `specs/[###]/spec.md` | AI | `/speckit.specify` | 要件定義 |
+| `specs/[###]/plan.md` | AI | `/speckit.plan` | 設計 |
+| `specs/[###]/basic-design.md` | AI | `/speckit.design basic` | 設計 |
+| `specs/[###]/detailed-design.md` | AI | `/speckit.design detail` | 設計 |
+| `specs/[###]/table-definition.md` | AI | `/speckit.design table` | 設計 |
+| `specs/[###]/tasks.md` | AI | `/speckit.tasks` | 実装計画 |
+| `specs/[###]/test-plan.md` | AI | `/speckit.testplan` | テスト |
+| `docs/reviews/phase[N]-*.md` | AI（署名は人間） | `/speckit.review` | 全フェーズ |
+| `docs/changes/CR-[NNN]-*.md` | AI（承認は人間） | `/speckit.change [変更の概要]` | 全フェーズ |
 
 ## 💡 Claude補足
 - **注意点**: Spec Kit自体はSDD（仕様駆動開発）の思想に基づき、仕様を「実装後も更新され続ける生きた文書」として扱う設計です。ウォーターフォールの「フェーズ確定後は原則変更しない」という運用にする場合は、上記のように承認ゲートをpreset側で追加する運用ルールが必要であり、Spec Kit本体がウォーターフォール専用モードを持っているわけではありません。

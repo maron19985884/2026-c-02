@@ -1,10 +1,12 @@
 # フェーズゲート承認記録（テンプレート）
 
-> **位置づけ**: ウォーターフォール各フェーズの完了時に記入・保管するドキュメントです。
+> **位置づけ**: ウォーターフォール各フェーズの完了時に **`/speckit.review` が本テンプレートをもとに承認記録を生成します**。
+> 人間はその出力をレビューし、承認署名を記入してから次フェーズへ進みます。
 > `docs/waterfall-preset-guide.md` の承認ゲートに対応します。
 >
-> 使い方: フェーズ完了のたびに本ファイルをコピーし、フェーズ名を変えて `docs/reviews/` 等に保管します。
-> 例: `docs/reviews/phase1-requirements.md`、`docs/reviews/phase2-design.md`
+> **使い方**: フェーズ完了時に `/speckit.review` を実行する → 出力を `docs/reviews/` に保存する → 人間が内容確認・署名する。
+> 例: `docs/reviews/phase1-requirements-2026-07-01.md`、`docs/reviews/phase2-design-2026-07-10.md`
+> 本ファイル自体は AI の生成テンプレートです。直接編集する必要はありません。
 
 ---
 
