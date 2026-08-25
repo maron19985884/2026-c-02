@@ -275,3 +275,11 @@
 **追加修正（同日）**: 上記の初回対処では `speckit.tasks.md` に「Option 1（single project）: Models→Services→CLI/APIエントリポイント／Option 2（web application）: Models→Services→Endpoints→Frontend components／Option 3（mobile+API）: API層→モバイルクライアント」という、`plan-template.md`のOption 1/2/3をそのまま複製した固定分岐を書いてしまっていた。これは`plan-template.md`が持つ列挙（閉じた3択ではなく出発点の選択肢）を`speckit.tasks.md`側にも複製することになり、片方だけ変更されると再び同種の不整合（今回のF-2そのもの）を生む設計だった。
 
 `tasks.md`は`tech-stack.md`を直接読まず`plan.md`を読む設計のため（`tech-stack.md`自体にディレクトリ構成の情報はない）、「`plan.md`のStructure Decisionに実際に書かれている層だけを使う」という動的な参照に修正した。固定の3分類を撤廃し、`plan.md`にフロントエンド／プレゼンテーション層が無ければそのタスクを生成しない、という判断をAIに直接行わせる形にした（`speckit.tasks.md`・`tasks-template.md`・`detailed-design-template.md`の3ファイルから`Option 1/2/3`という固定文言を除去）。
+
+---
+
+## 対処16（2026-08-26）：speckit.plan.mdのLoad contextにtech-stack.mdを明記
+
+**背景**: `speckit.plan.md`の「Load context」手順は`FEATURE_SPEC`と`constitution.md`を読むとだけ書かれており、`tech-stack.md`を読むことが明示されていなかった。`tech-stack.md`を読む指示は`plan-template.md`側のコメント（「Read tech-stack.md and fill each field from it」）にしかなく、コマンド本体の手順には出てきていなかった。実害はほぼないが（テンプレート側の指示で結果的に読まれる）、`plan.md`が`tech-stack.md`を入力とすることをコマンド本体でも明示すべきという指摘を受けて対応。
+
+**対処**: `.claude/commands/speckit.plan.md`の「Load context」手順に`tech-stack.md`を追加し、「Read `FEATURE_SPEC`, `tech-stack.md`, and `.specify/memory/constitution.md`」に修正。

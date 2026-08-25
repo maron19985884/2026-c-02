@@ -26,7 +26,7 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 1. **Setup**: Run `.specify/scripts/bash/setup-plan.sh --json` from repo root and parse JSON for `FEATURE_SPEC`, `IMPL_PLAN`, `SPECS_DIR`, `BRANCH`.
 
-2. **Load context**: Read `FEATURE_SPEC` and `.specify/memory/constitution.md`. The plan template is already copied to `IMPL_PLAN`.
+2. **Load context**: Read `FEATURE_SPEC`, `tech-stack.md`, and `.specify/memory/constitution.md`. The plan template is already copied to `IMPL_PLAN`.
 
 3. **Execute plan workflow**:
    - Fill Technical Context (mark unknowns as "NEEDS CLARIFICATION")
