@@ -41,8 +41,8 @@ AI駆動開発は、進め方や品質基準を各作業者・AIエージェン�
 └── docs/
     ├── overview.md                   … 本ファイル（説明用サマリ）
     ├── inputs/
-    │   ├── requirements-template.md  … 要件定義書テンプレ（人間が記入）
-    │   └── tech-stack-template.md    … 技術選定書テンプレ（コピー元。記入は不可）
+    │   ├── requirements-template.md  … 要件定義書テンプレ（コピー元。ルート直下 requirements.md へコピーして記入。本体の編集は不可）
+    │   └── tech-stack-template.md    … 技術選定書テンプレ（コピー元。ルート直下 tech-stack.md へコピーして記入。本体の編集は不可）
     └── guides/
         ├── lint-preset-guide.md      … 会社固有Lintルールのpreset化手順
         ├── waterfall-preset-guide.md … ウォーターフォール運用ガイド

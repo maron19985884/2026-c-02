@@ -283,3 +283,11 @@
 **背景**: `speckit.plan.md`の「Load context」手順は`FEATURE_SPEC`と`constitution.md`を読むとだけ書かれており、`tech-stack.md`を読むことが明示されていなかった。`tech-stack.md`を読む指示は`plan-template.md`側のコメント（「Read tech-stack.md and fill each field from it」）にしかなく、コマンド本体の手順には出てきていなかった。実害はほぼないが（テンプレート側の指示で結果的に読まれる）、`plan.md`が`tech-stack.md`を入力とすることをコマンド本体でも明示すべきという指摘を受けて対応。
 
 **対処**: `.claude/commands/speckit.plan.md`の「Load context」手順に`tech-stack.md`を追加し、「Read `FEATURE_SPEC`, `tech-stack.md`, and `.specify/memory/constitution.md`」に修正。
+
+---
+
+## 対処17（2026-08-26）：overview.mdの構成図でrequirements-template.mdの説明が矛盾していた点を修正
+
+**背景**: `docs/overview.md`の「雛形の構成」図で、`requirements-template.md`が「（人間が記入）」、`tech-stack-template.md`が「（コピー元。記入は不可）」と、同じ`docs/inputs/`配下の対になるファイルなのに説明の書き方が矛盾していた。対処8で`tech-stack-template.md`について整理した「コピー元は編集せず、コピー先の実物を編集する」という規則が、`requirements-template.md`側の説明には反映されていなかった。
+
+**対処**: 両方とも「コピー元。ルート直下の実物（`requirements.md`／`tech-stack.md`）へコピーして記入。本体の編集は不可」という同じ形式の説明に統一した。
