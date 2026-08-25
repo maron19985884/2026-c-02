@@ -46,52 +46,29 @@
 
 ## 2. リスク分析・テスト計画書・テスト仕様書・テストケースをAIで作成できるか
 
-### 現状の SpecKit のテスト関連の限界
+### 現状（2026-08-26 更新）
 
-現在のフローは以下のとおりです：
+テスト計画書・テストケースの生成は **実装済み** です。
 
 ```
-/speckit.specify → /speckit.plan → /speckit.tasks → /speckit.implement
+/speckit.specify → /speckit.plan → /speckit.tasks → /speckit.implement → /speckit.testplan → /speckit.review
 ```
 
-テストに関して現在の仕組みが担っているのは受け入れシナリオの記述のみで、
-`test-plan-template.md` は「**人間が記入する**」前提で設計されており、
-AIフローに接続されていません。
+`/speckit.testplan`（`.claude/commands/speckit.testplan.md`）が `spec.md` の受け入れシナリオ（Acceptance Scenarios）からテストケースを生成し、`.specify/templates/test-plan-template.md` の構造で `specs/[###]/test-plan.md` を出力します。`test-plan-template.md` は「人間が記入する」ではなく「AIが生成し、人間が承認する」という位置づけです。
 
 ### AIで作成できるもの・できないもの
 
-| やりたいこと | AIに頼める？ | 必要な追加作業 |
-|---|---|---|
-| テスト仕様書・テストケースの生成 | ✅ 可能 | コマンド（.md）新設 |
-| テストコードの実装 | ✅ 可能 | `tasks.md` テンプレへのテストタスク追記 |
-| CI でのテスト実行設定（yml）の生成 | ✅ 可能 | AIに `quality-gate.yml` 改修を依頼 |
-| テストが実際に通ること | ⚠️ AIが保証はできない | 実行環境（DB・外部サービス等）の整備は人間が必要 |
+| やりたいこと | 状況 |
+|---|---|
+| テスト計画書・テストケースの生成 | ✅ 実装済み（`/speckit.testplan`） |
+| テストコードの実装 | ✅ 可能（`tasks.md` にテストタスクを含めて `/speckit.implement` で実装） |
+| リスク分析の生成 | ❌ 未実装。専用コマンド（例: `speckit.risk.md`）は存在しない |
+| CI でのテスト実行（yml） | ❌ 未実装。`quality-gate.yml` は Lint のみでテスト実行ステップがない（詳細は本ガイド§5） |
+| テストが実際に通ること | ⚠️ AIが保証はできない。実行環境（DB・外部サービス等）の整備は人間が必要 |
 
-### 必要な変更の全体像（3層）
+### 残っている拡張余地
 
-```
-層1: コマンドファイル（.claude/commands/）          → 新規追加が必要（現存なし）
-     speckit.risk.md     … リスク分析生成
-     speckit.testplan.md … テスト計画書生成
-     speckit.testspec.md … テスト仕様書・テストケース生成
-
-層2: テンプレート（.specify/templates/ または docs/） → 既存の書き換え・新規追加が必要
-     test-plan-template.md  … 「人間が記入」→「AIが生成」へ位置づけ変更
-     risk-template.md       … 新規作成
-     test-spec-template.md  … 新規作成
-
-層3: SpecKit フローへの組み込み                       → 既存コマンドの handoffs 追記が必要
-     speckit.implement.md に handoff 追加
-     waterfall-preset-guide.md の対応表更新
-```
-
-### SpecKit の枠を超えるか
-
-**超えません。SpecKit の想定する拡張方法（preset・コマンド追加）の範囲内です。**
-
-SpecKit のコア（specify → plan → tasks → implement）には手を入れず、
-`.claude/commands/` への新コマンド追加・テンプレート整備・既存コマンドへの接続という
-3層の追加で対応できます。
+「リスク分析の生成」のみ、`/speckit.testplan` とは別の専用コマンドが必要な未実装機能として残っています。SpecKit のコア（specify → plan → tasks → implement）には手を入れず、既存の拡張方法（`.claude/commands/` へのコマンド追加）の範囲内で対応できます。
 
 ---
 

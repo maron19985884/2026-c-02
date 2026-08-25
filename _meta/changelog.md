@@ -302,3 +302,15 @@
 - §4の記入手順を§5と同じ「まだ無ければコピーして配置する」形式に修正し、ステップを1つ追加
 - §4・§5とも、記入先ファイルを開く手順に「（`docs/inputs/...` 本体は次の案件用のコピー元なので編集しない）」を明記
 - これで要件定義書・技術選定書の両方について、「どこにコピーして編集するか」「テンプレート本体は編集しないこと」がoverview.mdとhow-to-use.mdの両方で同じ言い回しに揃った
+
+---
+
+## 対処19（2026-08-26）：testing-strategy-guide.mdの陳腐化した記述を修正（F-4対応）
+
+**背景**: `docs/guides/testing-strategy-guide.md`§2が「`speckit.testplan.md`は現存しない（新規追加が必要）」「`test-plan-template.md`は人間が記入する前提でAIフローに接続されていない」と書いていたが、この記述はIssue #16で`/speckit.testplan`が実装される前に書かれたもので、現在は事実と異なっていた。`how-to-use.md`から本ガイドへ誘導される導線があるため、読者が矛盾した情報に行き当たる状態だった。
+
+**対処**:
+- §2を全面更新。「テスト計画書・テストケースの生成は実装済み」であることを明記し、フロー図に`/speckit.testplan`・`/speckit.review`を追加
+- 「AIで作成できるもの・できないもの」表を現状に合わせて更新。テスト計画書・テストケース生成を✅実装済みに変更し、未実装として残るのは「リスク分析の生成」（専用コマンド`speckit.risk.md`等が存在しない）のみであることを明示
+- 旧「必要な変更の全体像（3層）」は、残課題がリスク分析のみになったため簡略化した「残っている拡張余地」に置き換え
+- あわせて、本ガイドが層3の未実装事項として指摘していた「`speckit.implement.md`にhandoff追加」を実施。`.claude/commands/speckit.implement.md`に`/speckit.testplan`へのhandoffを追加し、他のコマンド（`speckit.tasks.md`等）と同じ形式で `/speckit.implement` 完了後に `/speckit.testplan` への導線を明示した

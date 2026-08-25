@@ -1,5 +1,10 @@
 ---
 description: Execute the implementation plan by processing and executing all tasks defined in tasks.md
+handoffs:
+  - label: Generate Test Plan
+    agent: speckit.testplan
+    prompt: Generate the test plan for this feature
+    send: true
 ---
 
 ## User Input
