@@ -314,3 +314,13 @@
 - 「AIで作成できるもの・できないもの」表を現状に合わせて更新。テスト計画書・テストケース生成を✅実装済みに変更し、未実装として残るのは「リスク分析の生成」（専用コマンド`speckit.risk.md`等が存在しない）のみであることを明示
 - 旧「必要な変更の全体像（3層）」は、残課題がリスク分析のみになったため簡略化した「残っている拡張余地」に置き換え
 - あわせて、本ガイドが層3の未実装事項として指摘していた「`speckit.implement.md`にhandoff追加」を実施。`.claude/commands/speckit.implement.md`に`/speckit.testplan`へのhandoffを追加し、他のコマンド（`speckit.tasks.md`等）と同じ形式で `/speckit.implement` 完了後に `/speckit.testplan` への導線を明示した
+
+---
+
+## 対処20（2026-08-26）：L-2の検討 — speckit.checklist.mdとspeckit.review.mdの役割分けを注記のみで明確化
+
+**背景**: 前回のAI判定（`ai-review.md` L-2）は「`speckit.checklist.md`が`waterfall-preset-guide.md`のDoDを参照していない」ことを指摘していたが、精査した結果これは誤検知だった。`speckit.checklist.md`は**要件定義書（`spec.md`）の書き方の質**（網羅性・明確さ・一貫性等）を検証するコマンドで、冒頭で"do NOT verify implementation behavior"と明言している。一方DoDは**フェーズの成果物が実在し承認されているか**を確認するもので、既に`/speckit.review`（`.specify/templates/review-gate-template.md`）が担当しており、その「成果物確認チェックリスト」はDoDとほぼ同一内容になっている。両者は目的が異なる別物であり、`speckit.checklist.md`にDoD参照を追加すると「実装・成果物の状態を見ない」という自身の設計原則と矛盾するため、**L-2の対応（DoD参照の追加）は見送る**。
+
+**対処**: 機能の混在は行わず、両コマンドの冒頭に「他コマンドとの違い」を1行注記するのみに留めた。
+- `speckit.checklist.md`：要件の書き方の質を検証する旨、DoDの完了判定は`/speckit.review`を使う旨を明記
+- `speckit.review.md`：成果物の実在・承認を確認する旨、要件品質のチェックは`/speckit.checklist`を使う旨を明記

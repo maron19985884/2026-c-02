@@ -2,6 +2,8 @@
 description: Generate a custom checklist for the current feature based on user requirements.
 ---
 
+> **他コマンドとの違い**: 本コマンドは**要件定義書（`spec.md`）の書き方の質**（網羅性・明確さ・一貫性・カバー範囲・測定可能性）を検証する。**フェーズの成果物が揃っているか・承認されているか**（Definition of Done）は検証しない。フェーズゲートの完了判定は `/speckit.review` を使うこと。
+
 ## Checklist Purpose: "Unit Tests for Requirements"
 
 Checklists are **unit tests for requirements writing** — they validate the quality, clarity, and completeness of requirements. They do NOT verify implementation behavior.

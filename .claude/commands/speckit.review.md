@@ -2,6 +2,8 @@
 description: Generate a phase gate review record for the current feature phase. Output is AI-generated; human approval (signature) required to proceed to the next phase.
 ---
 
+> **他コマンドとの違い**: 本コマンドは**フェーズの成果物が実在し、承認されているか**（Definition of Done、`docs/guides/waterfall-preset-guide.md`参照）を確認する。**要件定義書の書き方の質**（明確さ・網羅性等）は検証しない。要件品質のチェックは `/speckit.checklist` を使うこと。
+
 ## User Input
 
 ```text
