@@ -15,8 +15,8 @@ AI駆動開発は、進め方や品質基準を各作業者・AIエージェン�
 
 ## 事前準備（人間が用意するもの）
 - **憲法（constitution.md）**：組織で一度確定させた版を、都度作り直さずそのまま配置する（本ひな形に雛形を同梱）
-- **要件定義書**：AIには書かせず人間が作成する（雛形: `docs/requirements-template.md`）
-- **技術選定書**：使用技術・アーキテクチャ方針を人間がまとめる（記入先: ルート直下 `tech-stack.md`。空の雛形: `docs/tech-stack-template.md`）
+- **要件定義書**：AIには書かせず人間が作成する（雛形: `docs/inputs/requirements-template.md`）
+- **技術選定書**：使用技術・アーキテクチャ方針を人間がまとめる（記入先: ルート直下 `tech-stack.md`。空の雛形: `docs/inputs/tech-stack-template.md`）
 - これら3点をプロジェクトに配置してからSpec Kitのフローに入る
 
 ## 使う流れ
@@ -38,8 +38,9 @@ AI駆動開発は、進め方や品質基準を各作業者・AIエージェン�
 ├── .github/workflows/quality-gate.yml … Lint自動チェック（GitHubへの変更で発火）
 └── docs/
     ├── overview.md                   … 本ファイル（説明用サマリ）
-    ├── requirements-template.md      … 要件定義書テンプレ（人間が記入）
-    ├── tech-stack-template.md        … 技術選定書テンプレ（コピー元。記入は不可）
+    ├── inputs/
+    │   ├── requirements-template.md  … 要件定義書テンプレ（人間が記入）
+    │   └── tech-stack-template.md    … 技術選定書テンプレ（コピー元。記入は不可）
     ├── lint-preset-guide.md          … 会社固有Lintルールのpreset化手順
     ├── waterfall-preset-guide.md     … ウォーターフォール運用ガイド
     ├── brownfield-guide.md           … 既存システム改修ガイド

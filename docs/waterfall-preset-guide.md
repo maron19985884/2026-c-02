@@ -77,7 +77,7 @@ Spec Kit公式は、presetによって「Agile、Kanban、Waterfallなど、利�
 |---|---|---|---|
 | `requirements.md` | **人間** | 手作業で記入 | 要件定義 |
 | `user_requirements.md` | **人間** | 手作業で記入 | 要件定義 |
-| `tech-stack.md` | **人間** | 手作業で記入（AI編集禁止。雛形は `docs/tech-stack-template.md`） | 設計 |
+| `tech-stack.md` | **人間** | 手作業で記入（AI編集禁止。雛形は `docs/inputs/tech-stack-template.md`） | 設計 |
 | `specs/[###]/spec.md` | AI | `/speckit.specify` | 要件定義 |
 | `specs/[###]/plan.md` | AI | `/speckit.plan` | 設計 |
 | `specs/[###]/basic-design.md` | AI | `/speckit.design basic` | 設計 |

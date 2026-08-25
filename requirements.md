@@ -4,8 +4,8 @@
 > **更新タイミング:** 要件変更時（変更履歴を必ず記録する）
 >
 > **書き方の参照先:**
-> - テンプレート（空欄の雛形）: [`docs/requirements-template.md`](docs/requirements-template.md)
-> - 記入例（オンライン書店サンプル）: [`docs/requirements-example.md`](docs/requirements-example.md)
+> - テンプレート（空欄の雛形）: [`docs/inputs/requirements-template.md`](docs/inputs/requirements-template.md)
+> - 記入例（オンライン書店サンプル）: [`docs/inputs/requirements-example.md`](docs/inputs/requirements-example.md)
 > - 利用指南書: [`docs/how-to-use.md`](docs/how-to-use.md) §4
 
 ---

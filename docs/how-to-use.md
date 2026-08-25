@@ -137,9 +137,9 @@ git remote set-url origin <新リポジトリのURL>
 
 ### 記入の手順
 
-1. `docs/requirements-template.md` を参考に `requirements.md` を記入する
+1. `docs/inputs/requirements-template.md` を参考に `requirements.md` を記入する
 2. `user_requirements.md` を画面・機能単位で記入する
-3. 記入例（`docs/requirements-example.md`）を参照しながら埋める
+3. 記入例（`docs/inputs/requirements-example.md`）を参照しながら埋める
 4. `/speckit.specify` を実行して `spec.md` を生成する（→ §6）
 
 ### 良い例と悪い例
@@ -195,7 +195,7 @@ AI は推測で埋めてしまい、意図と異なる spec.md が出てくる�
 
 ### 記入例の参照先
 
-→ [`docs/requirements-example.md`](requirements-example.md)（オンライン書店のサンプル）
+→ [`docs/inputs/requirements-example.md`](inputs/requirements-example.md)（オンライン書店のサンプル）
 
 ### 完了条件
 
@@ -207,7 +207,7 @@ AI は推測で埋めてしまい、意図と異なる spec.md が出てくる�
 
 ### ファイルの場所
 
-`tech-stack.md`（リポジトリのルート直下。空の雛形は `docs/tech-stack-template.md`）
+`tech-stack.md`（リポジトリのルート直下。空の雛形は `docs/inputs/tech-stack-template.md`）
 
 ### ⚠️ 重要ルール：AI は編集禁止
 
@@ -217,7 +217,7 @@ AI は推測で埋めてしまい、意図と異なる spec.md が出てくる�
 
 ### 記入の手順
 
-1. ルートに `tech-stack.md` がまだ無い場合は、`docs/tech-stack-template.md` をコピーしてルート直下に `tech-stack.md` として配置する（この雛形をそのまま新規プロジェクトとして使い始めた場合は配置済み）
+1. ルートに `tech-stack.md` がまだ無い場合は、`docs/inputs/tech-stack-template.md` をコピーしてルート直下に `tech-stack.md` として配置する（この雛形をそのまま新規プロジェクトとして使い始めた場合は配置済み）
 2. `tech-stack.md` を直接開いて記入する
 3. 「全体構成」「使用技術スタック」「Lint・品質ツール」の各セクションを埋める
 4. 記入が完了したら `/speckit.plan` を実行する（→ §6）
@@ -729,9 +729,9 @@ Lint ルールを変更したい場合は `docs/lint-preset-guide.md` を参照�
 | ドキュメント | 内容 |
 |---|---|
 | `docs/overview.md` | 雛形のサマリー（1ページ概要） |
-| `docs/requirements-template.md` | 要件定義書の空欄テンプレート |
-| `docs/requirements-example.md` | 要件定義書の記入例（オンライン書店） |
-| `tech-stack.md` | 技術選定書本体（**人間が記入**。空の雛形は `docs/tech-stack-template.md`） |
+| `docs/inputs/requirements-template.md` | 要件定義書の空欄テンプレート |
+| `docs/inputs/requirements-example.md` | 要件定義書の記入例（オンライン書店） |
+| `tech-stack.md` | 技術選定書本体（**人間が記入**。空の雛形は `docs/inputs/tech-stack-template.md`） |
 | `docs/waterfall-preset-guide.md` | ウォーターフォール運用ガイド・DoD定義 |
 | `docs/brownfield-guide.md` | 既存システム改修ガイド |
 | `docs/testing-strategy-guide.md` | テスト戦略ガイド（Javaフレームワーク選定含む） |

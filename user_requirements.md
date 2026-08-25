@@ -5,7 +5,7 @@
 >
 > **書き方の参照先:**
 > - 利用指南書: [`docs/how-to-use.md`](docs/how-to-use.md) §4
-> - 記入例（オンライン書店サンプル）: [`docs/requirements-example.md`](docs/requirements-example.md)
+> - 記入例（オンライン書店サンプル）: [`docs/inputs/requirements-example.md`](docs/inputs/requirements-example.md)
 >
 > **使い方:** ユーザーの「したいこと（ユーザー要件）」を画面・機能単位で記入する。
 > `requirements.md`（システム要件）と合わせて `/speckit.specify` の入力として使用する。

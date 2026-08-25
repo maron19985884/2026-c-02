@@ -21,6 +21,7 @@
 | 8 | 2026-08-26 | `tech-stack.md`（新規）ほか15ファイル | 新規／修正 | tech-stack-template.md の命名・配置矛盾を解消（詳細は後述） |
 | 9 | 2026-08-26 | `.claude/commands/speckit.plan.md` | 修正 | Key Rules の技術参照先を `tech-stack.md` に修正 |
 | 10 | 2026-08-26 | `_meta/`（新規） | 新規／移動／削除 | 雛形自身の開発履歴を docs/ から分離（詳細は後述） |
+| 11 | 2026-08-26 | `docs/inputs/`（新規） | 移動 | 案件開始時に人間が記入する3ファイルを docs/inputs/ へ分離（詳細は後述） |
 
 ---
 
@@ -201,3 +202,17 @@
 - `docs/`側と完全重複していた `IBM Bob/ai-review.md`・`IBM Bob/changelog.md` は削除（`IBM Bob/`フォルダ自体も消滅）
 - `_meta/README.md` を新設し、このフォルダの位置づけ（雛形の使用には不要）を明記
 - `docs/`配下からこれらのファイルへの参照は元々存在しなかったため、`how-to-use.md`等の修正は不要だった
+
+---
+
+## 対処11（2026-08-26）：案件開始時の人間入力を docs/inputs/ へ分離
+
+**背景**: `docs/`配下は「案件開始時に一度だけコピーして使う人間入力」（`requirements-template.md`・`requirements-example.md`・`tech-stack-template.md`）と「状況に応じて読む運用ガイド」（`waterfall-preset-guide.md`等）、「AIが読んで成果物を生成するテンプレート」（`test-plan-template.md`等）、「エントリポイント」（`overview.md`・`how-to-use.md`）が混在しており、利用者が迷いやすい。まず性質が最も明確な「案件開始時の人間入力」3ファイルを分離した。
+
+**対処**:
+- `docs/requirements-template.md`・`requirements-example.md`・`tech-stack-template.md` を `docs/inputs/` へ移動
+- 移動先ファイル内の相対リンク（`../tech-stack.md`→`../../tech-stack.md`、`change-request-template.md`→`../change-request-template.md`、`how-to-use.md`→`../how-to-use.md`）を修正
+- 参照元（`requirements.md`・`user_requirements.md`・`tech-stack.md`・`docs/how-to-use.md`・`docs/overview.md`・`docs/waterfall-preset-guide.md`）のパスを `docs/inputs/...` に更新
+- `docs/overview.md`の構成図に`inputs/`のネストを反映（他の未反映箇所はスコープ外として据え置き）
+
+**見送った範囲**: 「AIが読んで成果物を生成するテンプレート」（`basic-design-template.md`等）を`.specify/templates/`へ統合する案、「状況依存ガイド」を`docs/guides/`へまとめる案は、参照箇所が多く（それぞれ約54箇所・約33箇所）別途合意の上で着手する。
