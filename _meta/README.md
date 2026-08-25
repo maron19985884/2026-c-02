@@ -22,7 +22,8 @@
 | `2026-08-26-ai-review.md` | 第2回評価（69/100点）。`changelog.md` 対処8〜23の起点 |
 | `2026-08-26-0719-claude-sonnet-5-ai-review.md` | 第3回評価・Claude (Sonnet 5)（87/100点）。対処8〜23の完了後に実施した自己評価 |
 | `2026-08-26T0703-ai-review-bob.md` | 第3回評価・Bob (IBM Bob Agent)（83/100点）。Claudeとは独立に同時点を評価 |
-| `2026-08-26-0736-claude-sonnet-5-comparison.md` | 上記2つの第3回評価の比較・統合対応優先順位 |
+| `2026-08-26T0732-cross-review-bob.md` | Bobによる、Bob評価とClaude評価の比較・統合対応優先順位 |
+| `2026-08-26-0736-claude-sonnet-5-comparison.md` | Claudeによる、同じ2つの第3回評価の比較・統合対応優先順位（Bobの比較とは独立に作成） |
 
 ファイル名は`YYYY-MM-DD-ai-review.md`を基本形とし、**同日に複数回評価する場合は`YYYY-MM-DD-HHMM-評価者名-ai-review.md`のように時刻・評価者名を付加する**こと。評価者名はAIエージェント名（例: `claude-sonnet-5`）または人間の氏名を用いる。次回以降の再評価もこの命名規則でこのフォルダに追加する。
 
