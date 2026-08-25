@@ -9,10 +9,19 @@
 
 | ファイル | 内容 |
 |---|---|
-| `ai-review.md` / `ai-review.html` | 2026-07-13 時点の雛形に対する AI as a Judge 評価（62/100点）。HTML版は同内容の別レンダリング |
-| `changelog.md` | 上記評価への対処記録、およびその後の個別修正の記録 |
+| `ai-judge/` | AI as a Judge 評価を時系列で並べたフォルダ（詳細は下記） |
+| `changelog.md` | `ai-judge/`配下の各評価への対処記録、およびその後の個別修正の記録 |
 | `changelog-speckit-ai-driven-guide.md` | 2026-08-25（Issue #16）の指南書新規作成・雛形修正の変更ログ |
 | `request-speckit-guide-2026-08-25-issue16.md` | 上記Issue #16の依頼内容そのもの |
+
+### `ai-judge/`（AI as a Judge 評価の時系列）
+
+| ファイル | 内容 |
+|---|---|
+| `2026-07-13-ai-review.md` / `.html` | 初回評価（62/100点）。HTML版は同内容の別レンダリング |
+| `2026-08-26-ai-review.md` | 再評価（69/100点）。`changelog.md` 対処8〜21の起点 |
+
+ファイル名は`YYYY-MM-DD-ai-review.md`の形式で追加していくこと。次回以降の再評価もこの命名規則でこのフォルダに追加する。
 
 ## なぜ docs/ から分離したか
 

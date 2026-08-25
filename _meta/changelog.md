@@ -1,7 +1,7 @@
 # Spec Kit テンプレート — 変更ログ
 
-> AI as a Judge 評価（`ai-review.md` 参照）に基づき、CRITICAL→HIGH→MEDIUM の優先順で対処した記録。
-> 対処8以降は、その後の利用過程で見つかった個別の指摘への対応。
+> AI as a Judge 評価（[`ai-judge/2026-07-13-ai-review.md`](ai-judge/2026-07-13-ai-review.md)）に基づき、CRITICAL→HIGH→MEDIUM の優先順で対処した記録。
+> 対処8〜21は、その後の利用過程で見つかった個別の指摘、および2026-08-26の再評価（[`ai-judge/2026-08-26-ai-review.md`](ai-judge/2026-08-26-ai-review.md)）への対応。評価の時系列は `ai-judge/` を参照。
 
 ---
 
@@ -348,3 +348,15 @@
 - `waterfall-preset-guide.md`：6フェーズ分のDoDを各2行に圧縮し、「詳細は`review-gate-template.md`を唯一の正とする」「詳細項目の追加・変更は`review-gate-template.md`側で行う」と明記
 
 **副次的に見つかった別課題（今回は対応しない）**: `review-gate-template.md`の§2（成果物確認チェックリスト）は「要件定義／設計／実装計画／実装／テスト／リリース」という直列6フェーズの構造そのものがウォーターフォール前提であり、§1・3・4・5（基本情報・指摘事項・承認判定・承認署名）は方法論に依存しない汎用的な器である。同様に`test-plan-template.md`・`change-request-template.md`・`change-spec-template.md`と`/speckit.review`・`/speckit.change`・`/speckit.testplan`・`/speckit.design`（重厚な設計書を実装前に作る前提）も、Spec Kit公式のspec/plan/tasksコアとは異なり実質「ウォーターフォール専用の追加機能」である。これらは対処14で`.specify/templates/`（汎用テンプレートの置き場所）へ統合したが、アジャイル等への転用を検討する場合は、テンプレートの書き換えではなく、これらのコマンド自体を使うかどうかという判断が必要になる。ウォーターフォール専用機能と汎用機能をどう区別・分離するか（例: Spec Kit公式のpreset機構を使う等）は、今回のF-3対応とは別の設計判断として残す。
+
+---
+
+## 対処23（2026-08-26）：AI as a Judge 評価を時系列で追える `_meta/ai-judge/` を新設
+
+**背景**: `_meta/`にはこれまで2026-07-13の初回評価（`ai-review.md`/`.html`）しか保存されておらず、今回のセッション冒頭に行った2026-08-26の再評価（総合69点、F-1〜F-7として対処1〜22の起点になったもの）はチャット上とArtifact上にしか残っていなかった。メンバーへの説明・pushを前に、評価の推移を時系列で確認できるようにする必要があった。
+
+**対処**:
+- `_meta/ai-judge/` を新設し、`ai-review.md`・`ai-review.html` を `2026-07-13-ai-review.md`・`2026-07-13-ai-review.html` として移動
+- セッション冒頭の再評価を `2026-08-26-ai-review.md` として新規に文書化（総合69/100、軸別スコア、対処1〜7で解消済みの項目、F-1〜F-7の詳細所見、対応優先順位）。以降の対応経緯は本ファイル（`changelog.md`）の対処1〜22を参照する形にした
+- `_meta/README.md`に`ai-judge/`の説明を追加し、次回以降も`YYYY-MM-DD-ai-review.md`の命名規則で追加していく運用を明記
+- 本ファイル冒頭の参照先を`ai-judge/`配下の2ファイルに更新
