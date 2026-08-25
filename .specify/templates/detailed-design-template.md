@@ -27,7 +27,7 @@
 
 ## 1. 修正対象ファイル一覧
 
-> `tasks.md` および `plan.md` のプロジェクト構造をもとに列挙する。パスは `plan.md` の Structure Decision（Option 1/2/3）に従うこと。`backend/`・`frontend/` 構成を仮定してよいのは Option 2（Webアプリケーション）を選択した場合のみ。
+> `tasks.md` および `plan.md` のプロジェクト構造をもとに列挙する。パスは `plan.md` の Structure Decision に実際に記載された構造に従うこと。`backend/`・`frontend/` という2層構成を仮定してよいのは、`plan.md`が実際にその構成を採用している場合のみ。
 
 | ファイルパス | 種別 | 変更内容概要 | 関連タスクID |
 |---|---|---|---|

@@ -60,15 +60,12 @@ Every task MUST follow this format:
 - ❌ `- [ ] Create [Entity] model` (missing ID and Story label)
 - ❌ `T001 [US1] Create model` (missing checkbox)
 
-File paths in generated tasks MUST come from the Structure Decision in `plan.md`, never assumed. Do not default to a `backend/`+`frontend/` layout unless `plan.md` actually selected Option 2 (web application).
+File paths in generated tasks MUST come from the actual Project Structure documented in `plan.md`'s Structure Decision — never assumed. Do not default to a `backend/`+`frontend/` split unless `plan.md` actually describes one.
 
 ### Phase Structure
 
 - **Phase 1**: Setup (project initialization)
 - **Phase 2**: Foundational (blocking prerequisites — MUST complete before user stories)
 - **Phase 3+**: User Stories in priority order (P1, P2, P3…)
-  - Within each story, order tasks by dependency, following the Structure Decision in `plan.md`:
-    - Option 1 (single project): Models → Services → CLI/API entry points
-    - Option 2 (web application): Models → Services → Endpoints → Frontend components
-    - Option 3 (mobile+API): API layer → Mobile client
+  - Within each story, order tasks by dependency, using only the layers that actually appear in `plan.md`'s Project Structure (e.g., data/model layer → business logic layer → interface/API layer → presentation layer). Skip any layer `plan.md` doesn't define — e.g., generate no frontend/presentation tasks if `plan.md`'s structure has none.
 - **Final Phase**: Polish & Cross-Cutting Concerns

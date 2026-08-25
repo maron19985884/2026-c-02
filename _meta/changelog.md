@@ -271,3 +271,7 @@
 - `.specify/templates/tasks-template.md` のPhase 3例示タスク（T009〜T013）のファイルパスを `[path per plan.md Structure Decision]` に置き換え、「plan.mdのStructure Decisionに従う。Webアプリのbackend/frontend構成を既定にしない」旨の注記を追加
 - `.claude/commands/speckit.tasks.md` のExamplesから`book.ts`・「Create Book model」を除去し、同様に汎用プレースホルダーに置き換え。タスク生成規則「Within each story」をOption 1/2/3それぞれに対応する順序（例: Option1はModels→Services→CLI/APIエントリポイント）に分岐させた
 - `.specify/templates/detailed-design-template.md` の「修正対象ファイル一覧」例示行を `backend/src/...`・`frontend/src/...` の2行から `[plan.mdのStructure Decisionに基づくパス]` の1行に統合し、Option 2以外では`backend/`・`frontend/`構成を仮定しない旨を明記
+
+**追加修正（同日）**: 上記の初回対処では `speckit.tasks.md` に「Option 1（single project）: Models→Services→CLI/APIエントリポイント／Option 2（web application）: Models→Services→Endpoints→Frontend components／Option 3（mobile+API）: API層→モバイルクライアント」という、`plan-template.md`のOption 1/2/3をそのまま複製した固定分岐を書いてしまっていた。これは`plan-template.md`が持つ列挙（閉じた3択ではなく出発点の選択肢）を`speckit.tasks.md`側にも複製することになり、片方だけ変更されると再び同種の不整合（今回のF-2そのもの）を生む設計だった。
+
+`tasks.md`は`tech-stack.md`を直接読まず`plan.md`を読む設計のため（`tech-stack.md`自体にディレクトリ構成の情報はない）、「`plan.md`のStructure Decisionに実際に書かれている層だけを使う」という動的な参照に修正した。固定の3分類を撤廃し、`plan.md`にフロントエンド／プレゼンテーション層が無ければそのタスクを生成しない、という判断をAIに直接行わせる形にした（`speckit.tasks.md`・`tasks-template.md`・`detailed-design-template.md`の3ファイルから`Option 1/2/3`という固定文言を除去）。
