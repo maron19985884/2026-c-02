@@ -256,6 +256,10 @@ AI は推測で埋めてしまい、意図と異なる spec.md が出てくる�
 Claude Code がチャット内で「この依存を追加します」「バージョンを変更します」と言っても、`tech-stack.md` への書き込みを指示してはいけません。
 技術スタックを変更したい場合は、担当者がファイルを直接編集してから、再度 `/speckit.plan` を実行してください。
 
+### 記入例の参照先
+
+→ [`docs/inputs/tech-stack-example.md`](inputs/tech-stack-example.md)（オンライン書店のサンプル。`requirements-example.md`と同じ案件の技術選定書）
+
 ### 完了条件
 
 `tech-stack.md` の「使用技術スタック」テーブルが全レイヤー記入済みで、「Lint・品質ツール」セクションも埋まっていること。
@@ -732,6 +736,7 @@ Lint ルールを変更したい場合は `docs/lint-preset-guide.md` を参照�
 | `docs/inputs/requirements-template.md` | 要件定義書の空欄テンプレート |
 | `docs/inputs/requirements-example.md` | 要件定義書の記入例（オンライン書店） |
 | `tech-stack.md` | 技術選定書本体（**人間が記入**。空の雛形は `docs/inputs/tech-stack-template.md`） |
+| `docs/inputs/tech-stack-example.md` | 技術選定書の記入例（オンライン書店。requirements-exampleと同一案件） |
 | `docs/waterfall-preset-guide.md` | ウォーターフォール運用ガイド・DoD定義 |
 | `docs/brownfield-guide.md` | 既存システム改修ガイド |
 | `docs/testing-strategy-guide.md` | テスト戦略ガイド（Javaフレームワーク選定含む） |

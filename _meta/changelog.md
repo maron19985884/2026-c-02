@@ -22,6 +22,7 @@
 | 9 | 2026-08-26 | `.claude/commands/speckit.plan.md` | 修正 | Key Rules の技術参照先を `tech-stack.md` に修正 |
 | 10 | 2026-08-26 | `_meta/`（新規） | 新規／移動／削除 | 雛形自身の開発履歴を docs/ から分離（詳細は後述） |
 | 11 | 2026-08-26 | `docs/inputs/`（新規） | 移動 | 案件開始時に人間が記入する3ファイルを docs/inputs/ へ分離（詳細は後述） |
+| 12 | 2026-08-26 | `docs/inputs/tech-stack-example.md`（新規） | 新規 | requirements-example.md と対になる技術選定書の記入例を新規作成（詳細は後述） |
 
 ---
 
@@ -216,3 +217,13 @@
 - `docs/overview.md`の構成図に`inputs/`のネストを反映（他の未反映箇所はスコープ外として据え置き）
 
 **見送った範囲**: 「AIが読んで成果物を生成するテンプレート」（`basic-design-template.md`等）を`.specify/templates/`へ統合する案、「状況依存ガイド」を`docs/guides/`へまとめる案は、参照箇所が多く（それぞれ約54箇所・約33箇所）別途合意の上で着手する。
+
+---
+
+## 対処12（2026-08-26）：技術選定書の記入例を新規作成
+
+**背景**: `docs/inputs/requirements-example.md`（オンライン書店サンプルの記入済み要件定義書）は存在するのに、対になる技術選定書の記入例（`tech-stack-example.md`）が存在しなかった。要件定義書には「良い例・悪い例」に加え記入例ファイルへの参照があるのに対し、技術選定書は`how-to-use.md`§5にインラインの例（React/Node/PostgreSQL）しかなく、`requirements-example.md`とは無関係な技術選択だった。
+
+**対処**:
+- `docs/inputs/tech-stack-example.md` を新規作成。`requirements-example.md`と同じ「オンライン書店」案件を前提に、この雛形の前身プロジェクト（`feature/h1nakamu`）で実際に採用されたスタック（Next.js + Express.js + TypeScript + MySQL + Docker Compose、port 3000/4000）を記入し、`requirements-example.md`の非機能要件・制約条件と整合させた
+- `tech-stack.md`・`docs/inputs/tech-stack-template.md`のヘッダーと、`docs/how-to-use.md`§5「記入例の参照先」・関連ドキュメント一覧に参照を追加
