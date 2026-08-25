@@ -22,45 +22,30 @@ Spec Kit公式は、presetによって「Agile、Kanban、Waterfallなど、利�
 
 ## 各フェーズの完了定義（Definition of Done）
 
+> 各フェーズの詳細な完了条件（成果物確認チェックリスト）は `.specify/templates/review-gate-template.md` の「2. 成果物確認チェックリスト」を**唯一の正**とする。ここでは重複を避けるため、そのチェックリストと承認署名の2条件のみを示す。詳細な項目を追加・変更する場合は `review-gate-template.md` 側を更新すること（本ファイル側は更新不要）。
+
 ### 要件定義フェーズ DoD
-- [ ] `requirements.md` が全セクション記入済みであること
-- [ ] `/speckit.specify` により `spec.md` が生成されていること
-- [ ] `/speckit.clarify` による曖昧さ解消が完了していること（または「曖昧さなし」と確認済み）
-- [ ] スコープ内・スコープ外が明確に定義されていること
-- [ ] 受け入れ基準（Acceptance Criteria）が全機能要件に対して記載されていること
-- [ ] `requirements.md` の承認欄に PM / 顧客代表の承認が記録されていること
+- [ ] `review-gate-template.md` の「要件定義フェーズ」欄が全項目満たされていること
+- [ ] フェーズゲート承認記録（`docs/reviews/phase1-*.md`）の要件定義フェーズ欄が承認済みであること
 
 ### 設計フェーズ DoD
-- [ ] `tech-stack.md` が全セクション記入済みであること
-- [ ] `/speckit.plan` により `plan.md` が生成されていること
-- [ ] `data-model.md` にエンティティ・フィールド・関係が定義されていること
-- [ ] `contracts/` にAPI仕様（エンドポイント・リクエスト・レスポンス）が定義されていること
-- [ ] `constitution.md` の Constitution Check をパスしていること
-- [ ] フェーズゲート承認記録（`.specify/templates/review-gate-template.md`）の設計フェーズ欄が承認済みであること
+- [ ] `review-gate-template.md` の「設計フェーズ」欄が全項目満たされていること
+- [ ] フェーズゲート承認記録の設計フェーズ欄が承認済みであること
 
 ### 実装計画フェーズ DoD
-- [ ] `/speckit.tasks` により `tasks.md` が生成されていること
-- [ ] `/speckit.analyze` による整合性チェックが完了していること
-- [ ] CRITICAL・HIGH の指摘事項がすべて解消されていること
+- [ ] `review-gate-template.md` の「実装計画フェーズ」欄が全項目満たされていること
 - [ ] フェーズゲート承認記録の実装計画欄が承認済みであること
 
 ### 実装フェーズ DoD
-- [ ] `tasks.md` の全タスクが完了（`[x]`）していること
-- [ ] Lint エラーが 0 件であること
-- [ ] テストカバレッジが `constitution.md` セクション2の目標値以上であること
-- [ ] コードレビューが完了していること
+- [ ] `review-gate-template.md` の「実装フェーズ」欄が全項目満たされていること
 - [ ] フェーズゲート承認記録の実装欄が承認済みであること
 
 ### テストフェーズ DoD
-- [ ] `.specify/templates/test-plan-template.md` の Exit Criteria を全て満たしていること
-- [ ] 重大バグ（Critical / High）が 0 件であること
-- [ ] テスト結果が記録・保管されていること
+- [ ] `review-gate-template.md` の「テストフェーズ」欄が全項目満たされていること
 - [ ] フェーズゲート承認記録のテスト欄が承認済みであること
 
 ### リリースフェーズ DoD
-- [ ] テストフェーズの承認が完了していること
-- [ ] リリース手順書が存在し、手順が検証済みであること
-- [ ] ロールバック手順が定義されていること
+- [ ] `review-gate-template.md` の「リリースフェーズ」欄が全項目満たされていること
 - [ ] フェーズゲート承認記録のリリース欄が承認済みであること
 
 ## 具体的な実装方法

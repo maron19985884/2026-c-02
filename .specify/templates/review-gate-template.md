@@ -35,12 +35,13 @@
 
 ### 要件定義フェーズ
 
-- [ ] `requirements.md` が記入済みであること
+- [ ] `requirements.md` が全セクション記入済みであること
 - [ ] `user_requirements.md` と整合していること
 - [ ] スコープ内・スコープ外が明確に定義されていること
 - [ ] 受け入れ基準（Acceptance Criteria）が記載されていること
 - [ ] `/speckit.specify` により `spec.md` が生成されていること
 - [ ] `/speckit.clarify` による曖昧さ解消が完了していること
+- [ ] `requirements.md` の承認欄に PM / 顧客代表の承認が記録されていること
 
 ### 設計フェーズ
 
@@ -48,6 +49,9 @@
 - [ ] `/speckit.plan` により `plan.md` が生成されていること
 - [ ] `data-model.md` が生成されていること
 - [ ] `contracts/` 配下にAPI仕様が定義されていること
+- [ ] `/speckit.design basic` により `basic-design.md` が生成されていること
+- [ ] `/speckit.design detail` により `detailed-design.md` が生成されていること
+- [ ] `/speckit.design table` により `table-definition.md` が生成されていること（データベースを使用する場合）
 - [ ] `constitution.md` の Constitution Check をパスしていること
 
 ### 実装計画フェーズ
@@ -60,12 +64,12 @@
 
 - [ ] `tasks.md` の全タスクが完了（`[x]`）していること
 - [ ] Lint エラーが 0 件であること
-- [ ] テストカバレッジが目標値以上であること
+- [ ] テストカバレッジが `constitution.md` セクション2の目標値以上であること
 - [ ] コードレビューが完了していること
 
 ### テストフェーズ
 
-- [ ] `test-plan-template.md` の Exit Criteria を全て満たしていること
+- [ ] `.specify/templates/test-plan-template.md` の Exit Criteria を全て満たしていること
 - [ ] 重大バグ（Critical / High）が 0 件であること
 - [ ] テスト結果が記録されていること
 

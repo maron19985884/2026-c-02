@@ -336,3 +336,15 @@
 **対処**: 名前倒れだった最終ステップ「Fail on Lint Errors」を「Verify a Lint stack was detected」に置き換えた。`hashFiles('package.json') == '' && hashFiles('pyproject.toml') == ''`（＝どちらの言語判定にも該当しない）の場合に明示的に`exit 1`し、「この言語用のLintブロックが未定義」という設定不足を、コード自体のLintエラー（各言語のLintステップが個別に失敗させる、従来通りの経路）と区別できるようにした。あわせて、新しい言語ブロックを追加する際はこのif条件にも判定ファイルを追記する必要がある旨をファイル冒頭のコメントに明記した。
 
 **見送った範囲**: Java/Go/Rust等のLintブロック追加、および多言語Lint集約ツールへの乗り換え検討は、対応言語の範囲という別の意思決定を伴うため、今回のスコープに含めず別タスクとした。
+
+---
+
+## 対処22（2026-08-26）：F-3対応 — DoDと成果物確認チェックリストの二重管理を解消
+
+**背景**: `docs/guides/waterfall-preset-guide.md`のDoDと`.specify/templates/review-gate-template.md`の「成果物確認チェックリスト」は、内容がほぼ同じにもかかわらず独立して保守されていた（前者は人間向けの説明文書、後者は`/speckit.review`が実際に読み込んで自動チェックする対象）。精査した結果、3設計書（basic-design.md/detailed-design.md/table-definition.md）の欠落という共通の穴に加えて、要件定義フェーズで既に2箇所の食い違い（`review-gate-template.md`にのみ「`user_requirements.md`との整合」、`waterfall-preset-guide.md`にのみ「`requirements.md`の承認欄記録」）が生じていることが判明した。同期を保つ仕組みが無いため、今後も同様のズレが再発する構造だった。
+
+**対処**: `review-gate-template.md`を成果物確認の**唯一の正**とし、`waterfall-preset-guide.md`のDoDは「`review-gate-template.md`の該当フェーズ欄が満たされていること」＋「承認署名が入っていること」の2条件に要約する形に置き換えた。
+- `review-gate-template.md`：設計フェーズに3設計書の3項目を追加。要件定義フェーズに両ファイルの食い違いだった2項目を統合。実装フェーズ・テストフェーズの表現をより具体的な方（`constitution.md`セクション2参照、フルパス表記）に統一
+- `waterfall-preset-guide.md`：6フェーズ分のDoDを各2行に圧縮し、「詳細は`review-gate-template.md`を唯一の正とする」「詳細項目の追加・変更は`review-gate-template.md`側で行う」と明記
+
+**副次的に見つかった別課題（今回は対応しない）**: `review-gate-template.md`の§2（成果物確認チェックリスト）は「要件定義／設計／実装計画／実装／テスト／リリース」という直列6フェーズの構造そのものがウォーターフォール前提であり、§1・3・4・5（基本情報・指摘事項・承認判定・承認署名）は方法論に依存しない汎用的な器である。同様に`test-plan-template.md`・`change-request-template.md`・`change-spec-template.md`と`/speckit.review`・`/speckit.change`・`/speckit.testplan`・`/speckit.design`（重厚な設計書を実装前に作る前提）も、Spec Kit公式のspec/plan/tasksコアとは異なり実質「ウォーターフォール専用の追加機能」である。これらは対処14で`.specify/templates/`（汎用テンプレートの置き場所）へ統合したが、アジャイル等への転用を検討する場合は、テンプレートの書き換えではなく、これらのコマンド自体を使うかどうかという判断が必要になる。ウォーターフォール専用機能と汎用機能をどう区別・分離するか（例: Spec Kit公式のpreset機構を使う等）は、今回のF-3対応とは別の設計判断として残す。
