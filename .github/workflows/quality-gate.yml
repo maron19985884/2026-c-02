@@ -2,7 +2,7 @@ name: Quality Gate (Lint)
 
 # Spec Kitの /speckit.implement 実行後、AIエージェントが生成・変更した
 # コードに対してLintを強制するためのサンプルCI。
-# 言語別のLintコマンドは組織のpreset（docs/lint-preset-guide.md参照）に合わせて置き換える。
+# 言語別のLintコマンドは組織のpreset（docs/guides/lint-preset-guide.md参照）に合わせて置き換える。
 
 on:
   pull_request:

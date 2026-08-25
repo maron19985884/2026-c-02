@@ -1,7 +1,7 @@
 # テスト戦略ガイド（SpecKit × Java）
 
 > **位置づけ**: SpecKit を使った開発プロジェクトにおけるテスト設計・自動化・AI活用に関する方針をまとめたガイドです。
-> `docs/waterfall-preset-guide.md` のテストフェーズ運用と合わせて参照してください。
+> `waterfall-preset-guide.md` のテストフェーズ運用と合わせて参照してください。
 
 ---
 
@@ -281,7 +281,7 @@ SpecKit のコア（specify → plan → tasks → implement）には手を入�
 | ドキュメント | 内容 |
 |---|---|
 | `.specify/memory/constitution.md` | テスト基準（§2）・技術的意思決定ルール（§5） |
-| `docs/waterfall-preset-guide.md` | テストフェーズ DoD・承認ゲート |
+| `waterfall-preset-guide.md` | テストフェーズ DoD・承認ゲート |
 | `docs/test-plan-template.md` | テスト計画書テンプレート |
 | `tech-stack.md` | テストフレームワークの記入先 |
 | `.github/workflows/quality-gate.yml` | Lint・テスト自動実行の定義 |

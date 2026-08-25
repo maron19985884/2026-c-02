@@ -2,7 +2,7 @@
 
 > **位置づけ**: ウォーターフォール各フェーズの完了時に **`/speckit.review` が本テンプレートをもとに承認記録を生成します**。
 > 人間はその出力をレビューし、承認署名を記入してから次フェーズへ進みます。
-> `docs/waterfall-preset-guide.md` の承認ゲートに対応します。
+> `docs/guides/waterfall-preset-guide.md` の承認ゲートに対応します。
 >
 > **使い方**: フェーズ完了時に `/speckit.review` を実行する → 出力を `docs/reviews/` に保存する → 人間が内容確認・署名する。
 > 例: `docs/reviews/phase1-requirements-2026-07-01.md`、`docs/reviews/phase2-design-2026-07-10.md`

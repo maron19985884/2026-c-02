@@ -23,6 +23,7 @@
 | 10 | 2026-08-26 | `_meta/`（新規） | 新規／移動／削除 | 雛形自身の開発履歴を docs/ から分離（詳細は後述） |
 | 11 | 2026-08-26 | `docs/inputs/`（新規） | 移動 | 案件開始時に人間が記入する3ファイルを docs/inputs/ へ分離（詳細は後述） |
 | 12 | 2026-08-26 | `docs/inputs/tech-stack-example.md`（新規） | 新規 | requirements-example.md と対になる技術選定書の記入例を新規作成（詳細は後述） |
+| 13 | 2026-08-26 | `docs/guides/`（新規） | 移動 | 状況依存の運用ガイド4本を docs/guides/ へ分離（詳細は後述） |
 
 ---
 
@@ -227,3 +228,16 @@
 **対処**:
 - `docs/inputs/tech-stack-example.md` を新規作成。`requirements-example.md`と同じ「オンライン書店」案件を前提に、この雛形の前身プロジェクト（`feature/h1nakamu`）で実際に採用されたスタック（Next.js + Express.js + TypeScript + MySQL + Docker Compose、port 3000/4000）を記入し、`requirements-example.md`の非機能要件・制約条件と整合させた
 - `tech-stack.md`・`docs/inputs/tech-stack-template.md`のヘッダーと、`docs/how-to-use.md`§5「記入例の参照先」・関連ドキュメント一覧に参照を追加
+
+---
+
+## 対処13（2026-08-26）：状況依存の運用ガイドを docs/guides/ へ分離
+
+**背景**: `waterfall-preset-guide.md`・`brownfield-guide.md`・`lint-preset-guide.md`・`testing-strategy-guide.md`は「全案件が読むわけではなく、該当する運用形態のときだけ参照する」という共通の性質を持つ。`docs/`直下では、案件開始時に必ず記入する`docs/inputs/`配下のファイルや、AIが自動で読み込むテンプレート類と混在しており区別しにくかった。
+
+**対処**:
+- 上記4ファイルを `docs/guides/` へ移動
+- `testing-strategy-guide.md`内の自己参照（`waterfall-preset-guide.md`への言及、2箇所）を相対パスに修正
+- 参照元8ファイル（`docs/change-request-template.md`・`docs/review-gate-template.md`・`docs/test-plan-template.md`・`.specify/memory/constitution.md`・`.github/workflows/quality-gate.yml`・`.claude/commands/speckit.change.md`・`docs/how-to-use.md`・`docs/overview.md`）のパスを `docs/guides/...` に更新
+
+これで `docs/` 直下は「エントリポイント」（`overview.md`・`how-to-use.md`）と、まだ未整理の「AIが読んで成果物を生成するテンプレート」7ファイルのみになった。残る③（`.specify/templates/`への統合）は参照箇所が最も多く（約54箇所）、既存の`.specify/templates/`側のファイル命名・構造との整合も検討が必要なため、着手には改めて合意を取ること。

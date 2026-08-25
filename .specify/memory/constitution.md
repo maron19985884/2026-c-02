@@ -11,7 +11,7 @@
 
 ## 1. コード品質原則（Code Quality）
 - すべてのコードは、静的解析（Lint）で **エラー0件** を必須とする。警告(Warning)の扱いはプロジェクト単位でpresetに定義する。
-- Lintツールは言語・スタックにより異なる（例: JavaScript/TypeScript → ESLint、Python → Ruff、Java → Checkstyle）。具体的なルールセットは本ファイルに直接書かず、`docs/lint-preset-guide.md` の手順でpreset化し、`.specify/templates/overrides/` または独自presetパッケージとして管理する。
+- Lintツールは言語・スタックにより異なる（例: JavaScript/TypeScript → ESLint、Python → Ruff、Java → Checkstyle）。具体的なルールセットは本ファイルに直接書かず、`docs/guides/lint-preset-guide.md` の手順でpreset化し、`.specify/templates/overrides/` または独自presetパッケージとして管理する。
 - Lint基準の変更は本憲法の改訂手続き（レビュー＋承認）を経て反映する。
 
 ## 2. テスト基準（Testing Standards）
@@ -34,8 +34,8 @@
 - **技術選定書（`tech-stack.md`）への記入・変更は人間のみが実施する。AIによる記入・変更は不可。** 不用意なライブラリ・依存関係の混入を防ぐため、AIエージェントは技術選定書を参照するのみとし、内容を追加・変更・削除してはならない。
 
 ## 6. 開発方法論の運用ルール（Waterfall / Brownfield）
-- 本プロジェクトを **ウォーターフォールで運用する場合**: 各フェーズ（要件定義／設計／実装／テスト／リリース）ごとに承認ゲートを設け、`docs/waterfall-preset-guide.md` の対応表に従って `/speckit.specify` → `/speckit.plan` → `/speckit.tasks` → `/speckit.implement` の各出力を正式ドキュメントとして承認フローに乗せる。
-- 本プロジェクトが **既存システムの改修（Brownfield）である場合**: システム全体をspec化せず、`docs/brownfield-guide.md` に従い、改修範囲のみを対象とした狭いspec（`docs/change-spec-template.md`参照）を作成する。既存の設計書・規約は本憲法に転記せず、参照リンクのみを記載する。
+- 本プロジェクトを **ウォーターフォールで運用する場合**: 各フェーズ（要件定義／設計／実装／テスト／リリース）ごとに承認ゲートを設け、`docs/guides/waterfall-preset-guide.md` の対応表に従って `/speckit.specify` → `/speckit.plan` → `/speckit.tasks` → `/speckit.implement` の各出力を正式ドキュメントとして承認フローに乗せる。
+- 本プロジェクトが **既存システムの改修（Brownfield）である場合**: システム全体をspec化せず、`docs/guides/brownfield-guide.md` に従い、改修範囲のみを対象とした狭いspec（`docs/change-spec-template.md`参照）を作成する。既存の設計書・規約は本憲法に転記せず、参照リンクのみを記載する。
 
 ## 7. 設計ルール
 - 基本設計書について、HTMLベースでUMLに準拠して作成する。

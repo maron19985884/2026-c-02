@@ -17,7 +17,7 @@ You **MUST** consider the user input before proceeding (if not empty).
 生成後は人間がレビューし、承認を得てから `spec.md` / `plan.md` / `tasks.md` に変更を反映する。
 
 > **重要**: 変更要求書の承認なしに `spec.md`・`plan.md`・`tasks.md` を直接修正してはならない。
-> これはウォーターフォール運用の変更管理プロセスのゲートである（`docs/waterfall-preset-guide.md` 参照）。
+> これはウォーターフォール運用の変更管理プロセスのゲートである（`docs/guides/waterfall-preset-guide.md` 参照）。
 
 ## Pre-Execution Checks
 

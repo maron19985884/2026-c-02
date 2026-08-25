@@ -2,7 +2,7 @@
 
 > **位置づけ**: `/speckit.implement` 完了後、テストフェーズ開始前に **`/speckit.testplan` が本テンプレートをもとにテスト計画書を生成します**。
 > 人間はその出力をレビューし、承認を得てからテストを開始します。
-> `docs/waterfall-preset-guide.md` のテストフェーズ承認ゲートに対応します。
+> `docs/guides/waterfall-preset-guide.md` のテストフェーズ承認ゲートに対応します。
 >
 > **使い方**: `/speckit.testplan` を実行する → 出力を `specs/[###]/test-plan.md` として保存する → 人間がレビュー・承認する。
 > 本ファイル自体は AI の生成テンプレートです。直接編集する必要はありません。

@@ -91,7 +91,7 @@ git remote set-url origin <新リポジトリのURL>
 `.specify/memory/constitution.md` を開き、内容を確認してください。
 **憲法は組織で一度確定させたものをそのまま使います。案件ごとに書き直さないでください。**
 
-プロジェクト固有の例外ルール（特定ライブラリの禁止など）が必要な場合のみ、`.specify/templates/overrides/` に追加します（詳細は `docs/lint-preset-guide.md` 参照）。
+プロジェクト固有の例外ルール（特定ライブラリの禁止など）が必要な場合のみ、`.specify/templates/overrides/` に追加します（詳細は `docs/guides/lint-preset-guide.md` 参照）。
 
 > **完了条件**: `.specify/memory/constitution.md` が存在し、内容を読んで意味を理解できること。
 
@@ -478,7 +478,7 @@ pytest
 mvn test
 ```
 
-テスト実行をCIで自動化する場合は `.github/workflows/quality-gate.yml` にテストステップを追加します（詳細は `docs/testing-strategy-guide.md` 参照）。
+テスト実行をCIで自動化する場合は `.github/workflows/quality-gate.yml` にテストステップを追加します（詳細は `docs/guides/testing-strategy-guide.md` 参照）。
 
 **テスト結果の記録**: テスト結果ファイル（例: `test-results/report.md` や `coverage/`）を Git にコミットして証跡として残します。
 
@@ -691,7 +691,7 @@ npm run lint
 ruff check .
 ```
 
-Lint ルールを変更したい場合は `docs/lint-preset-guide.md` を参照してください。
+Lint ルールを変更したい場合は `docs/guides/lint-preset-guide.md` を参照してください。
 
 ---
 
@@ -712,13 +712,13 @@ Lint ルールを変更したい場合は `docs/lint-preset-guide.md` を参照�
 ### Q. 憲法（constitution.md）を変更してよいか？
 
 **A.** 憲法は「組織で一度確定させた取り決め」です。案件個別の事情でむやみに変更しないでください。
-プロジェクト固有のルールが必要な場合は `.specify/templates/overrides/` に上書きルールを追加します（`docs/lint-preset-guide.md` 参照）。
+プロジェクト固有のルールが必要な場合は `.specify/templates/overrides/` に上書きルールを追加します（`docs/guides/lint-preset-guide.md` 参照）。
 
 ---
 
 ### Q. 既存システムに改修を加える場合はどうするか？
 
-**A.** `docs/brownfield-guide.md` を参照してください。システム全体を仕様化せず、**改修範囲だけ**を対象に `/speckit.specify` を実行します。改修用のテンプレートは `docs/change-spec-template.md` です。
+**A.** `docs/guides/brownfield-guide.md` を参照してください。システム全体を仕様化せず、**改修範囲だけ**を対象に `/speckit.specify` を実行します。改修用のテンプレートは `docs/change-spec-template.md` です。
 
 ---
 
@@ -737,10 +737,10 @@ Lint ルールを変更したい場合は `docs/lint-preset-guide.md` を参照�
 | `docs/inputs/requirements-example.md` | 要件定義書の記入例（オンライン書店） |
 | `tech-stack.md` | 技術選定書本体（**人間が記入**。空の雛形は `docs/inputs/tech-stack-template.md`） |
 | `docs/inputs/tech-stack-example.md` | 技術選定書の記入例（オンライン書店。requirements-exampleと同一案件） |
-| `docs/waterfall-preset-guide.md` | ウォーターフォール運用ガイド・DoD定義 |
-| `docs/brownfield-guide.md` | 既存システム改修ガイド |
-| `docs/testing-strategy-guide.md` | テスト戦略ガイド（Javaフレームワーク選定含む） |
-| `docs/lint-preset-guide.md` | Lint のpreset化手順 |
+| `docs/guides/waterfall-preset-guide.md` | ウォーターフォール運用ガイド・DoD定義 |
+| `docs/guides/brownfield-guide.md` | 既存システム改修ガイド |
+| `docs/guides/testing-strategy-guide.md` | テスト戦略ガイド（Javaフレームワーク選定含む） |
+| `docs/guides/lint-preset-guide.md` | Lint のpreset化手順 |
 | `docs/change-spec-template.md` | 改修用の狭いspecテンプレート |
 | `.specify/memory/constitution.md` | 憲法（組織共通ルール） |
 | `.github/workflows/quality-gate.yml` | Lint 自動チェックCI |
