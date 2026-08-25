@@ -25,6 +25,7 @@
 | 12 | 2026-08-26 | `docs/inputs/tech-stack-example.md`（新規） | 新規 | requirements-example.md と対になる技術選定書の記入例を新規作成（詳細は後述） |
 | 13 | 2026-08-26 | `docs/guides/`（新規） | 移動 | 状況依存の運用ガイド4本を docs/guides/ へ分離（詳細は後述） |
 | 14 | 2026-08-26 | `.specify/templates/`配下7ファイル | 移動 | AI生成テンプレートを .specify/templates/ へ統合（詳細は後述） |
+| 15 | 2026-08-26 | `tasks-template.md`・`speckit.tasks.md`・`detailed-design-template.md` | 修正 | Webアプリ固定パス・書籍アプリ残骸（F-2）を汎用化（詳細は後述） |
 
 ---
 
@@ -259,3 +260,14 @@
 **言語方針の明確化**: `.specify/templates/`には元々英語で書かれた`spec-template.md`等（Spec Kit公式）と、日本語で書かれた本プロジェクト追加分（今回移動した7ファイル）が混在することになる。翻訳は行わず、**Spec Kit公式テンプレートは英語のまま、本プロジェクトが追加したテンプレートは日本語で統一する**方針とする。これは前回のAI判定（`ai-review.md` M-4）が指摘していた「テンプレート言語の統一方針が未決定」への回答でもある。
 
 これで `docs/` 直下は `overview.md`・`how-to-use.md`・`guides/`・`inputs/` の4項目のみとなり、②③④すべてが完了した。
+
+---
+
+## 対処15（2026-08-26）：tasks-template.md 等の技術固定・書籍アプリ残骸を汎用化（F-2対応）
+
+**背景**: `plan-template.md`は対処2でNext.js+Express決め打ちからOption 1/2/3の選択式に修正済みだったが、そこから生成される`tasks.md`・`detailed-design.md`側の雛形は直っていなかった。`tasks-template.md`は`backend/src/models/[entity1].ts`・`frontend/src/components/[Component].tsx`というWebアプリ構造を例示し、`speckit.tasks.md`のExamplesには元の書籍アプリの残骸である`backend/src/models/book.ts`・「Create Book model」がそのまま残っていた。さらに`speckit.tasks.md`のタスク生成規則は「Models → Services → Endpoints → Frontend components」という層構造を固定しており、`plan.md`でOption 1（CLI/ライブラリ）を選んだプロジェクトにもfrontend層を前提としたタスクを生成しかねなかった。
+
+**対処**:
+- `.specify/templates/tasks-template.md` のPhase 3例示タスク（T009〜T013）のファイルパスを `[path per plan.md Structure Decision]` に置き換え、「plan.mdのStructure Decisionに従う。Webアプリのbackend/frontend構成を既定にしない」旨の注記を追加
+- `.claude/commands/speckit.tasks.md` のExamplesから`book.ts`・「Create Book model」を除去し、同様に汎用プレースホルダーに置き換え。タスク生成規則「Within each story」をOption 1/2/3それぞれに対応する順序（例: Option1はModels→Services→CLI/APIエントリポイント）に分岐させた
+- `.specify/templates/detailed-design-template.md` の「修正対象ファイル一覧」例示行を `backend/src/...`・`frontend/src/...` の2行から `[plan.mdのStructure Decisionに基づくパス]` の1行に統合し、Option 2以外では`backend/`・`frontend/`構成を仮定しない旨を明記

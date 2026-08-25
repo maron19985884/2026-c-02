@@ -55,15 +55,20 @@ Every task MUST follow this format:
 
 **Examples**:
 - ✅ `- [ ] T001 Create project structure per implementation plan`
-- ✅ `- [ ] T005 [P] Implement auth middleware in backend/src/middleware/auth.ts`
-- ✅ `- [ ] T012 [P] [US1] Create Book model in backend/src/models/book.ts`
-- ❌ `- [ ] Create Book model` (missing ID and Story label)
+- ✅ `- [ ] T005 [P] Implement [middleware] in [path per plan.md Structure Decision]`
+- ✅ `- [ ] T012 [P] [US1] Create [Entity] model in [path per plan.md Structure Decision]`
+- ❌ `- [ ] Create [Entity] model` (missing ID and Story label)
 - ❌ `T001 [US1] Create model` (missing checkbox)
+
+File paths in generated tasks MUST come from the Structure Decision in `plan.md`, never assumed. Do not default to a `backend/`+`frontend/` layout unless `plan.md` actually selected Option 2 (web application).
 
 ### Phase Structure
 
 - **Phase 1**: Setup (project initialization)
 - **Phase 2**: Foundational (blocking prerequisites — MUST complete before user stories)
 - **Phase 3+**: User Stories in priority order (P1, P2, P3…)
-  - Within each story: Models → Services → Endpoints → Frontend components
+  - Within each story, order tasks by dependency, following the Structure Decision in `plan.md`:
+    - Option 1 (single project): Models → Services → CLI/API entry points
+    - Option 2 (web application): Models → Services → Endpoints → Frontend components
+    - Option 3 (mobile+API): API layer → Mobile client
 - **Final Phase**: Polish & Cross-Cutting Concerns

@@ -43,11 +43,13 @@ description: "Task list template for feature implementation"
 
 **Independent Test**: [How to verify this story works on its own]
 
-- [ ] T009 [P] [US1] Create [Entity1] model in backend/src/models/[entity1].ts
-- [ ] T010 [P] [US1] Create [Entity2] model in backend/src/models/[entity2].ts
-- [ ] T011 [US1] Implement [Service] in backend/src/services/[service].ts
-- [ ] T012 [US1] Implement [endpoint] in backend/src/api/[file].ts
-- [ ] T013 [US1] Implement [Component] in frontend/src/components/[Component].tsx
+> File paths below MUST use the Structure Decision recorded in `plan.md` (Option 1: single project / Option 2: web application / Option 3: mobile+API) — do not default to a web app's `backend/`+`frontend/` layout when the project isn't one.
+
+- [ ] T009 [P] [US1] Create [Entity1] model in [path per plan.md Structure Decision]
+- [ ] T010 [P] [US1] Create [Entity2] model in [path per plan.md Structure Decision]
+- [ ] T011 [US1] Implement [Service] in [path per plan.md Structure Decision]
+- [ ] T012 [US1] Implement [endpoint] in [path per plan.md Structure Decision]
+- [ ] T013 [US1] Implement [Component] in [path per plan.md Structure Decision] (Option 2: Web application の場合のみ発生)
 
 **Checkpoint**: User Story 1 fully functional and testable independently
 
