@@ -284,7 +284,7 @@ Claude Code がチャット内で「この依存を追加します」「バー�
 
 ### コマンド①: `/speckit.specify`
 
-**何をするか**: `requirements.md` と `user_requirements.md` をもとに機能仕様書（`spec.md`）を生成する。
+**何をするか**: `requirements.md` をもとに機能仕様書（`spec.md`）を生成する。ユーザー視点の要件（User Scenarios）は AI が自動生成する。
 
 **実行方法**:
 ```
