@@ -1,88 +1,89 @@
-# AI駆動開発ひな形について
+# AI駁E��開発ひな形につぁE��
 
 ## これは何か
-GitHub Spec Kit（仕様駆動開発）＋ Lint品質ゲートを組み込んだ、**どの会社でも使い回せて、作業者ごとのばらつきが出ない**開発ひな形。
+GitHub Spec Kit�E�仕様駁E��開発�E�！ELint品質ゲートを絁E��込んだ、E*どの会社でも使ぁE��せて、作業老E��とのばらつきが出なぁE*開発ひな形、E
 
-## 課題
-AI駆動開発は、進め方や品質基準を各作業者・AIエージェントの裁量に任せると、
-- 人によって「仕様を書く／書かない」「Lintを通す／通さない」がバラつく
-- 会社・プロジェクトが変わるたびに、運用ルールをゼロから作り直す
+## 課顁E
+AI駁E��開発は、E��め方めE��質基準を吁E��業老E�EAIエージェント�E裁E��に任せると、E
+- 人によって「仕様を書く／書かなぁE��「Lintを通す�E�通さなぁE��がバラつぁE
+- 会社・プロジェクトが変わるたびに、E��用ルールをゼロから作り直ぁE
 
-## このひな形がやること
-- **進め方をコアに固定**：仕様→設計→タスク→実装 という型を全員共通にする
-- **会社ごとの違いはpresetで分離**：Lintルール等はコアと切り離し、差し替えるだけで他社にも流用可能
-- **品質チェックを自動化**：Lintを人のチェック任せにせず、機械的にブロック
+## こ�Eひな形がやること
+- **進め方をコアに固宁E*�E�仕様�E設計�Eタスク→実裁EとぁE��型を全員共通にする
+- **会社ごとの違いはpresetで刁E��**�E�Lintルール等�Eコアと刁E��離し、差し替えるだけで他社にも流用可能
+- **品質チェチE��を�E動化**�E�Lintを人のチェチE��任せにせず、機械皁E��ブロチE��
 
-## 事前準備（人間が用意するもの）
-- **憲法（constitution.md）**：組織で一度確定させた版を、都度作り直さずそのまま配置する（本ひな形に雛形を同梱）
-- **要件定義書**：AIには書かせず人間が作成する（雛形: `docs/inputs/requirements-template.md`）
-- **技術選定書 兼 開発規約**：使用技術・アーキテクチャ方針・命名規則・禁止事項・スコープ外機能を人間がまとめる（記入先: ルート直下 `tech-stack.md`。空の雛形: `docs/inputs/tech-stack-template.md`）
-- これら3点をプロジェクトに配置してからSpec Kitのフローに入る
+## 事前準備�E�人間が用意するもの�E�E
+- **憲法！Eonstitution.md�E�E*�E�絁E��で一度確定させた版を、E�E度作り直さずそ�Eまま配置する�E�本ひな形に雛形を同梱�E�E
+- **要件定義書**�E�AIには書かせず人間が作�Eする�E�雛形: `docs/inputs/requirements-template.md`�E�E
+- **技術選定書 兼 開発規紁E*�E�使用技術�EアーキチE��チャ方針�E命名規則・禁止事頁E�Eスコープ外機�Eを人間がまとめる�E�記�E允E ルート直丁E`tech-stack.md`。空の雛形: `docs/inputs/tech-stack-template.md`�E�E
+- これめE点を�Eロジェクトに配置してからSpec Kitのフローに入めE
 
-## 使う流れ
+## 使ぁE��れ
 ```
-配置        憲法・要件定義書・技術選定書を人間が用意して置く
-仕様化      /speckit.specify   … 要件定義書をもとに何を作るか書く
-設計        /speckit.plan      … 技術選定書をもとに設計に落とす（技術選び自体はしない）
-タスク分解  /speckit.tasks     … 作業単位に分ける
-実装        /speckit.implement … AIエージェントが実装
-品質チェック GitHubに変更を送ると自動でLintが走る … 基準未達はマージ不可
+配置        憲法�E要件定義書・技術選定書を人間が用意して置ぁE
+仕様化      /speckit.specify   … 要件定義書をもとに何を作るか書ぁE
+設訁E       /speckit.plan      … 技術選定書をもとに設計に落とす（技術選び自体�EしなぁE��E
+タスク刁E��  /speckit.tasks     … 作業単位に刁E��めE
+実裁E       /speckit.implement … AIエージェントが実裁E
+品質チェチE�� GitHubに変更を送ると自動でLintが走めE… 基準未達�Eマ�Eジ不可
 ```
-「憲法」「要件定義書」「技術選定書」という土台は人間が固定し、そこから先（仕様の書き起こし〜実装〜品質チェック）をSpec Kit＋Lintが型どおりに進める。人によって進め方がブレる余地がない。
+「�E法」「要件定義書」「技術選定書」とぁE��土台は人間が固定し、そこから�E�E�仕様�E書き起こし〜実裁E��品質チェチE���E�をSpec Kit�E�Lintが型どおりに進める。人によって進め方がブレる余地がなぁE��E
 
-## 雛形の構成
+## 雛形の構�E
 ```
-├── CLAUDE.md                          … Claude Code 起動時設定（コマンド表・コーディング規約）
-├── requirements.md                    … 要件定義書（人間が記入）
-├── tech-stack.md                      … 技術選定書 兼 開発規約（人間が記入。AI編集禁止）
-│
+├── README.md                          … 利用持E��書�E�手頁E�EFAQ、EitHub で自動表示�E�E
+├── CLAUDE.md                          … Claude Code 起動時設定（コマンド表・コーチE��ング規紁E��E
+├── requirements.md                    … 要件定義書�E�人間が記�E�E�E
+├── tech-stack.md                      … 技術選定書 兼 開発規紁E��人間が記�E、EI編雁E��止�E�E
+━E
 ├── .specify/
-│   ├── memory/constitution.md         … 憲法（組織で一度確定→そのまま再利用）
-│   └── templates/                     … AIがコマンド経由で読み込み成果物を生成するテンプレート
-│       ├── spec-template.md           … 機能仕様書テンプレ
-│       ├── plan-template.md           … 実装計画書テンプレ
-│       ├── tasks-template.md          … タスクリストテンプレ
-│       ├── basic-design-template.md   … 基本設計書テンプレ（ウォーターフォール用）
-│       ├── detailed-design-template.md … 詳細設計書テンプレ（ウォーターフォール用）
-│       ├── table-definition-template.md … テーブル定義書テンプレ（ウォーターフォール用）
-│       ├── test-plan-template.md      … テスト計画書テンプレ（ウォーターフォール用）
-│       ├── review-gate-template.md    … フェーズゲート承認記録テンプレ（ウォーターフォール用）
-│       ├── change-request-template.md … 変更要求書テンプレ（ウォーターフォール用）
-│       └── change-spec-template.md    … 改修用の狭いspecテンプレ（既存システム改修用）
-│
-├── .claude/commands/                  … Spec Kit コマンド（12本）
-│
-├── .github/workflows/quality-gate.yml … Lint自動チェック（GitHubへの変更で発火）
-│
+━E  ├── memory/constitution.md         … 憲法（絁E��で一度確定�Eそ�Eまま再利用�E�E
+━E  └── templates/                     … AIがコマンド経由で読み込み成果物を生成するテンプレーチE
+━E      ├── spec-template.md           … 機�E仕様書チE��プレ
+━E      ├── plan-template.md           … 実裁E��画書チE��プレ
+━E      ├── tasks-template.md          … タスクリストテンプレ
+━E      ├── basic-design-template.md   … 基本設計書チE��プレ�E�ウォーターフォール用�E�E
+━E      ├── detailed-design-template.md … 詳細設計書チE��プレ�E�ウォーターフォール用�E�E
+━E      ├── table-definition-template.md … チE�Eブル定義書チE��プレ�E�ウォーターフォール用�E�E
+━E      ├── test-plan-template.md      … チE��ト計画書チE��プレ�E�ウォーターフォール用�E�E
+━E      ├── review-gate-template.md    … フェーズゲート承認記録チE��プレ�E�ウォーターフォール用�E�E
+━E      ├── change-request-template.md … 変更要求書チE��プレ�E�ウォーターフォール用�E�E
+━E      └── change-spec-template.md    … 改修用の狭いspecチE��プレ�E�既存シスチE��改修用�E�E
+━E
+├── .claude/commands/                  … Spec Kit コマンド！E2本�E�E
+━E
+├── .github/workflows/quality-gate.yml … Lint自動チェチE���E�EitHubへの変更で発火�E�E
+━E
 ├── docs/
-│   ├── overview.md                    … 本ファイル（説明用サマリ）
-│   ├── how-to-use.md                  … 利用指南書（手順・FAQ）
-│   ├── inputs/                        … 案件開始時に人間がコピーして記入するテンプレート
-│   │   ├── requirements-template.md   … 要件定義書テンプレ（コピー元。ルート直下 requirements.md へコピーして記入）
-│   │   ├── requirements-example.md    … 要件定義書の記入例（オンライン書店）
-│   │   ├── tech-stack-template.md     … 技術選定書テンプレ（コピー元。ルート直下 tech-stack.md へコピーして記入）
-│   │   └── tech-stack-example.md      … 技術選定書の記入例（オンライン書店）
-│   └── guides/                        … 状況依存の運用ガイド（必要な場合のみ参照）
-│       ├── lint-preset-guide.md       … 会社固有Lintルールのpreset化手順
-│       ├── waterfall-preset-guide.md  … ウォーターフォール運用ガイド
-│       ├── brownfield-guide.md        … 既存システム改修ガイド
-│       └── testing-strategy-guide.md  … テスト戦略ガイド
-│
-└── _meta/                             … この雛形自身の開発履歴（新規プロジェクトでは削除可）
+━E  ├── overview.md                    … 本ファイル�E�説明用サマリ�E�E
+━E  ├── README.md                      … 利用持E��書�E�手頁E�EFAQ�E�E
+━E  ├── inputs/                        … 案件開始時に人間がコピ�Eして記�EするチE��プレーチE
+━E  ━E  ├── requirements-template.md   … 要件定義書チE��プレ�E�コピ�E允E��ルート直丁Erequirements.md へコピ�Eして記�E�E�E
+━E  ━E  ├── requirements-example.md    … 要件定義書の記�E例（オンライン書店！E
+━E  ━E  ├── tech-stack-template.md     … 技術選定書チE��プレ�E�コピ�E允E��ルート直丁Etech-stack.md へコピ�Eして記�E�E�E
+━E  ━E  └── tech-stack-example.md      … 技術選定書の記�E例（オンライン書店！E
+━E  └── guides/                        … 状況依存�E運用ガイド（忁E��な場合�Eみ参�E�E�E
+━E      ├── lint-preset-guide.md       … 会社固有Lintルールのpreset化手頁E
+━E      ├── waterfall-preset-guide.md  … ウォーターフォール運用ガイチE
+━E      ├── brownfield-guide.md        … 既存シスチE��改修ガイチE
+━E      └── testing-strategy-guide.md  … チE��ト戦略ガイチE
+━E
+└── _meta/                             … こ�E雛形自身の開発履歴�E�新規�Eロジェクトでは削除可�E�E
     ├── changelog.md                   … 変更ログ
     └── ai-judge/                      … AI as a Judge 評価記録
 ```
-| 区分 | ファイル | 誰が用意 |
+| 区刁E| ファイル | 誰が用愁E|
 |---|---|---|
-| 土台（人間が記入） | `requirements.md` / `tech-stack.md` | 人間 |
-| 憲法 | `.specify/memory/constitution.md` | 人間（組織で一度確定） |
-| コマンド | `.claude/commands/` 配下12本 | Spec Kit（変更不要） |
-| テンプレート | `.specify/templates/` 配下 | Spec Kit（変更不要） |
-| 自動 | `.github/workflows/quality-gate.yml`（Lint） | 仕組み（GitHub） |
-| ガイド | `docs/` 配下の各ガイド | 参照するだけ |
+| 土台�E�人間が記�E�E�E| `requirements.md` / `tech-stack.md` | 人閁E|
+| 憲況E| `.specify/memory/constitution.md` | 人間（絁E��で一度確定！E|
+| コマンチE| `.claude/commands/` 配丁E2本 | Spec Kit�E�変更不要E��E|
+| チE��プレーチE| `.specify/templates/` 配丁E| Spec Kit�E�変更不要E��E|
+| 自勁E| `.github/workflows/quality-gate.yml`�E�Eint�E�E| 仕絁E���E�EitHub�E�E|
+| ガイチE| `docs/` 配下�E吁E��イチE| 参�EするだぁE|
 
-## 見込まれる効果
-- 担当者・AIエージェントが変わっても、成果物の構造とレビュー観点が揃う
-- 仕様と実装のズレによる手戻りが減る
-- 新規プロジェクト・新しい会社への導入を、ゼロから設計せず短時間で行える
-- 新規開発・ウォーターフォール・既存改修、どの進め方でも同じ土台を使い回せる
+## 見込まれる効极E
+- 拁E��老E�EAIエージェントが変わっても、�E果物の構造とレビュー観点が揃ぁE
+- 仕様と実裁E�Eズレによる手戻りが減る
+- 新規�Eロジェクト�E新しい会社への導�Eを、ゼロから設計せず短時間で行えめE
+- 新規開発・ウォーターフォール・既存改修、どの進め方でも同じ土台を使ぁE��せる

@@ -7,7 +7,7 @@
 > **書き方の参照先:**
 > - テンプレート（空欄の雛形。次の案件用のコピー元）: [`docs/inputs/tech-stack-template.md`](docs/inputs/tech-stack-template.md)
 > - 記入例（オンライン書店サンプル）: [`docs/inputs/tech-stack-example.md`](docs/inputs/tech-stack-example.md)
-> - 利用指南書: [`docs/how-to-use.md`](docs/how-to-use.md) §5
+> - 利用指南書: [`README.md`](README.md) §5
 
 > **⚠️ 重要: 本ファイルへの記入は人間が実施すること。AIによる記入・変更は不可。**
 > 不用意なライブラリや依存関係の混入を防ぐため、使用技術・ライブラリの選定および本ファイルへの反映は

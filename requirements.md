@@ -6,7 +6,7 @@
 > **書き方の参照先:**
 > - テンプレート（空欄の雛形）: [`docs/inputs/requirements-template.md`](docs/inputs/requirements-template.md)
 > - 記入例（オンライン書店サンプル）: [`docs/inputs/requirements-example.md`](docs/inputs/requirements-example.md)
-> - 利用指南書: [`docs/how-to-use.md`](docs/how-to-use.md) §4
+> - 利用指南書: [`README.md`](README.md) §4
 
 ---
 
