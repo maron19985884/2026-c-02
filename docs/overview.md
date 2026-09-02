@@ -16,7 +16,7 @@ AI駆動開発は、進め方や品質基準を各作業者・AIエージェン�
 ## 事前準備（人間が用意するもの）
 - **憲法（constitution.md）**：組織で一度確定させた版を、都度作り直さずそのまま配置する（本ひな形に雛形を同梱）
 - **要件定義書**：AIには書かせず人間が作成する（雛形: `docs/inputs/requirements-template.md`）
-- **技術選定書**：使用技術・アーキテクチャ方針を人間がまとめる（記入先: ルート直下 `tech-stack.md`。空の雛形: `docs/inputs/tech-stack-template.md`）
+- **技術選定書 兼 開発規約**：使用技術・アーキテクチャ方針・命名規則・禁止事項・スコープ外機能を人間がまとめる（記入先: ルート直下 `tech-stack.md`。空の雛形: `docs/inputs/tech-stack-template.md`）
 - これら3点をプロジェクトに配置してからSpec Kitのフローに入る
 
 ## 使う流れ
@@ -34,7 +34,7 @@ AI駆動開発は、進め方や品質基準を各作業者・AIエージェン�
 ```
 ├── CLAUDE.md                          … Claude Code 起動時設定（コマンド表・コーディング規約）
 ├── requirements.md                    … 要件定義書（人間が記入）
-├── tech-stack.md                      … 技術選定書（人間が記入。AI編集禁止）
+├── tech-stack.md                      … 技術選定書 兼 開発規約（人間が記入。AI編集禁止）
 │
 ├── .specify/
 │   ├── memory/constitution.md         … 憲法（組織で一度確定→そのまま再利用）
