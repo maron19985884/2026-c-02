@@ -26,6 +26,8 @@
 | 13 | 2026-08-26 | `docs/guides/`（新規） | 移動 | 状況依存の運用ガイド4本を docs/guides/ へ分離（詳細は後述） |
 | 14 | 2026-08-26 | `.specify/templates/`配下7ファイル | 移動 | AI生成テンプレートを .specify/templates/ へ統合（詳細は後述） |
 | 15 | 2026-08-26 | `tasks-template.md`・`speckit.tasks.md`・`detailed-design-template.md` | 修正 | Webアプリ固定パス・書籍アプリ残骸（F-2）を汎用化（詳細は後述） |
+| 26 | 2026-08-27 | `CLAUDE.md`・`plan-template.md`・`how-to-use.md`・`changelog.md`・`overview.md`・`requirements-template.md`・`quality-gate.yml` | 修正 | N-2〜N-8 残存指摘を一括解消（詳細は後述） |
+| 27 | 2026-08-27 | `user_requirements.md`（削除）・`CLAUDE.md`・`how-to-use.md`・`overview.md`・`waterfall-preset-guide.md`・`review-gate-template.md`・`speckit.review.md` | 削除／修正 | `user_requirements.md` を廃止し `/speckit.specify` による自動生成に統一（詳細は後述） |
 
 ---
 
@@ -193,6 +195,20 @@
 | 9 | `.claude/commands/speckit.plan.md` | Key Rules の「Do NOT select technology — technology is defined in `requirements.md` and `constitution.md`」を「`tech-stack.md`」参照に修正。前回のAI判定（`ai-review.md` C-3）で指摘された、`speckit.plan.md`と`plan-template.md`の矛盾のうち、`plan-template.md`側のヘッダーのみ直っていた分の未対応部分 |
 
 **修正しなかった箇所**: `IBM Bob/changelog.md`・本ファイル自身の対処1〜7の記述・`changelog-speckit-ai-driven-guide.md`・`request-speckit-guide-2026-08-25-issue16.md` — いずれも過去の意思決定を記録した履歴であり、当時は `docs/tech-stack-template.md` が正しいパスだったため書き換えない。
+
+---
+
+## 対処9（2026-08-26）：speckit.plan.md の Key Rules 技術参照先を tech-stack.md に修正
+
+**対象**: `.claude/commands/speckit.plan.md`
+
+### 変更点
+
+| 変更前 | 変更後 |
+|---|---|
+| Key Rules に「Do NOT select technology — technology is defined in `requirements.md` and `constitution.md`」 | 「`tech-stack.md`」参照に修正 |
+
+**背景**: `plan-template.md` 側のヘッダー（対処2）で `tech-stack.md` を参照するよう直していたが、コマンド本体（`speckit.plan.md`）側の Key Rules はまだ `requirements.md` と `constitution.md` への参照のままだった。前回の AI 判定（`ai-review.md` C-3）が指摘していた `speckit.plan.md` と `plan-template.md` の矛盾のうち、対処2では `plan-template.md` 側のみ直っており、コマンド本体側が未対応のままだった部分を今回解消した。
 
 ---
 
@@ -386,3 +402,41 @@
 - 9項目の統合対応優先順位表
 
 `_meta/README.md`のai-judge一覧に、Bobの評価ファイルと本比較ファイルを追記した。
+
+---
+
+## 対処26（2026-08-27）：N-2〜N-8 残存指摘を一括解消
+
+**背景**: 前回セッション（2026-08-26）の Bob 評価（83/100）および Claude 自己評価（87/100）が残存指摘として記録していた N-1〜N-8 のうち、N-1（`tasks-template.md` Phase 2 のWebアプリ残存タスク）は対処15で既に完了済みであることを確認。残る N-2〜N-8 を一括で解消した。
+
+### 変更点
+
+| 指摘 | 対象ファイル | 変更内容 |
+|---|---|---|
+| N-2 | `CLAUDE.md` | フェーズ別コマンド表に `/speckit.clarify`・`/speckit.design`・`/speckit.testplan`・`/speckit.review`・`/speckit.change` を追記。コマンド使用手順にも対応行を追加し、ウォーターフォール用コマンドを別セクションで明示 |
+| N-3 | `.specify/templates/plan-template.md` | Source Code セクションのコメントに「いずれのオプションも合わない場合は独自構成を定義してよい」旨を追記 |
+| N-4 | `docs/how-to-use.md` | §3①（雛形コピー手順）に「`_meta/` フォルダは新規プロジェクト不要なので削除すること」のステップとシェルコマンド例・補足注を追加 |
+| N-5 | `_meta/changelog.md` | 対処8の大きなブロックの後に、対処9（`speckit.plan.md` の Key Rules 修正）の独立した `##` 見出しと詳細説明を追加 |
+| N-6 | `docs/overview.md` | 「雛形の構成」コードブロックを全面更新。`CLAUDE.md`・ルート3ファイル・`.specify/templates/`全テンプレート・`.claude/commands/`・`docs/how-to-use.md`・`guides/testing-strategy-guide.md`・`_meta/`（ai-judge/）を追加。表も7行に拡張 |
+| N-7 | `docs/inputs/requirements-template.md` | ヘッダーの引用ブロック末尾に「本体は編集しないでください」の注と実物（`requirements.md`）・記入例（`requirements-example.md`）へのリンクを追加 |
+| N-8 | `.github/workflows/quality-gate.yml` | 例3として Java ブロックを追加（Maven: `mvn checkstyle:check`、Gradle: `./gradlew checkstyleMain checkstyleTest`、`actions/setup-java@v4` + Temurin JDK 21）。フェイルセーフの `if` 条件に `pom.xml`・`build.gradle`・`build.gradle.kts` の判定を追記 |
+
+---
+
+## 対処27（2026-08-27）：`user_requirements.md` を廃止し `/speckit.specify` による自動生成に統一
+
+**背景**: `user_requirements.md`（ユーザーが「何をしたいか」を画面・機能単位で記述）は、`spec-template.md` の `User Scenarios & Testing` セクション（User Story形式・Given/When/Then）と役割が重複していた。`/speckit.specify` を実行した時点で同等の内容が `spec.md` に自動生成される設計になっているため、人間が別ファイルに手書きする必要がなかった。また `docs/inputs/` に `user_requirements` 用のテンプレートも記入例も存在せず、`requirements.md` と対等に整備されていない状態だった。
+
+**方針**: `user_requirements.md` を廃止し、ユーザー視点の要件は `/speckit.specify` が `spec.md` の User Scenarios として自動生成する形に統一する。
+
+### 変更点
+
+| 対象 | 変更内容 |
+|---|---|
+| `user_requirements.md` | **削除**（`git rm`）。ルートに置く人間記入ファイルは `requirements.md` と `tech-stack.md` の2本のみになった |
+| `CLAUDE.md` | `## ユーザー要件 / @user_requirements.md` セクションを削除。基本姿勢の文言を「要件定義書（`requirements.md`）・憲法・技術選定書」と明示化 |
+| `docs/how-to-use.md` | §2「人間が作る2つのドキュメント」表の `requirements.md + user_requirements.md` → `requirements.md` に修正。§4「どのファイルに書くか」の2ファイル表を廃止し、`requirements.md` 1ファイルに書く旨と「ユーザー視点の要件は `/speckit.specify` が自動生成」の説明に置き換え。記入手順のステップ番号も修正 |
+| `docs/overview.md` | 構成図から `user_requirements.md` 行を削除。区分表の土台欄を `requirements.md` / `tech-stack.md` の2本に修正 |
+| `docs/guides/waterfall-preset-guide.md` | フェーズ対応表の要件定義行から `user_requirements.md` を削除。ドキュメント一覧から `user_requirements.md` 行を削除 |
+| `.specify/templates/review-gate-template.md` | 要件定義フェーズのチェック項目から「`user_requirements.md` と整合していること」を削除 |
+| `.claude/commands/speckit.review.md` | Load context の要件定義フェーズ参照リストから `user_requirements.md` を削除 |

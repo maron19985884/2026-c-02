@@ -36,7 +36,7 @@ AI（Claude Code）に「仕様→設計→タスク→実装」という順序�
 
 | ドキュメント | ファイル | タイミング | なぜ人間が作るか |
 |---|---|---|---|
-| 要件定義書 | `requirements.md` + `user_requirements.md` | `/speckit.specify` の前 | 「何を作るか」はビジネス判断。AI に委ねると意図がずれる |
+| 要件定義書 | `requirements.md` | `/speckit.specify` の前 | 「何を作るか」はビジネス判断。AI に委ねると意図がずれる |
 | 技術選定書 | `tech-stack.md` | `/speckit.plan` の前 | 「何で作るか」はアーキテクチャ判断。不用意な依存混入を防ぐため AI 編集禁止 |
 
 ### AI が生成するもの
@@ -86,6 +86,15 @@ cd <新プロジェクト名>
 git remote set-url origin <新リポジトリのURL>
 ```
 
+`_meta/` フォルダはこの雛形自身の開発履歴（AI評価・変更ログ等）であり、新規プロジェクトには不要です。コピー後に削除してください。
+
+```bash
+# 雛形固有の開発履歴を削除（新規プロジェクトには不要）
+rm -rf _meta/
+```
+
+> **補足**: 削除せず参照用に残しておくことも可能ですが、その場合は `_meta/README.md` に記載されているとおり、プロジェクト固有のメタ情報と混在しないよう注意してください。
+
 #### ② 憲法を確認する
 
 `.specify/memory/constitution.md` を開き、内容を確認してください。
@@ -128,20 +137,16 @@ git remote set-url origin <新リポジトリのURL>
 
 ### どのファイルに何を書くか
 
-| ファイル | 書く内容 |
-|---|---|
-| `requirements.md` | システムとして「何を作るか」（機能要件・非機能要件・制約） |
-| `user_requirements.md` | ユーザーが「何をしたいか」（ユーザー視点の要件） |
+`requirements.md` 1ファイルに、機能要件・非機能要件・制約条件をまとめて記入します。
 
-両ファイルは `/speckit.specify` の入力として使われます。
+> **ユーザー視点の要件（「ユーザーが何をしたいか」）は `/speckit.specify` が `spec.md` の User Scenarios セクションとして自動生成します。** 人間が別ファイルに書く必要はありません。
 
 ### 記入の手順
 
 1. ルートに `requirements.md` がまだ無い場合は、`docs/inputs/requirements-template.md` をコピーしてルート直下に `requirements.md` として配置する（この雛形をそのまま新規プロジェクトとして使い始めた場合は配置済み）
 2. `requirements.md` を直接開いて記入する（`docs/inputs/requirements-template.md` 本体は次の案件用のコピー元なので編集しない）
-3. `user_requirements.md` を画面・機能単位で記入する
-4. 記入例（`docs/inputs/requirements-example.md`）を参照しながら埋める
-5. `/speckit.specify` を実行して `spec.md` を生成する（→ §6）
+3. 記入例（`docs/inputs/requirements-example.md`）を参照しながら埋める
+4. `/speckit.specify` を実行して `spec.md` を生成する（→ §6）
 
 ### 良い例と悪い例
 

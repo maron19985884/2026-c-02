@@ -49,6 +49,8 @@ specs/[###-feature]/
 <!--
   Choose ONE option below based on tech-stack.md. Delete unused options.
   Replace example paths with real paths for this project.
+  If none of these options fits your project structure, define a custom layout
+  and document it in the Structure Decision below.
 -->
 
 ```text

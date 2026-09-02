@@ -31,7 +31,7 @@ If empty, detect the current phase from available artifacts (see step 2).
    - Confirm detected phase with user before proceeding
 
 2. **Load context** for the detected phase:
-   - `requirements.md`, `user_requirements.md` (要件定義フェーズ)
+   - `requirements.md` (要件定義フェーズ)
    - `FEATURE_DIR/spec.md`, `FEATURE_DIR/plan.md` (設計フェーズ)
    - `FEATURE_DIR/tasks.md`, `/speckit.analyze` output if available (実装計画フェーズ)
    - `FEATURE_DIR/test-plan.md` (テストフェーズ)

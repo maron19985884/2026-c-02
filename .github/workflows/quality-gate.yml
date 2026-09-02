@@ -4,8 +4,8 @@ name: Quality Gate (Lint)
 # コードに対してLintを強制するためのサンプルCI。
 # 言語別のLintコマンドは組織のpreset（docs/guides/lint-preset-guide.md参照）に合わせて置き換える。
 #
-# 現時点で自動対応しているのは Node.js/TypeScript と Python の2例のみ。
-# 他言語のプロジェクトでは、下記の例1・例2と同じ形式（hashFilesで判定 →
+# 現時点で自動対応しているのは Node.js/TypeScript・Python・Java（Maven/Gradle）の3例。
+# 他言語のプロジェクトでは、下記と同じ形式（hashFilesで判定 →
 # Setup → Lint実行）でブロックを追加し、あわせて最終ステップ
 # 「Verify a Lint stack was detected」のif条件にもその言語の判定ファイルを
 # 追記すること（追記しないと、その言語のプロジェクトはLintが一つも走らない
@@ -50,13 +50,34 @@ jobs:
           pip install ruff
           ruff check .
 
+      # --- 例3: Java プロジェクトの場合（Maven または Gradle） ---
+      - name: Setup Java
+        if: hashFiles('pom.xml') != '' || hashFiles('build.gradle') != '' || hashFiles('build.gradle.kts') != ''
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "21"
+
+      - name: Run Checkstyle (Maven)
+        if: hashFiles('pom.xml') != ''
+        run: mvn --batch-mode checkstyle:check
+
+      - name: Run Checkstyle (Gradle)
+        if: hashFiles('build.gradle') != '' || hashFiles('build.gradle.kts') != ''
+        run: ./gradlew checkstyleMain checkstyleTest
+
       # --- フェイルセーフ: どの言語ブロックにも該当しなかった場合は明示的に失敗させる ---
       # (上記いずれのLintも実行されていない = このプロジェクトの言語がまだ
       #  quality-gate.ymlに未対応、という設定不足を「サイレントな緑」ではなく
       #  明示的な赤として検出する。コードのLintエラー自体は各言語のLintステップ
       #  が既に失敗させるため、ここでは扱わない)
       - name: Verify a Lint stack was detected
-        if: hashFiles('package.json') == '' && hashFiles('pyproject.toml') == ''
+        if: >
+          hashFiles('package.json') == '' &&
+          hashFiles('pyproject.toml') == '' &&
+          hashFiles('pom.xml') == '' &&
+          hashFiles('build.gradle') == '' &&
+          hashFiles('build.gradle.kts') == ''
         run: |
           echo "::error::このプロジェクトの言語に対応するLintブロックがquality-gate.ymlに定義されていません。"
           echo "::error::docs/guides/lint-preset-guide.md を参照し、該当する言語のLintブロックを追加してください。"

@@ -7,6 +7,9 @@
 >
 > 使い方: 本ファイルをコピーして各項目を埋め、プロジェクトに配置してから `/speckit.specify` を実行します。
 > フェーズ確定後の変更は [変更要求書](../../.specify/templates/change-request-template.md) を通じて管理します。
+>
+> **このファイルはコピー元のテンプレートです。本体は編集しないでください。**
+> 実際に記入する実物: [../../requirements.md](../../requirements.md) | 記入例: [requirements-example.md](requirements-example.md)
 
 ---
 

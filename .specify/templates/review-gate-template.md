@@ -36,7 +36,6 @@
 ### 要件定義フェーズ
 
 - [ ] `requirements.md` が全セクション記入済みであること
-- [ ] `user_requirements.md` と整合していること
 - [ ] スコープ内・スコープ外が明確に定義されていること
 - [ ] 受け入れ基準（Acceptance Criteria）が記載されていること
 - [ ] `/speckit.specify` により `spec.md` が生成されていること

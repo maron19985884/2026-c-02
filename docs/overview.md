@@ -32,27 +32,54 @@ AI駆動開発は、進め方や品質基準を各作業者・AIエージェン�
 
 ## 雛形の構成
 ```
+├── CLAUDE.md                          … Claude Code 起動時設定（コマンド表・コーディング規約）
+├── requirements.md                    … 要件定義書（人間が記入）
+├── tech-stack.md                      … 技術選定書（人間が記入。AI編集禁止）
+│
 ├── .specify/
-│   ├── memory/constitution.md        … 憲法（組織で一度確定→そのまま再利用）
-│   └── templates/
-│       ├── change-spec-template.md   … 改修用の狭いspecテンプレ（AIが生成）
-│       └── overrides/                … 会社固有ルールの上書き先（空）
+│   ├── memory/constitution.md         … 憲法（組織で一度確定→そのまま再利用）
+│   └── templates/                     … AIがコマンド経由で読み込み成果物を生成するテンプレート
+│       ├── spec-template.md           … 機能仕様書テンプレ
+│       ├── plan-template.md           … 実装計画書テンプレ
+│       ├── tasks-template.md          … タスクリストテンプレ
+│       ├── basic-design-template.md   … 基本設計書テンプレ（ウォーターフォール用）
+│       ├── detailed-design-template.md … 詳細設計書テンプレ（ウォーターフォール用）
+│       ├── table-definition-template.md … テーブル定義書テンプレ（ウォーターフォール用）
+│       ├── test-plan-template.md      … テスト計画書テンプレ（ウォーターフォール用）
+│       ├── review-gate-template.md    … フェーズゲート承認記録テンプレ（ウォーターフォール用）
+│       ├── change-request-template.md … 変更要求書テンプレ（ウォーターフォール用）
+│       └── change-spec-template.md    … 改修用の狭いspecテンプレ（既存システム改修用）
+│
+├── .claude/commands/                  … Spec Kit コマンド（12本）
+│
 ├── .github/workflows/quality-gate.yml … Lint自動チェック（GitHubへの変更で発火）
-└── docs/
-    ├── overview.md                   … 本ファイル（説明用サマリ）
-    ├── inputs/
-    │   ├── requirements-template.md  … 要件定義書テンプレ（コピー元。ルート直下 requirements.md へコピーして記入。本体の編集は不可）
-    │   └── tech-stack-template.md    … 技術選定書テンプレ（コピー元。ルート直下 tech-stack.md へコピーして記入。本体の編集は不可）
-    └── guides/
-        ├── lint-preset-guide.md      … 会社固有Lintルールのpreset化手順
-        ├── waterfall-preset-guide.md … ウォーターフォール運用ガイド
-        └── brownfield-guide.md       … 既存システム改修ガイド
+│
+├── docs/
+│   ├── overview.md                    … 本ファイル（説明用サマリ）
+│   ├── how-to-use.md                  … 利用指南書（手順・FAQ）
+│   ├── inputs/                        … 案件開始時に人間がコピーして記入するテンプレート
+│   │   ├── requirements-template.md   … 要件定義書テンプレ（コピー元。ルート直下 requirements.md へコピーして記入）
+│   │   ├── requirements-example.md    … 要件定義書の記入例（オンライン書店）
+│   │   ├── tech-stack-template.md     … 技術選定書テンプレ（コピー元。ルート直下 tech-stack.md へコピーして記入）
+│   │   └── tech-stack-example.md      … 技術選定書の記入例（オンライン書店）
+│   └── guides/                        … 状況依存の運用ガイド（必要な場合のみ参照）
+│       ├── lint-preset-guide.md       … 会社固有Lintルールのpreset化手順
+│       ├── waterfall-preset-guide.md  … ウォーターフォール運用ガイド
+│       ├── brownfield-guide.md        … 既存システム改修ガイド
+│       └── testing-strategy-guide.md  … テスト戦略ガイド
+│
+└── _meta/                             … この雛形自身の開発履歴（新規プロジェクトでは削除可）
+    ├── changelog.md                   … 変更ログ
+    └── ai-judge/                      … AI as a Judge 評価記録
 ```
 | 区分 | ファイル | 誰が用意 |
 |---|---|---|
-| 土台 | 憲法・要件定義書・技術選定書 | 人間 |
-| 自動 | quality-gate.yml（Lint） | 仕組み（GitHub） |
-| ガイド | docs配下の各ガイド | 参照するだけ |
+| 土台（人間が記入） | `requirements.md` / `tech-stack.md` | 人間 |
+| 憲法 | `.specify/memory/constitution.md` | 人間（組織で一度確定） |
+| コマンド | `.claude/commands/` 配下12本 | Spec Kit（変更不要） |
+| テンプレート | `.specify/templates/` 配下 | Spec Kit（変更不要） |
+| 自動 | `.github/workflows/quality-gate.yml`（Lint） | 仕組み（GitHub） |
+| ガイド | `docs/` 配下の各ガイド | 参照するだけ |
 
 ## 見込まれる効果
 - 担当者・AIエージェントが変わっても、成果物の構造とレビュー観点が揃う
