@@ -134,9 +134,22 @@ rm -rf _meta/
 
 #### ④ GitHub の質合格ゲートを有効にする
 
-`.github/workflows/quality-gate.yml` はすでに配置済みです。GitHub リポジトリの **Branch protection rules** で `main` / `develop` への直プッシュを禁止し、PR 経由のマージを必須にすると、Lint が自動的に品質ゲートとして機能します。
+`.github/workflows/quality-gate.yml` はすでに配置済みです。
 
-> **完了条件**: GitHub Actions の quality-gate ワークフローが "Actions" タブで確認できること。
+**なぜ PR 経由が必要か：**
+Lint（quality-gate）は直プッシュでも PR でも**どちらでも実行されます**。ただし直プッシュの場合、コードが `main` に入った**後**で Lint が走るため、失敗しても手遅れです。PR 経由の場合は、マージする**前**に Lint が走るため、失敗したらマージをブロックできます。
+
+```
+直プッシュ:  push → main に入る → Lint 実行 → 失敗しても手遅れ
+PR 経由:     push → PR 作成 → Lint 実行 → ✅成功でマージ可 / ❌失敗でブロック
+```
+
+GitHub リポジトリの **Branch protection rules** で以下を設定してください：
+1. `main` / `develop` への直プッシュを禁止
+2. PR 経由のマージを必須
+3. 「Require status checks to pass before merging」で `quality-gate` を必須ステータスに追加
+
+> **完了条件**: GitHub Actions の quality-gate ワークフローが "Actions" タブで確認でき、Branch protection rules が設定されていること。
 
 ---
 
