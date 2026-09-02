@@ -132,22 +132,20 @@ rm -rf _meta/
 
 > **完了条件**: `tech-stack.md` の §7 命名規則と §9 スコープ外機能が記入済みであること。
 
-#### ④ GitHub の質合格ゲートを有効にする
+#### ④ GitHub の直プッシュを禁止する
 
 `.github/workflows/quality-gate.yml` はすでに配置済みです。
+直プッシュを禁止することで、Lint が失敗したコードを `main` / `develop` に混入させないようにします。
 
-**なぜ PR 経由が必要か：**
-Lint（quality-gate）は直プッシュでも PR でも**どちらでも実行されます**。ただし直プッシュの場合、コードが `main` に入った**後**で Lint が走るため、失敗しても手遅れです。PR 経由の場合は、マージする**前**に Lint が走るため、失敗したらマージをブロックできます。
-
-```
-直プッシュ:  push → main に入る → Lint 実行 → 失敗しても手遅れ
-PR 経由:     push → PR 作成 → Lint 実行 → ✅成功でマージ可 / ❌失敗でブロック
-```
-
-GitHub リポジトリの **Branch protection rules** で以下を設定してください：
-1. `main` / `develop` への直プッシュを禁止
-2. PR 経由のマージを必須
-3. 「Require status checks to pass before merging」で `quality-gate` を必須ステータスに追加
+**設定手順（GitHub リポジトリの画面で行う）：**
+1. リポジトリの **Settings** → **Branches** を開く
+2. **Add rule**（または Add branch ruleset）をクリック
+3. Branch name pattern に `main` と入力
+4. 以下にチェックを入れる：
+   - ✅ Require a pull request before merging
+   - ✅ Require status checks to pass before merging → `quality-gate` を追加
+   - ✅ Do not allow bypassing the above settings
+5. Save changes で保存（`develop` も同様に追加）
 
 > **完了条件**: GitHub Actions の quality-gate ワークフローが "Actions" タブで確認でき、Branch protection rules が設定されていること。
 
