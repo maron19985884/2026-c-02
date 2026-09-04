@@ -149,7 +149,7 @@ description: "Task list for 003-bookstore-purchase-flow"
 - [ ] T051 [P] 通信エラー表示 — backend 停止時に一覧／詳細／注文送信で `ErrorNotice` が出る（FR-032）。`frontend/tests/components/` に `api` モックでの失敗系
 - [ ] T052 [P] アクセシビリティ確認 — フォーカス可視化、`label`、`aria-invalid`、見出し階層（WCAG 2.1 AA 目標／憲法 §3）
 - [ ] T053 [P] 画面遷移・エラー・空状態の表現統一レビュー（FR-027）— `ErrorNotice`/`EmptyState` が全画面で使われているか
-- [ ] T054 Lint 緑化 — `backend`/`frontend` の `npm run lint` エラー0件（憲法 §1）。ルート `package.json` での一括 lint 集約（[plan.md](plan.md) Complexity Tracking）
+- [ ] T054 Lint 緑化 — `backend`/`frontend` それぞれに `lint` スクリプトを用意し `npm run lint` エラー0件（憲法 §1）。CI は改変済みの `.github/workflows/quality-gate.yml`（frontend/backend 個別 `working-directory` 実行）で緑化を確認（方針B・2026-09-04 決定）
 - [ ] T055 カバレッジ確認 — `npm test -- --coverage` が両パッケージで 80% しきい値を満たす（憲法 §2）
 - [ ] T056 [P] `quickstart.md` の §4〜§5 検証表を通しで実施し、結果を記録
 - [ ] T057 [P] ドキュメント整合 — 実装で判明した差分を [spec.md](spec.md)/[plan.md](plan.md) に反映（`tech-stack.md` は AI 編集不可。差分は `/speckit.review` で人間に申し送り）

@@ -142,7 +142,7 @@ mysql/
 | テスト用開発依存が `tech-stack.md` 未記載 | 憲法 §2 が単体テスト必須。実行には jest / ts-jest / @types/jest / supertest / @types/supertest / @testing-library/react / @testing-library/jest-dom / jest-environment-jsdom が必要 | 担当者が `tech-stack.md` §3 に「テストフレームワーク = Jest」および上記 devDependencies を追記し確定（AI は編集不可） |
 | Lint 用開発依存が `tech-stack.md` 未記載 | 憲法 §1・`quality-gate.yml` が ESLint 前提。`eslint` / `@typescript-eslint/parser` / `@typescript-eslint/eslint-plugin` / `eslint-config-next` が必要 | 担当者が `tech-stack.md` §3 に対象パッケージと設定ファイル名（`backend/.eslintrc.json` / `frontend/.eslintrc.json`）を明記 |
 | CSS 方針が未定義 | 憲法 §3 は未定義時ブラウザ既定で統一を要求。本計画は UI ライブラリ不使用＋CSS Modules＋`globals.css` の共有変数で対応（research D-06） | 担当者が `tech-stack.md` §3 か新項目に CSS 方針（UI ライブラリ不使用／CSS Modules／共有 CSS 変数）を明文化 |
-| `quality-gate.yml` はルート `package.json` を前提 | 実体は `frontend/` `backend/` に分離。ルート `package.json` が無いと Lint が走らずフェイルセーフで赤 | 担当者がルート `package.json`（`npm -w` のワークスペース or `lint` スクリプトで両サブパッケージを呼ぶ）を用意、または `quality-gate.yml` を分離構成に合わせて調整 |
+| `quality-gate.yml` はルート `package.json` を前提 | 実体は `frontend/` `backend/` に分離。ルート `package.json` が無いと Lint が走らずフェイルセーフで赤 | **解決済み（2026-09-04、方針B）**: `.github/workflows/quality-gate.yml` を frontend/backend 個別の `hashFiles` 判定＋`working-directory` で `npm ci && npm run lint` する構成に改変。フェイルセーフの `if` 条件にも両 `package.json` を追加。実装時に `frontend/backend` 双方へ `lint` スクリプトを用意すること（T003/T002） |
 
 ### ⛔ 実装前ゲート（`/speckit.implement` 着手前に完了させること）
 
@@ -151,8 +151,8 @@ mysql/
 | 1 | `tech-stack.md` §2/§3 に **テストFW = Jest** と test/lint devDependencies を追記（理由: [research.md](research.md) D-07） | ✅ 2026-09-04 AI 代行記入済み（人間の最終確認待ち） |
 | 2 | `tech-stack.md` §2/§3 に **CSS 方針**（UI ライブラリ不使用／CSS Modules／共有変数）を明記（理由: [research.md](research.md) D-06） | ✅ 2026-09-04 AI 代行記入済み（人間の最終確認待ち） |
 | 3 | `tech-stack.md` §6「却下した選択肢」に **Vitest** / **`ulid` パッケージ** / **CSS フレームワーク** を追記 | ✅ 2026-09-04 AI 代行記入済み（人間の最終確認待ち） |
-| 4 | ルート `package.json` 集約 or `quality-gate.yml` 調整の方針決定（T054 に反映） | ⬜ 未（`tech-stack.md` §3 に論点は記載済み） |
-| 5 | `/speckit.review` で設計フェーズを承認（`docs/reviews/` に記録） | ⬜ 未 |
-| 6 | ウォーターフォール運用なら `/speckit.design basic\|detail\|table`（HTMLベース設計書）を生成（憲法§7 / A4） | 🔄 実行予定 |
+| 4 | ルート `package.json` 集約 or `quality-gate.yml` 調整の方針決定（T054 に反映） | ✅ 2026-09-04 方針B：`quality-gate.yml` を frontend/backend 分離向けに改変済み |
+| 5 | `/speckit.review` で要件定義・設計フェーズを承認（`docs/reviews/` に記録） | 🔄 記録を下書き生成（署名は人間） |
+| 6 | ウォーターフォール運用なら `/speckit.design basic\|detail\|table`（HTMLベース設計書）を生成（憲法§7 / A4） | ✅ 2026-09-04 生成済み（basic/detail/table、承認欄未記入） |
 
 > 項目 1〜3 は憲法§5 上「人間が `tech-stack.md` に書く」ことが本来の形。2026-09-04 にユーザーのチャット指示で AI が代行記入し、その旨を `tech-stack.md` 冒頭に明記した。**担当者の最終確認・確定が必要。**

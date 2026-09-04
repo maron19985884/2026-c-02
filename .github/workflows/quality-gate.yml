@@ -10,6 +10,14 @@ name: Quality Gate (Lint)
 # 「Verify a Lint stack was detected」のif条件にもその言語の判定ファイルを
 # 追記すること（追記しないと、その言語のプロジェクトはLintが一つも走らない
 # ままジョブが緑になってしまう）。
+#
+# 本プロジェクト（003-bookstore-purchase-flow）はルートに package.json を置かず
+# frontend/ と backend/ に分離しているため、Node.js ブロックを
+#   (1) ルート package.json（他プロジェクト互換のため残置）
+#   (2) frontend/package.json
+#   (3) backend/package.json
+# の3系統に分け、それぞれ working-directory で ESLint を実行する。
+# フェイルセーフの if 条件にも frontend/backend の package.json を追加済み。
 
 on:
   pull_request:
@@ -25,14 +33,35 @@ jobs:
         uses: actions/checkout@v4
 
       # --- 例1: Node.js / TypeScript プロジェクトの場合 ---
+      # setup-node は一度実行すれば足りる（いずれかの package.json があれば Node をセットアップ）
       - name: Setup Node.js
-        if: hashFiles('package.json') != ''
+        if: >
+          hashFiles('package.json') != '' ||
+          hashFiles('frontend/package.json') != '' ||
+          hashFiles('backend/package.json') != ''
         uses: actions/setup-node@v4
         with:
           node-version: "20"
 
-      - name: Install & Run ESLint
+      # (1) ルート package.json（他プロジェクト互換のため残置。本プロジェクトでは通常ヒットしない）
+      - name: Install & Run ESLint (root)
         if: hashFiles('package.json') != ''
+        run: |
+          npm ci
+          npm run lint
+
+      # (2) frontend/
+      - name: Install & Run ESLint (frontend)
+        if: hashFiles('frontend/package.json') != ''
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run lint
+
+      # (3) backend/
+      - name: Install & Run ESLint (backend)
+        if: hashFiles('backend/package.json') != ''
+        working-directory: backend
         run: |
           npm ci
           npm run lint
@@ -74,6 +103,8 @@ jobs:
       - name: Verify a Lint stack was detected
         if: >
           hashFiles('package.json') == '' &&
+          hashFiles('frontend/package.json') == '' &&
+          hashFiles('backend/package.json') == '' &&
           hashFiles('pyproject.toml') == '' &&
           hashFiles('pom.xml') == '' &&
           hashFiles('build.gradle') == '' &&

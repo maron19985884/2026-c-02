@@ -67,7 +67,7 @@
 - カバレッジ目標：80%（憲法 §2 の暫定値を適用。`jest --coverage` の `coverageThreshold` で強制。主要ビジネスロジックを対象）
 - UI・CSS 方針：UI コンポーネントライブラリ・CSS フレームワークは導入しない。レイアウトは CSS Modules（`*.module.css`）＋ `frontend/app/globals.css` の共有 CSS 変数（色・間隔・フォント）で統一する（憲法§3 フォールバック）。エラー表示・空状態は共通コンポーネント（`ErrorNotice` / `EmptyState`）に集約
 - ※ 憲法セクション1（コード品質原則）および `.github/workflows/quality-gate.yml` の Node.js/TypeScript 向けステップと整合させること（Lint エラー0件を必須）
-- ※ `quality-gate.yml` はルート `package.json` を前提とするため、ルートに両サブパッケージの lint を呼ぶ `package.json` を用意するか、CI を分離構成向けに調整する（`plan.md` Complexity Tracking）
+- ※ CI（`.github/workflows/quality-gate.yml`）は frontend/backend 分離構成向けに改変済み（2026-09-04、方針B）。`frontend` / `backend` それぞれの `package.json` に `lint` スクリプトを用意すれば、`working-directory` 単位で ESLint が実行される
 
 ## 4. 外部依存・連携
 
