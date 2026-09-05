@@ -1,0 +1,38 @@
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.table th.num,
+.table td.num {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.title {
+  overflow-wrap: anywhere;
+}
+
+.unavailable {
+  color: var(--color-danger);
+  font-size: 0.85rem;
+}
+
+.totalRow td {
+  font-weight: 700;
+  font-size: 1.1rem;
+  border-bottom: none;
+  padding-top: var(--space-4);
+}
+
+.controls {
+  margin-top: var(--space-2);
+}

@@ -1,0 +1,22 @@
+.wrap {
+  text-align: center;
+  padding: var(--space-8) var(--space-4);
+}
+
+.message {
+  font-size: 1.2rem;
+  margin: 0 0 var(--space-4);
+}
+
+.numberLabel {
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-1);
+}
+
+.number {
+  font-size: 1.4rem;
+  font-weight: 700;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  margin: 0 0 var(--space-6);
+  overflow-wrap: anywhere;
+}

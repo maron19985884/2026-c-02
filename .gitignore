@@ -1,9 +1,15 @@
 # 環境変数（絶対にコミットしない）
 .env
+.env.local
+.env.*.local
 
 # Node
 node_modules/
 npm-debug.log*
+*.log
+
+# テストカバレッジ
+coverage/
 
 # Next.js
 frontend/.next/

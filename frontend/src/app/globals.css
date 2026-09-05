@@ -1,0 +1,104 @@
+:root {
+  /* 色 */
+  --color-bg: #faf9f6;
+  --color-surface: #ffffff;
+  --color-text: #1f2430;
+  --color-text-muted: #5b6472;
+  --color-border: #d9d5c9;
+  --color-primary: #2f6b4f;
+  --color-primary-hover: #275a42;
+  --color-primary-text: #ffffff;
+  --color-danger: #b4322b;
+  --color-danger-surface: #fdecea;
+  --color-focus: #1d6fb8;
+
+  /* 間隔 */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-8: 48px;
+
+  /* その他 */
+  --radius: 8px;
+  --maxw: 1040px;
+  --font: system-ui, -apple-system, "Segoe UI", "Hiragino Kaku Gothic ProN",
+    "Noto Sans JP", Meiryo, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font);
+  line-height: 1.6;
+}
+
+a {
+  color: var(--color-primary);
+}
+
+h1 {
+  font-size: 1.5rem;
+  margin: 0 0 var(--space-4);
+}
+
+h2 {
+  font-size: 1.15rem;
+  margin: 0 0 var(--space-3);
+}
+
+button {
+  font-family: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.container {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: var(--space-5) var(--space-4) var(--space-8);
+}
+
+/* 汎用ボタン */
+.btn {
+  display: inline-block;
+  padding: var(--space-3) var(--space-5);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius);
+  background: var(--color-primary);
+  color: var(--color-primary-text);
+  text-decoration: none;
+  text-align: center;
+}
+.btn:hover {
+  background: var(--color-primary-hover);
+}
+.btn[disabled],
+.btn[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.btn-secondary {
+  background: var(--color-surface);
+  color: var(--color-primary);
+}
+.btn-secondary:hover {
+  background: #f0efe9;
+}
