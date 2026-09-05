@@ -18,7 +18,11 @@
   "rules": {
     "@typescript-eslint/no-explicit-any": "error",
     "@typescript-eslint/explicit-function-return-type": "off",
-    "no-console": "off"
+    "no-console": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }
+    ]
   },
   "ignorePatterns": ["dist/", "node_modules/", "coverage/", "jest.config.js"]
 }

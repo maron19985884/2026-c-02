@@ -57,7 +57,6 @@ export const errorHandler = (
 
   // 想定外の例外
   const message = err instanceof Error ? err.message : "unexpected error";
-  // eslint-disable-next-line no-console
   console.error("[errorHandler]", err);
   res.status(500).json({ error: "INTERNAL_ERROR", message });
 };
