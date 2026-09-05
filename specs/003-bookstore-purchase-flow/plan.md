@@ -99,39 +99,52 @@ backend/
     ├── unit/                     # pricing / orderValidation / orderNumber
     └── integration/              # orders-create.test.ts（Supertest）
 
-frontend/
-├── app/
-│   ├── layout.tsx                # 共通レイアウト（ヘッダ: 一覧/カートへの導線）
-│   ├── page.tsx                  # 画面1: 商品一覧（?page= でページング）
-│   ├── books/[id]/page.tsx       # 画面2: 商品詳細
-│   ├── cart/page.tsx             # 画面3: カート
-│   ├── checkout/page.tsx         # 画面4: 注文フォーム
-│   └── order-complete/page.tsx   # 画面5: 注文完了（注文番号表示）
-├── components/
-│   ├── BookCard.tsx
-│   ├── BookGrid.tsx
-│   ├── Pagination.tsx
-│   ├── OrderSummary.tsx          # カート行＋合計（カート画面・注文フォームで共用）
-│   ├── QuantityStepper.tsx       # 数量増減（US2）
-│   ├── CheckoutForm.tsx
-│   ├── ErrorNotice.tsx           # 汎用エラー表示（FR-032）
-│   └── EmptyState.tsx            # 空状態の共通表示（FR-004, FR-016, FR-027）
-├── lib/
-│   ├── api.ts                    # バックエンド REST クライアント
-│   ├── cart.ts                   # localStorage カート: readCart/addItem(+1)/clear（US1）＋ setQuantity/removeItem（US2）
-│   ├── cartTotal.ts              # 小計・合計の算出（テスト対象、バックと同一ロジック）
-│   └── validation.ts            # 入力バリデーション（送信時、テスト対象）
+frontend/                        # ※ main のスケルトンに合わせ src/ 配下（@/* → ./src/*）
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx            # 共通レイアウト（<Header/> で 一覧/カートへの導線）
+│   │   ├── globals.css          # 共有 CSS 変数（色・間隔・フォント）
+│   │   ├── page.tsx             # 画面1: 商品一覧（?page= でページング）
+│   │   ├── books/[id]/page.tsx  # 画面2: 商品詳細
+│   │   ├── cart/page.tsx        # 画面3: カート
+│   │   ├── checkout/page.tsx    # 画面4: 注文フォーム
+│   │   └── order-complete/page.tsx  # 画面5: 注文完了（注文番号表示）
+│   ├── components/
+│   │   ├── Header.tsx           # ヘッダ（カート点数バッジ）
+│   │   ├── BookCard.tsx / BookGrid.tsx / Pagination.tsx
+│   │   ├── OrderSummary.tsx     # カート行＋合計（カート画面・注文フォームで共用）
+│   │   ├── QuantityStepper.tsx  # 数量増減（US2）
+│   │   ├── CheckoutForm.tsx
+│   │   ├── ErrorNotice.tsx      # 汎用エラー表示（FR-032）
+│   │   └── EmptyState.tsx       # 空状態の共通表示（FR-004, FR-016, FR-027）
+│   └── lib/
+│       ├── api.ts               # バックエンド REST クライアント（ApiError 正規化）
+│       ├── types.ts             # API 型定義
+│       ├── cart.ts              # localStorage カート: readCart/addItem(+1)/clear（US1）＋ setQuantity/removeItem（US2）
+│       ├── cartEvents.ts        # 自タブへのカート変更通知（CustomEvent）
+│       ├── useCartLines.ts      # カート(bookId,qty) を書籍詳細 API で表示用明細へ解決
+│       ├── cartTotal.ts         # 小計・合計の算出（テスト対象、バックと同一ロジック）
+│       ├── format.ts            # 金額整形（Intl.NumberFormat ja-JP）
+│       └── validation.ts        # 入力バリデーション（送信時、テスト対象）
 └── tests/
-    ├── unit/                     # cart / cartTotal / validation
-    └── components/               # CheckoutForm など（@testing-library/react）
+    ├── unit/                    # cart / cartTotal / validation
+    └── components/              # CheckoutForm / cart-page / checkout-page / list-error（@testing-library/react）
 
 mysql/
 └── init/
-    ├── 001_schema.sql            # books / orders / order_items の CREATE
-    └── 002_seed_books.sql        # デモ用書籍データ
+    ├── 001_schema.sql           # books / orders / order_items の CREATE（サンプル 01_init.sql は削除）
+    └── 002_seed_books.sql       # デモ用書籍データ（selling 26 / unlisted 3、cover は placeholder 統一）
 ```
 
-**Structure Decision**: plan-template の Option 2（Web application: frontend + backend）を採用。既存の `frontend/` `backend/` `mysql/` `docker-compose.yml` に合わせ、バックは routes / services / domain / repositories の層に分割、フロントは App Router のページ単位＋再利用コンポーネント＋`lib/` に純粋ロジックを寄せる（テスト容易性のため）。
+**Structure Decision**: plan-template の Option 2（Web application: frontend + backend）を採用。**実装時に main のスケルトンを取り込んだため、フロントは `frontend/src/app|components|lib` 構成**（`tsconfig` の `@/*` → `./src/*`）。バックは routes / services / domain / repositories の層に分割、フロントは App Router のページ単位＋再利用コンポーネント＋`lib/` に純粋ロジックを寄せる（テスト容易性のため）。
+
+### 実装で確定した差分（2026-09-06、T057 / `/speckit.review` で人間へ申し送り）
+
+- **土台**: `main` の最小スケルトン（`frontend/` `backend/` `mysql/` `docker-compose.yml` `.env.example`）を `git checkout origin/main -- …` で取り込み、その上に実装。サンプルの `mysql/init/01_init.sql`（users テーブル）は削除。
+- **フロント構成**: 当初 plan の `frontend/app|components|lib` ではなく `frontend/src/…`（main 準拠）。
+- **追加モジュール**（plan の当初一覧に無いが必要だったもの）: `lib/types.ts` / `lib/cartEvents.ts` / `lib/useCartLines.ts` / `lib/format.ts` / `components/Header.tsx`。
+- **フロント lint**: `frontend/package.json` の `lint` は `next lint`（`eslint-config-next`）。
+- **未検証**: 本作業環境に Node/Docker が無く、`docker compose build` / `npm test` / `npm run lint` は未実行（T054/T055/T056 は担当者が実施）。
 
 ## Complexity Tracking
 

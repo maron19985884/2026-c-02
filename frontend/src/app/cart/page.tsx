@@ -5,6 +5,8 @@ import Link from "next/link";
 import EmptyState from "@/components/EmptyState";
 import ErrorNotice from "@/components/ErrorNotice";
 import OrderSummary from "@/components/OrderSummary";
+import QuantityStepper from "@/components/QuantityStepper";
+import { removeItem, setQuantity } from "@/lib/cart";
 import { useCartLines } from "@/lib/useCartLines";
 import styles from "./page.module.css";
 
@@ -28,7 +30,29 @@ export default function CartPage() {
 
       {status === "ok" && !isEmpty && (
         <>
-          <OrderSummary lines={lines} total={total} />
+          <OrderSummary
+            lines={lines}
+            total={total}
+            renderRowControls={(line) => (
+              <div className={styles.rowControls}>
+                {!line.unavailable && (
+                  <QuantityStepper
+                    value={line.quantity}
+                    label={`「${line.title}」の数量`}
+                    onChange={(next) => setQuantity(line.bookId, next)}
+                  />
+                )}
+                <button
+                  type="button"
+                  className={styles.removeBtn}
+                  onClick={() => removeItem(line.bookId)}
+                  aria-label={`「${line.title}」をカートから削除`}
+                >
+                  削除
+                </button>
+              </div>
+            )}
+          />
           <div className={styles.actions}>
             <Link href="/" className="btn btn-secondary">
               買い物を続ける

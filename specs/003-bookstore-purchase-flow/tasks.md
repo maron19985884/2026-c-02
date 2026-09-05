@@ -118,10 +118,10 @@ description: "Task list for 003-bookstore-purchase-flow"
 
 **Independent Test**: [quickstart.md](quickstart.md) §5 の #5, #6 を実施して成功する
 
-- [ ] T041 [P] [US2] `frontend/components/QuantityStepper.tsx` — 数量の＋／−。下限1で止まる、上限99（[research.md](research.md) D-03、FR-015）
-- [ ] T042 [P] [US2] `frontend/lib/cart.ts` 拡張 — `setQuantity`（1..99 にクランプ）、`removeItem`、変更後の即時再読込。既に T016 で用意済みなら本タスクは境界値の詰めとテスト観点整理のみ
-- [ ] T043 [US2] `frontend/app/cart/page.tsx` 拡張 — 各行に `QuantityStepper` と「削除」を追加。変更で `OrderSummary` の小計・合計を再レンダリング（FR-010/FR-011）。最後の1件を削除したら `EmptyState`（FR-016）
-- [ ] T044 [P] [US2] `frontend/tests/unit/cart.test.ts` 追記 — `setQuantity` クランプ、`removeItem`、合計再計算。`frontend/tests/components/cart-page.test.tsx` — 数量変更・削除で合計表示が更新される
+- [x] T041 [P] [US2] `frontend/components/QuantityStepper.tsx` — 数量の＋／−。下限1で止まる、上限99（[research.md](research.md) D-03、FR-015）
+- [x] T042 [P] [US2] `frontend/lib/cart.ts` 拡張 — `setQuantity`（1..99 にクランプ）、`removeItem`、変更後の即時再読込。既に T016 で用意済みなら本タスクは境界値の詰めとテスト観点整理のみ
+- [x] T043 [US2] `frontend/app/cart/page.tsx` 拡張 — 各行に `QuantityStepper` と「削除」を追加。変更で `OrderSummary` の小計・合計を再レンダリング（FR-010/FR-011）。最後の1件を削除したら `EmptyState`（FR-016）
+- [x] T044 [P] [US2] `frontend/tests/unit/cart.test.ts` 追記 — `setQuantity` クランプ、`removeItem`、合計再計算。`frontend/tests/components/cart-page.test.tsx` — 数量変更・削除で合計表示が更新される
 
 **Checkpoint**: US1 + US2 が動作。US1 のテストは引き続き green
 
@@ -133,11 +133,11 @@ description: "Task list for 003-bookstore-purchase-flow"
 
 **Independent Test**: [quickstart.md](quickstart.md) §5 の #8, #9 と [contracts/orders-create.md](contracts/orders-create.md) の 400 観点を実施して成功する
 
-- [ ] T045 [P] [US3] `frontend/lib/validation.ts` — 送信時バリデーション（氏名/住所: 非空・長さ、メール: 形式・長さ）。純関数でテスト対象（[data-model.md](data-model.md) §5）
-- [ ] T046 [US3] `frontend/components/CheckoutForm.tsx` 拡張 — `validation.ts` を送信時に適用。各入力欄に項目別エラー表示、`aria-invalid`／`label` 関連付け（WCAG AA／[research.md](research.md) D-06）。サーバ `400` の `fields`（`name`/`address`/`email`/`items`）を対応欄へマッピング（[research.md](research.md) D-12、FR-018）
-- [ ] T047 [P] [US3] `backend/src/domain/orderValidation.ts` 拡張 — `fields` 内訳を [contracts/orders-create.md](contracts/orders-create.md) の表どおりに（空白のみ／256文字以上／`quantity` 非整数・0・100／`items` 空／非実在・`unlisted` `bookId`）。金額フィールドが来ても無視
-- [ ] T048 [P] [US3] `backend/tests/integration/orders-validation.test.ts` — 400 全ケース（`name` 空、`email` に `@` なし、`items: []`、非実在/`unlisted` `bookId`、`quantity` 0/100/1.5、`unitPrice`/`totalAmount` 混入時サーバ値で上書き）＋注文レコード未作成の確認
-- [ ] T049 [P] [US3] `frontend/tests/` — `validation.ts` 単体、`CheckoutForm` の項目別エラー描画とサーバ `fields` マッピング
+- [x] T045 [P] [US3] `frontend/lib/validation.ts` — 送信時バリデーション（氏名/住所: 非空・長さ、メール: 形式・長さ）。純関数でテスト対象（[data-model.md](data-model.md) §5）
+- [x] T046 [US3] `frontend/components/CheckoutForm.tsx` 拡張 — `validation.ts` を送信時に適用。各入力欄に項目別エラー表示、`aria-invalid`／`label` 関連付け（WCAG AA／[research.md](research.md) D-06）。サーバ `400` の `fields`（`name`/`address`/`email`/`items`）を対応欄へマッピング（[research.md](research.md) D-12、FR-018）
+- [x] T047 [P] [US3] `backend/src/domain/orderValidation.ts` 拡張 — `fields` 内訳を [contracts/orders-create.md](contracts/orders-create.md) の表どおりに（空白のみ／256文字以上／`quantity` 非整数・0・100／`items` 空／非実在・`unlisted` `bookId`）。金額フィールドが来ても無視
+- [x] T048 [P] [US3] `backend/tests/integration/orders-validation.test.ts` — 400 全ケース（`name` 空、`email` に `@` なし、`items: []`、非実在/`unlisted` `bookId`、`quantity` 0/100/1.5、`unitPrice`/`totalAmount` 混入時サーバ値で上書き）＋注文レコード未作成の確認
+- [x] T049 [P] [US3] `frontend/tests/` — `validation.ts` 単体、`CheckoutForm` の項目別エラー描画とサーバ `fields` マッピング
 
 **Checkpoint**: US1〜US3 が動作。全ストーリーのテスト green
 
@@ -145,14 +145,14 @@ description: "Task list for 003-bookstore-purchase-flow"
 
 ## Phase 6: Polish & Cross-Cutting
 
-- [ ] T050 [P] Edge Cases 詰め — 一覧の範囲外 `page` 丸め（結合テスト）、空カタログの `EmptyState`、長い書名・著者名でレイアウト非破壊、注文後の再送信不可（T040b と対）（[spec.md](spec.md) Edge Cases）
-- [ ] T051 [P] 通信エラー表示 — backend 停止時に一覧／詳細／注文送信で `ErrorNotice` が出る（FR-032）。`frontend/tests/components/` に `api` モックでの失敗系
-- [ ] T052 [P] アクセシビリティ確認 — フォーカス可視化、`label`、`aria-invalid`、見出し階層（WCAG 2.1 AA 目標／憲法 §3）
-- [ ] T053 [P] 画面遷移・エラー・空状態の表現統一レビュー（FR-027）— `ErrorNotice`/`EmptyState` が全画面で使われているか
-- [ ] T054 Lint 緑化 — `backend`/`frontend` それぞれに `lint` スクリプトを用意し `npm run lint` エラー0件（憲法 §1）。CI は改変済みの `.github/workflows/quality-gate.yml`（frontend/backend 個別 `working-directory` 実行）で緑化を確認（方針B・2026-09-04 決定）
-- [ ] T055 カバレッジ確認 — `npm test -- --coverage` が両パッケージで 80% しきい値を満たす（憲法 §2）
-- [ ] T056 [P] `quickstart.md` の §4〜§5 検証表を通しで実施し、結果を記録
-- [ ] T057 [P] ドキュメント整合 — 実装で判明した差分を [spec.md](spec.md)/[plan.md](plan.md) に反映（`tech-stack.md` は AI 編集不可。差分は `/speckit.review` で人間に申し送り）
+- [x] T050 [P] Edge Cases 詰め — 一覧の範囲外 `page` 丸め（結合テスト）、空カタログの `EmptyState`、長い書名・著者名でレイアウト非破壊、注文後の再送信不可（T040b と対）（[spec.md](spec.md) Edge Cases）
+- [x] T051 [P] 通信エラー表示 — backend 停止時に一覧／詳細／注文送信で `ErrorNotice` が出る（FR-032）。`frontend/tests/components/` に `api` モックでの失敗系
+- [x] T052 [P] アクセシビリティ確認 — フォーカス可視化、`label`、`aria-invalid`、見出し階層（WCAG 2.1 AA 目標／憲法 §3）
+- [x] T053 [P] 画面遷移・エラー・空状態の表現統一レビュー（FR-027）— `ErrorNotice`/`EmptyState` が全画面で使われているか
+- [ ] T054 Lint 緑化 — `backend`/`frontend` それぞれに `lint` スクリプトを用意し `npm run lint` エラー0件（憲法 §1）。CI は改変済みの `.github/workflows/quality-gate.yml`（frontend/backend 個別 `working-directory` 実行）で緑化を確認（方針B・2026-09-04 決定）〈**未実施: 作業環境に Node なし。`lint` スクリプトは両 package.json に用意済み。担当者が `cd frontend && npm i && npm run lint` / `cd backend && npm i && npm run lint` を実施〉**
+- [ ] T055 カバレッジ確認 — `npm test -- --coverage` が両パッケージで 80% しきい値を満たす（憲法 §2）〈**未実施: Node なし。`jest --coverage` の `coverageThreshold` 80% は設定済み。担当者が `npm test` を実施〉**
+- [ ] T056 [P] `quickstart.md` の §4〜§5 検証表を通しで実施し、結果を記録〈**未実施: Docker なし。担当者が `docker compose up` 後に実施〉**
+- [x] T057 [P] ドキュメント整合 — 実装で判明した差分を [spec.md](spec.md)/[plan.md](plan.md) に反映（`tech-stack.md` は AI 編集不可。差分は `/speckit.review` で人間に申し送り）
 
 ---
 
