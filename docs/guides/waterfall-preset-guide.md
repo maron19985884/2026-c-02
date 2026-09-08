@@ -1,13 +1,25 @@
 # ウォーターフォール運用ガイド（Spec Kit preset化）
 
 ## 結論
-Spec Kit公式は、presetによって「Agile、Kanban、Waterfallなど、利用中の開発方法論にワークフローを適応させる」ことを明示的にサポートしています。
-そのため、Spec Kitのコア（Spec→Plan→Tasks→Implement）を変更せず、**フェーズゲートをpresetとして追加する**ことでウォーターフォール運用が可能です。
-出典: https://github.com/github/spec-kit
+Spec Kit公式のpreset／extension機構と、プロジェクト固有のテンプレート・コマンドを組み合わせることで、Spec Kitのコア（Spec→Plan→Tasks→Implement）を変更せずに、ウォーターフォール型の運用へ適応できます。
+
+ただし、本リポジトリで確認できるのは、preset機能を利用するための手順と、ウォーターフォール向けのテンプレート・コマンドを組み合わせた運用設計です。GitHub公式が完成済みのWaterfall presetを配布していることや、本リポジトリでWaterfall presetの適用が完了していることを示す証跡は確認できません。
 
 ## 理由
-公式READMEには、presetの用途例として「規制トレーサビリティを要求するようspecテンプレートを再構成する」「利用中の方法論（Agile/Kanban/Waterfallなど）にワークフローを適応させる」「計画に必須のセキュリティレビューゲートを追加する」ことが明記されています。また、複数のpresetを優先度付きで積み重ねる（スタック）ことも公式にサポートされています。
-出典: https://github.com/github/spec-kit
+公式READMEには、presetの用途例として、規制上のトレーサビリティを満たすためのspecテンプレートの再構成、Agile・Kanban・Waterfallなどの開発方法論へのワークフロー適応、計画段階への必須セキュリティレビューゲートの追加が挙げられています。また、複数のpreset／extensionを優先度付きで重ねて適用する仕組みも説明されています。
+
+ただし、これらはpreset機構の用途例であり、GitHub公式がWaterfall preset本体を提供していることを意味しません。公式情報を引用する場合は、対象リリースまたはコミットと該当箇所を併記し、利用時点で内容を再確認してください。
+
+### 公式出典（確認済み）
+
+以下は、2026-08-26 に確認した `github/spec-kit` の `main` ブランチのコミット `0c8e31ff0a98c362696c2edb6a1bb25a37f68544` における該当箇所です。
+
+- [Spec Kit README — Making Spec Kit Your Own: Extensions & Presets](https://github.com/github/spec-kit/blob/0c8e31ff0a98c362696c2edb6a1bb25a37f68544/README.md#-making-spec-kit-your-own-extensions--presets)
+- [Spec Kit README — Extensions: Add New Capabilities](https://github.com/github/spec-kit/blob/0c8e31ff0a98c362696c2edb6a1bb25a37f68544/README.md#extensions--add-new-capabilities)
+- [Spec Kit README — Presets: Customize Existing Workflows](https://github.com/github/spec-kit/blob/0c8e31ff0a98c362696c2edb6a1bb25a37f68544/README.md#presets--customize-existing-workflows)
+- [Spec Kit README — Preset commands and Waterfall use case](https://github.com/github/spec-kit/blob/0c8e31ff0a98c362696c2edb6a1bb25a37f68544/README.md#presets--customize-existing-workflows)
+
+READMEには、presetの例としてWaterfallへの適応、必須セキュリティレビューゲート、`specify preset search`、`specify preset add <preset-name>`、複数presetの優先度付きスタックが記載されています。一方、この出典はpreset機構の説明であり、GitHub公式が完成済みのWaterfall presetを配布していることを示すものではありません。
 
 ## Spec Kitフェーズ ↔ ウォーターフォールフェーズ対応表
 
@@ -49,12 +61,14 @@ Spec Kit公式は、presetによって「Agile、Kanban、Waterfallなど、利�
 - [ ] フェーズゲート承認記録のリリース欄が承認済みであること
 
 ## 具体的な実装方法
-1. **承認ゲート用preset作成**: 各フェーズ完了時に「承認者・承認日・承認条件」を記載する必須セクションをspec/plan/tasksテンプレートに追加するpresetを作成する。
+1. **承認ゲート用preset／extensionの作成**: 各フェーズ完了時に「承認者・承認日・承認条件」を記載する必須セクションを、対象となるテンプレートやコマンドに追加する。既存の挙動・テンプレートを上書きする場合はpreset、新しいコマンドや処理を追加する場合はextensionを使用する。
    ```
+   specify preset search
    specify preset add <company-waterfall-preset>
    ```
-2. **フェーズを後退させない運用ルール**: ウォーターフォールでは前フェーズへの後戻りを最小化する前提のため、`/speckit.clarify` を `/speckit.plan` 前に必ず実行し、計画確定後の要件変更は変更管理プロセス（`.specify/templates/change-request-template.md`）を経由させる。
-3. **ドキュメント成果物の正式化**: 人間が用意した「要件定義書」「技術選定書」を入力とし、そこから生成された `specs/<feature>/spec.md`（詳細仕様）・`plan.md`（設計）・`tasks.md`（作業計画）を正式承認フローに乗せる（Markdownのままでも、必要であればWord/PDFへ変換）。入力ドキュメントと生成物の両方を版管理し、承認の証跡とする。
+   これらはpreset機能を利用するためのコマンド例である。本リポジトリの `feature/oono_test1` ブランチではコマンド例の記載を確認できるが、`company-waterfall-preset` の実体、追加の成功ログ、適用前後の差分までは確認できない。そのため、導入時は対象環境で実行結果を記録すること。
+2. **フェーズを後退させない運用ルール**: ウォーターフォールでは前フェーズへの後戻りを抑制するため、`/speckit.clarify` を `/speckit.plan` の前に必ず実行する。計画確定後に要件変更が発生した場合は、変更管理プロセス（`.specify/templates/change-request-template.md`）を経由させ、影響範囲に応じて関連成果物を再生成・再承認する。
+3. **ドキュメント成果物の正式化**: 人間が用意した「要件定義書」「技術選定書」を入力とし、そこから生成された `specs/<feature>/spec.md`（詳細仕様）・`plan.md`（設計）・`tasks.md`（作業計画）を正式な承認フローに乗せる。成果物はMarkdownのまま版管理し、必要に応じてWord／PDFへ変換する。入力ドキュメントと生成物の両方を版管理し、承認記録と関連付けて証跡とする。
 
 ## ドキュメント一覧
 
@@ -72,7 +86,9 @@ Spec Kit公式は、presetによって「Agile、Kanban、Waterfallなど、利�
 | `docs/reviews/phase[N]-*.md` | AI（署名は人間） | `/speckit.review` | 全フェーズ |
 | `docs/changes/CR-[NNN]-*.md` | AI（承認は人間） | `/speckit.change [変更の概要]` | 全フェーズ |
 
-## 💡 Claude補足
-- **注意点**: Spec Kit自体はSDD（仕様駆動開発）の思想に基づき、仕様を「実装後も更新され続ける生きた文書」として扱う設計です。ウォーターフォールの「フェーズ確定後は原則変更しない」という運用にする場合は、上記のように承認ゲートをpreset側で追加する運用ルールが必要であり、Spec Kit本体がウォーターフォール専用モードを持っているわけではありません。
-- **落とし穴**: 複数人開発の場合、`/speckit.tasks`で生成されるタスクの粒度（1タスクあたり1〜2ファイル程度）が細かすぎることがあります。要員アサインは`tasks.md`をベースに、PM側で人単位・工程単位に再編成する運用が必要です。
-- **確証が取れなかった情報**: 「Waterfall」という単語が公式presetの用途例として明記されていることは確認できましたが、GitHub公式が配布する完成済みの「Waterfall preset」自体が存在するかどうかは、2026年7月13日時点の検索結果では確認できませんでした。公式情報が確認できないため断定できません。自社でpresetとして作成することを推奨します。
+## 💡 補足
+- **Spec Kitの位置づけ**: Spec KitはSDD（仕様駆動開発）の思想に基づき、仕様を「実装後も更新され続ける生きた文書」として扱います。ウォーターフォールの「フェーズ確定後は原則変更しない」という運用にする場合は、承認ゲートと変更管理を追加する必要があります。Spec Kit本体がウォーターフォール専用モードを持っているわけではありません。
+- **AIの役割**: `/speckit.review` は、成果物の存在確認やレビュー記録の下書き生成を行う補助機能です。内容の業務妥当性、承認、署名、リスク受容をAIが確定するものではありません。最終的な承認は人間が行います。
+- **実装フェーズの扱い**: 実装フェーズを正式なフェーズゲートに含める場合は、コードレビュー、Lint、テスト、カバレッジなどの確認結果をレビュー記録に含め、実装完了時にも人間の承認を取得します。実装をCIとコードレビューだけで管理する場合は、対応表とDoDの記載をその方針に統一してください。
+- **落とし穴**: 複数人開発の場合、`/speckit.tasks` で生成されるタスクの粒度（1タスクあたり1〜2ファイル程度）が細かすぎることがあります。要員アサインは `tasks.md` をベースに、PM側で人単位・工程単位に再編成する運用が必要です。
+- **検証状況**: `feature/oono_test1` ブランチの `docs/guides/lint-preset-guide.md` に、`specify preset search` と `specify preset add <company-preset-name>` のコマンド例が記載されています。一方、Waterfall presetの実体、実行成功ログ、適用前後の差分は同ブランチ内で確認できません。したがって、本ガイドで確認済みとするのはpreset機能の利用手順であり、Waterfall presetの導入完了ではありません。
