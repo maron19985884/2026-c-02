@@ -32,15 +32,19 @@ The text the user typed after `/speckit.specify` **is** the feature description.
    - If `"sequential"` or absent: run without `--timestamp`
    - If `"timestamp"`: add `--timestamp`
 
-3. **Create the feature branch** by running:
+3. **Check branch strategy**: Read `.specify/init-options.json` and check `auto_branch`.
+   - If `false`: add `--no-branch` — the script will create `specs/<num>-<name>/` and record it as the active feature in `.specify/.current-feature` **without** switching git branches. All work stays on whatever branch is currently checked out.
+   - If `true` or absent: run without `--no-branch` (default Spec Kit behavior — creates and checks out a new feature branch).
+
+4. **Create the feature directory** by running:
    ```bash
    .specify/scripts/bash/create-new-feature.sh --json --short-name "<short-name>" "<feature description>"
    ```
    Parse JSON output for `BRANCH_NAME` and `SPEC_FILE`.
 
-4. Load `.specify/templates/spec-template.md` to understand required sections.
+5. Load `.specify/templates/spec-template.md` to understand required sections.
 
-5. Follow this execution flow:
+6. Follow this execution flow:
    1. Parse user description from Input. If empty: ERROR "No feature description provided"
    2. Extract key concepts: actors, actions, data, constraints
    3. For unclear aspects, make informed guesses. Mark as `[NEEDS CLARIFICATION: specific question]` only for critical decisions (max 3 markers)
@@ -49,9 +53,9 @@ The text the user typed after `/speckit.specify` **is** the feature description.
    6. Define Success Criteria (measurable, technology-agnostic)
    7. Identify Key Entities (if data involved)
 
-6. Write the specification to SPEC_FILE using the template structure.
+7. Write the specification to SPEC_FILE using the template structure.
 
-7. **Specification Quality Validation**: Validate against:
+8. **Specification Quality Validation**: Validate against:
    - No implementation details in spec
    - All mandatory sections completed
    - Requirements are testable and unambiguous
@@ -71,7 +75,7 @@ The text the user typed after `/speckit.specify` **is** the feature description.
    **Your choice**: _[Wait for user response]_
    ```
 
-8. Report completion with branch name, spec file path, and readiness for `/speckit.plan`.
+9. Report completion with branch name, spec file path, and readiness for `/speckit.plan`.
 
 ## Quick Guidelines
 

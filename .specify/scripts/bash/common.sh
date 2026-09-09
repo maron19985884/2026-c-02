@@ -34,13 +34,31 @@ get_repo_root() {
 }
 
 get_current_branch() {
+    # Falls back to .specify/.current-feature when the real git branch isn't
+    # feature-shaped (--no-branch mode: create-new-feature.sh writes this file
+    # instead of checking out a new branch).
     if [[ -n "${SPECIFY_FEATURE:-}" ]]; then
         echo "$SPECIFY_FEATURE"
         return
     fi
     local repo_root=$(get_repo_root)
     if has_git; then
-        git -C "$repo_root" rev-parse --abbrev-ref HEAD
+        local git_branch
+        git_branch=$(git -C "$repo_root" rev-parse --abbrev-ref HEAD)
+        if [[ "$git_branch" =~ ^[0-9]{3}- ]] || [[ "$git_branch" =~ ^[0-9]{8}-[0-9]{6}- ]]; then
+            echo "$git_branch"
+            return
+        fi
+        local current_feature_file="$repo_root/.specify/.current-feature"
+        if [[ -f "$current_feature_file" ]]; then
+            local saved
+            saved=$(tr -d '[:space:]' < "$current_feature_file" 2>/dev/null)
+            if [[ -n "$saved" ]]; then
+                echo "$saved"
+                return
+            fi
+        fi
+        echo "$git_branch"
         return
     fi
     local specs_dir="$repo_root/specs"

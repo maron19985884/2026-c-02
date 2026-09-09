@@ -5,6 +5,7 @@ JSON_MODE=false
 ALLOW_EXISTING=false
 SHORT_NAME=""
 USE_TIMESTAMP=false
+NO_BRANCH=false
 ARGS=()
 i=1
 while [ $i -le $# ]; do
@@ -15,8 +16,9 @@ while [ $i -le $# ]; do
         --short-name)
             i=$((i + 1)); SHORT_NAME="${!i}" ;;
         --timestamp) USE_TIMESTAMP=true ;;
+        --no-branch) NO_BRANCH=true ;;
         --help|-h)
-            echo "Usage: $0 [--json] [--allow-existing-branch] [--short-name <name>] [--timestamp] <feature_description>"
+            echo "Usage: $0 [--json] [--allow-existing-branch] [--short-name <name>] [--timestamp] [--no-branch] <feature_description>"
             exit 0 ;;
         *) ARGS+=("$arg") ;;
     esac
@@ -98,7 +100,10 @@ fi
 
 BRANCH_NAME="${FEATURE_NUM}-${BRANCH_SUFFIX}"
 
-if [ "$HAS_GIT" = true ]; then
+if [ "$NO_BRANCH" = true ]; then
+    mkdir -p "$REPO_ROOT/.specify"
+    printf '%s\n' "$BRANCH_NAME" > "$REPO_ROOT/.specify/.current-feature"
+elif [ "$HAS_GIT" = true ]; then
     if ! git checkout -b "$BRANCH_NAME" 2>/dev/null; then
         if git branch --list "$BRANCH_NAME" | grep -q .; then
             if [ "$ALLOW_EXISTING" = true ]; then

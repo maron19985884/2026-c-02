@@ -2,6 +2,7 @@
   "ai": "claude",
   "ai_commands_dir": null,
   "ai_skills": false,
+  "auto_branch": false,
   "branch_numbering": "sequential",
   "here": true,
   "offline": true,
