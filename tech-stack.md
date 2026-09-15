@@ -21,7 +21,14 @@
 >
 > **⚠️ AI 代行編集の記録（憲法§5 例外）:** 2026-09-04、ユーザーのチャット上の明示指示により、AI が本ファイルの
 > §2 / §3 / §6 に「テストフレームワーク＝Jest と開発依存」「UI・CSS 方針」「却下選択肢（Vitest・`ulid`）」を追記した。
-> 内容は `specs/003-bookstore-purchase-flow/plan.md`（実装前ゲート）・`research.md`（D-06 / D-07）で選定理由を文書化済み。
+> 内容は `specs/004-bookstore-purchase-flow/plan.md`（実装前ゲート）・`research.md`（D-06 / D-07）で選定理由を文書化する。
+> **最終確認・確定は担当者（人間）が行うこと。**
+>
+> **⚠️ AI 代行編集の記録（憲法§5 例外）:** 2026-09-15、ユーザーのチャット上の明示指示により、AI が上記の参照先を
+> `specs/003-bookstore-purchase-flow/` から `specs/004-bookstore-purchase-flow/` へ更新した。
+> `/speckit.specify` の採番が、既存の `origin/003-bookstore-purchase-flow` を検出して `004` を採ったことによる参照ずれの是正であり、
+> **技術選定の内容そのものは変更していない**。なお `specs/004-bookstore-purchase-flow/plan.md` および `research.md` は
+> `/speckit.plan` 未実行のため**未生成**であり、本参照は生成後に有効となる。
 > **最終確認・確定は担当者（人間）が行うこと。**
 
 ## 1. 全体構成
