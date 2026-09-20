@@ -1,0 +1,69 @@
+.complete {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-xl) var(--space-md);
+  text-align: center;
+}
+
+.heading {
+  margin: 0;
+  font-size: var(--font-size-xl);
+  color: var(--color-success);
+}
+
+.message {
+  margin: 0;
+}
+
+.orderNumberBox {
+  padding: var(--space-lg);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.orderNumberLabel {
+  margin: 0 0 var(--space-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.orderNumber {
+  margin: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  word-break: break-all;
+}
+
+.notice {
+  margin: 0;
+  color: var(--color-danger);
+  font-size: var(--font-size-sm);
+}
+
+.summary {
+  width: 100%;
+  max-width: 640px;
+  text-align: left;
+}
+
+.backLink {
+  display: inline-block;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: var(--color-primary-contrast);
+  text-decoration: none;
+}
+
+.backLink:hover {
+  background: var(--color-primary-hover);
+}
+
+.loading {
+  color: var(--color-text-muted);
+}

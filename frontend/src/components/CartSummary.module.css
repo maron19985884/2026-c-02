@@ -1,0 +1,88 @@
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table caption {
+  text-align: left;
+  padding-bottom: var(--space-sm);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.table th,
+.table td {
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.table th {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-weight: normal;
+}
+
+.numeric {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.quantityControl {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.stepper {
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: var(--font-size-md);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.stepper:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.quantityValue {
+  min-width: 2.5rem;
+  text-align: center;
+}
+
+.removeButton {
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-danger);
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+}
+
+.removeButton:hover {
+  background: var(--color-danger-bg);
+}
+
+.totalRow th,
+.totalRow td {
+  border-bottom: none;
+  border-top: 2px solid var(--color-border);
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+}
+
+.note {
+  margin: var(--space-sm) 0 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}

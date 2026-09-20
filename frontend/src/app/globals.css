@@ -1,0 +1,88 @@
+/*
+ * 共有スタイル。
+ *
+ * research.md D-06 / 憲法§3 に従い、UI ライブラリ・CSS フレームワークは導入しない。
+ * 色・間隔・フォントを CSS 変数として1箇所に集約し、各コンポーネントは
+ * CSS Modules (*.module.css) からこの変数を参照する。
+ */
+
+:root {
+  /* 色 */
+  --color-bg: #ffffff;
+  --color-surface: #fafafa;
+  --color-border: #e0e0e0;
+  --color-text: #1f2933;
+  --color-text-muted: #6b7785;
+  --color-primary: #1565c0;
+  --color-primary-hover: #0d47a1;
+  --color-primary-contrast: #ffffff;
+  --color-danger: #b71c1c;
+  --color-danger-bg: #fdecea;
+  --color-success: #1b5e20;
+
+  /* 間隔 */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 40px;
+
+  /* 角丸・線 */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+
+  /* フォント */
+  --font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Sans",
+    "Noto Sans JP", sans-serif;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.75rem;
+
+  /* レイアウト */
+  --content-max-width: 1080px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  line-height: 1.6;
+}
+
+a {
+  color: var(--color-primary);
+}
+
+/* キーボード操作時のフォーカスを明示する（憲法§3 / WCAG 2.1 AA） */
+:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.container {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--space-lg) var(--space-md);
+}
+
+/* 視覚的には隠すがスクリーンリーダーには読ませる */
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

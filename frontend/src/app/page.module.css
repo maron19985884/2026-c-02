@@ -1,0 +1,17 @@
+.heading {
+  margin: 0 0 var(--space-lg);
+  font-size: var(--font-size-xl);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-md);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.loading {
+  color: var(--color-text-muted);
+}
